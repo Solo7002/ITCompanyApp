@@ -1,3 +1,4 @@
+using ITCompanyApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITCompanyApp.Controllers
@@ -26,6 +27,19 @@ namespace ITCompanyApp.Controllers
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
+
+        [HttpGet(Name = "GetUsers")]
+        public IEnumerable<User> Get(int id)
+        {
+            return Enumerable.Range(1, 5).Select(index => new User
+            {
+                Password = index.ToString(),
+                Login = index.ToString(),
+                AccessLevelId = index,
+                Employee = null
             })
             .ToArray();
         }
