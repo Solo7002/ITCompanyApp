@@ -9,7 +9,7 @@ namespace ITCompanyApp.Models
         [StringLength(50, MinimumLength = 2, ErrorMessage = "From 2 to 50 characters")]
         public string DepartmentName { get; set; }
         public int? DepartmentHeadId { get; set; }
-        public virtual Employee Employee { get; set; }
+        public virtual Employee Manager { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
         public Department()
         {

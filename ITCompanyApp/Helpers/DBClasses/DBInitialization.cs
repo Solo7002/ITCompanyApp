@@ -48,7 +48,7 @@ namespace ITCompanyApp.Helpers.DBClasses
             {
 
                 DepartmentName = "Developers",
-                Employee = employee,
+                Manager = employee,
             };
           
       
