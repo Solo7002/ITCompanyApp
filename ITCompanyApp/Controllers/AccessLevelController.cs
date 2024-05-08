@@ -10,7 +10,7 @@ using ITCompanyApp.Models;
 
 namespace ITCompanyApp.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccessLevelController : ControllerBase
     {
