@@ -28,14 +28,22 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public AccessLevel GetAccessLevel(int id)
+        public ActionResult<AccessLevel> GetAccessLevel(int id)
         {
-            return _context.AccessLevels.FirstOrDefault(al=>al.AccessLevelId==id);
+            if (!_context.AccessLevels.Any(al => al.AccessLevelId == id))
+            {
+                return NotFound();
+            }
+            return _context.AccessLevels.First(al=>al.AccessLevelId==id);
         }
 
         [HttpPost]
-        public ActionResult<AccessLevel> PostAccessLevel(AccessLevel accessLevel)
+        public ActionResult<AccessLevel> CreateAccessLevel(AccessLevel accessLevel)
         {
+            if (accessLevel == null) 
+            {
+                return BadRequest();
+            }
             _context.AccessLevels.Add(accessLevel);
             _context.SaveChanges();
 
@@ -43,9 +51,9 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutAccessLevel(int id, AccessLevel accessLevel)
+        public IActionResult UpdateAccessLevel(int id, AccessLevel accessLevel)
         {
-            if (id != accessLevel.AccessLevelId)
+            if (accessLevel == null || id != accessLevel.AccessLevelId)
             {
                 return BadRequest();
             }
@@ -59,15 +67,11 @@ namespace ITCompanyApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAccessLevel(int id)
         {
-            if (_context.AccessLevels == null)
+            if (_context.AccessLevels == null || !_context.AccessLevels.Any(al=>al.AccessLevelId==id))
             {
                 return NotFound();
             }
-            AccessLevel accessLevel = _context.AccessLevels.FirstOrDefault(al => al.AccessLevelId == id);
-            if (accessLevel == null)
-            {
-                return NotFound();
-            }
+            AccessLevel accessLevel = _context.AccessLevels.First(al => al.AccessLevelId == id);
 
             _context.AccessLevels.Remove(accessLevel);
             _context.SaveChanges();

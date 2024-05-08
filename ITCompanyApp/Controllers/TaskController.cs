@@ -23,14 +23,24 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public Models.Task GetTask(int id)
+        public ActionResult<Models.Task> GetTask(int id)
         {
-            return _context.Tasks.FirstOrDefault(t => t.TaskId == id);
+            if (!_context.Tasks.Any(t => t.TaskId == id))
+            {
+                return NotFound();
+            }
+
+            return _context.Tasks.First(t => t.TaskId == id);
         }
 
         [HttpPost]
-        public ActionResult<Models.Task> PostTask(Models.Task task)
+        public ActionResult<Models.Task> CreateTask(Models.Task task)
         {
+            if (task == null)
+            {
+                return BadRequest();
+            }
+
             _context.Tasks.Add(task);
             _context.SaveChanges();
 
@@ -38,9 +48,9 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutTask(int id, Models.Task task)
+        public IActionResult UpdateTask(int id, Models.Task task)
         {
-            if (id != task.TaskId)
+            if (task == null || id != task.TaskId)
             {
                 return BadRequest();
             }
@@ -54,15 +64,11 @@ namespace ITCompanyApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteProject(int id)
         {
-            if (_context.Tasks == null)
+            if (_context.Tasks == null || !_context.Tasks.Any(t => t.TaskId == id))
             {
                 return NotFound();
             }
-            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == id);
-            if (task == null)
-            {
-                return NotFound();
-            }
+            Models.Task task = _context.Tasks.First(t => t.TaskId == id);
 
             _context.Tasks.Remove(task);
             _context.SaveChanges();

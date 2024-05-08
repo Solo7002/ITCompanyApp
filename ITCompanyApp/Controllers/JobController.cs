@@ -16,30 +16,40 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Job> Get()
+        public IEnumerable<Job> GetJobs()
         {
             return _context.Jobs;
         }
 
         [HttpGet("{id}")]
-        public Job Get(int id)
+        public ActionResult<Job> GetJob(int id)
         {
-            return _context.Jobs.FirstOrDefault(j => j.JobId == id);
+            if (!_context.Jobs.Any(j => j.JobId == id))
+            {
+                return NotFound();
+            }
+
+            return _context.Jobs.First(j => j.JobId == id);
         }
 
         [HttpPost]
-        public ActionResult<Job> PostJob(Job job)
+        public ActionResult<Job> CreateJob(Job job)
         {
+            if (job == null)
+            {
+                return BadRequest();
+            }
+
             _context.Jobs.Add(job);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetJobs");
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutJob(int id, Job job)
+        public IActionResult UpdateJob(int id, Job job)
         {
-            if (id != job.JobId)
+            if (job == null || id != job.JobId)
             {
                 return BadRequest();
             }
@@ -47,26 +57,22 @@ namespace ITCompanyApp.Controllers
             _context.Entry(job).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetJobs");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteJob(int id)
         {
-            if (_context.Jobs == null)
+            if (_context.Jobs == null || !_context.Jobs.Any(j => j.JobId == id))
             {
                 return NotFound();
             }
-            Job job = _context.Jobs.FirstOrDefault(j => j.JobId == id);
-            if (job == null)
-            {
-                return NotFound();
-            }
+            Job job = _context.Jobs.First(j => j.JobId == id);
 
             _context.Jobs.Remove(job);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetJobs");
         }
     }
 }

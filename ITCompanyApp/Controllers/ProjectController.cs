@@ -24,14 +24,24 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public Project GetProject(int id)
+        public ActionResult<Project> GetProject(int id)
         {
-            return _context.Projects.FirstOrDefault(p => p.ProjectId == id);
+            if (!_context.Projects.Any(p => p.ProjectId == id))
+            {
+                return NotFound();
+            }
+
+            return _context.Projects.First(p => p.ProjectId == id);
         }
 
         [HttpPost]
-        public ActionResult<Project> PostProject(Project project)
+        public ActionResult<Project> CreateProject(Project project)
         {
+            if (project == null)
+            {
+                return BadRequest();
+            }
+
             _context.Projects.Add(project);
             _context.SaveChanges();
 
@@ -39,9 +49,9 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutProject(int id, Project project)
+        public IActionResult UpdateProject(int id, Project project)
         {
-            if (id != project.ProjectId)
+            if (project == null || id != project.ProjectId)
             {
                 return BadRequest();
             }
@@ -55,15 +65,11 @@ namespace ITCompanyApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteProject(int id)
         {
-            if (_context.Projects == null)
+            if (_context.Projects == null || !_context.Projects.Any(p => p.ProjectId == id))
             {
                 return NotFound();
             }
-            Project project = _context.Projects.FirstOrDefault(p => p.ProjectId == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
+            Project project = _context.Projects.First(p => p.ProjectId == id);
 
             _context.Projects.Remove(project);
             _context.SaveChanges();

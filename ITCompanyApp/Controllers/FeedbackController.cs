@@ -24,14 +24,24 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public FeedBack GetFeedback(int id)
+        public ActionResult<FeedBack> GetFeedback(int id)
         {
-            return _context.FeedBacks.FirstOrDefault(f => f.FeedBackId == id);
+            if (!_context.FeedBacks.Any(f => f.FeedBackId == id))
+            {
+                return NotFound();
+            }
+
+            return _context.FeedBacks.First(f => f.FeedBackId == id);
         }
 
         [HttpPost]
-        public ActionResult<FeedBack> PostFeedback(FeedBack feedback)
+        public ActionResult<FeedBack> CreateFeedback(FeedBack feedback)
         {
+            if (feedback == null)
+            {
+                return BadRequest();
+            }
+
             _context.FeedBacks.Add(feedback);
             _context.SaveChanges();
 
@@ -39,9 +49,9 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutFeedback(int id, FeedBack feedBack)
+        public IActionResult UpdateFeedback(int id, FeedBack feedBack)
         {
-            if (id != feedBack.FeedBackId)
+            if (feedBack == null || id != feedBack.FeedBackId)
             {
                 return BadRequest();
             }
@@ -55,15 +65,11 @@ namespace ITCompanyApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteFeedback(int id)
         {
-            if (_context.FeedBacks == null)
+            if (_context.FeedBacks == null || !_context.FeedBacks.Any(f => f.FeedBackId == id))
             {
                 return NotFound();
             }
-            FeedBack feedback = _context.FeedBacks.FirstOrDefault(f => f.FeedBackId == id);
-            if (feedback == null)
-            {
-                return NotFound();
-            }
+            FeedBack feedback = _context.FeedBacks.First(f => f.FeedBackId == id);
 
             _context.FeedBacks.Remove(feedback);
             _context.SaveChanges();

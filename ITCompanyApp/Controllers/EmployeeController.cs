@@ -16,30 +16,40 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Employee> Get()
+        public IEnumerable<Employee> GetEmployees()
         {
             return _context.Employees;
         }
 
         [HttpGet("{id}")]
-        public Employee Get(int id)
+        public ActionResult<Employee> GetEmployee(int id)
         {
-            return _context.Employees.FirstOrDefault(e => e.Id == id);
+            if (!_context.Employees.Any(e => e.Id == id))
+            {
+                return NotFound();
+            }
+
+            return _context.Employees.First(e => e.Id == id);
         }
 
         [HttpPost]
-        public ActionResult<Employee> PostEmployee(Employee employee)
+        public ActionResult<Employee> CreateEmployee(Employee employee)
         {
+            if (employee == null)
+            {
+                return BadRequest();
+            }
+
             _context.Employees.Add(employee);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetEmployees");
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutEmployee(int id, Employee employee)
+        public IActionResult UpdateEmployee(int id, Employee employee)
         {
-            if (id != employee.Id)
+            if (employee == null || id != employee.Id)
             {
                 return BadRequest();
             }
@@ -47,26 +57,22 @@ namespace ITCompanyApp.Controllers
             _context.Entry(employee).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetEmployees");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployee(int id)
         {
-            if (_context.Employees == null)
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
             {
                 return NotFound();
             }
-            Employee employee = _context.Employees.FirstOrDefault(e => e.Id == id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
 
             _context.Employees.Remove(employee);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetEmployees");
         }
     }   
 }

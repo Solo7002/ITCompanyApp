@@ -16,30 +16,39 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Department> Get()
+        public IEnumerable<Department> GetDepartments()
         {
             return _context.Departments;
         }
         
         [HttpGet("{id}")]
-        public Department Get(int id)
+        public ActionResult<Department> GetDepartment(int id)
         {
-            return _context.Departments.FirstOrDefault(d => d.DepartmentId == id);
+            if (!_context.Departments.Any(d => d.DepartmentId == id))
+            {
+                return NotFound();
+            }
+
+            return _context.Departments.First(d => d.DepartmentId == id);
         }
 
         [HttpPost]
-        public ActionResult<Department> PostDepartment(Department department)
+        public ActionResult<Department> CreateDepartment(Department department)
         {
+            if (department == null)
+            {
+                return BadRequest();
+            }
             _context.Departments.Add(department);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetDepartments");
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutDepartment(int id, Department department)
+        public IActionResult UpdateDepartment(int id, Department department)
         {
-            if (id != department.DepartmentId)
+            if (department == null || id != department.DepartmentId)
             {
                 return BadRequest();
             }
@@ -47,26 +56,22 @@ namespace ITCompanyApp.Controllers
             _context.Entry(department).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetDepartments");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteDepartment(int id)
         {
-            if (_context.Departments == null)
+            if (_context.Departments == null || !_context.Departments.Any(al => al.DepartmentId == id))
             {
                 return NotFound();
             }
-            Department department = _context.Departments.FirstOrDefault(d => d.DepartmentId == id);
-            if (department == null)
-            {
-                return NotFound();
-            }
+            Department department = _context.Departments.First(d => d.DepartmentId == id);
 
             _context.Departments.Remove(department);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetDepartments");
         }
     }
 }

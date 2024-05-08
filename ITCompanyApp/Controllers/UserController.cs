@@ -16,30 +16,40 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<User> GetUsers()
         {
            return _context.Users;
         }
 
         [HttpGet("{id}")]
-        public User Get(int id)
+        public ActionResult<User> GetUser(int id)
         {
-            return _context.Users.FirstOrDefault(u=>u.Id==id);
+            if (!_context.Users.Any(u => u.Id == id))
+            {
+                return NotFound();
+            }
+
+            return _context.Users.First(u => u.Id == id);
         }
 
         [HttpPost]
-        public ActionResult<User> PostUser(User user)
+        public ActionResult<User> CreateUser(User user)
         {
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetUsers");
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutUser(int id, User user)
+        public IActionResult UpdateUser(int id, User user)
         {
-            if (id != user.Id)
+            if (user == null || id != user.Id)
             {
                 return BadRequest();
             }
@@ -47,26 +57,22 @@ namespace ITCompanyApp.Controllers
             _context.Entry(user).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetUsers");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
-            if (_context.Users == null)
+            if (_context.Users == null || !_context.Users.Any(u => u.Id == id))
             {
                 return NotFound();
             }
-            User user = _context.Users.FirstOrDefault(u => u.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            User user = _context.Users.First(u => u.Id == id);
 
             _context.Users.Remove(user);
             _context.SaveChanges();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("GetUsers");
         }
     }
 }
