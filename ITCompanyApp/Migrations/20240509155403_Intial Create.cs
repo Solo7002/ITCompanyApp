@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ITCompanyApp.data_access.migrations
+namespace ITCompanyApp.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class IntialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -144,7 +144,7 @@ namespace ITCompanyApp.data_access.migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Login = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccessLevelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -178,7 +178,7 @@ namespace ITCompanyApp.data_access.migrations
                         column: x => x.EmployeesId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EmployeeProject_Projects_ProjectsProjectId",
                         column: x => x.ProjectsProjectId,

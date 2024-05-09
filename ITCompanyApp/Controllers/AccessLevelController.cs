@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITCompanyApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccessLevelController : ControllerBase
     {
         private readonly DBContext _context;
