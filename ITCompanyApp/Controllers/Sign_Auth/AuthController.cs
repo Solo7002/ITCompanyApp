@@ -27,19 +27,21 @@ namespace ITCompanyApp.Controllers.Sign_Auth
         [AllowAnonymous]
         public IActionResult Login(UserLoginModel model)
         {
-            
-            User user=_context.Users.FirstOrDefault(u=>u.Login == model.Login);
-            if(user != null) {
+            try
+            {
+                User user = _context.Users.First(u => u.Login == model.Login);
                 if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 {
                     var token = GenerateJwtToken(model.Login);
 
                     return Ok(new { token });
                 }
-               
             }
-           return BadRequest();
-            
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return BadRequest();
         }
 
         [HttpPost("register")]
@@ -51,49 +53,55 @@ namespace ITCompanyApp.Controllers.Sign_Auth
             }
             else
             {
-                User user = _context.Users.FirstOrDefault(u => u.Login == u.Login);
-                if(user != null)
+                if (_context.Users.Any(u => u.Login == userRegisterModel.Login))
                 {
-                    return BadRequest("Login busy");
+                    return BadRequest($"Such login already exists");
                 }
-                else
+
+                string hashPassword = BCrypt.Net.BCrypt.HashPassword(userRegisterModel.Password, 10).ToString();
+                User newUser;
+                try
                 {
-                    string hashPassword = BCrypt.Net.BCrypt.HashPassword(userRegisterModel.Password, 10).ToString();
-                    User newUser = new User
+                    newUser = new User
                     {
                         Login = userRegisterModel.Login,
                         Password = hashPassword,
-                        AccessLevel = _context.AccessLevels.FirstOrDefault(a => a.AccessLevelName == userRegisterModel.RoleName),
-                      
-                    };
-                    Employee employee = new Employee
-                    {
-                        BirthDate = DateTime.Now,
-                        User = newUser,
-                        Email = "arrt@gmail.com",
-                        Salary = 2000,
-                        HireDate = DateTime.Now,
-                        LastName="Aaf",
-                        FirstName="Afds",
-                        PhoneNumber="2131234142",
-                        PhotoFile="",
-
+                        AccessLevel = _context.AccessLevels.First(a => a.AccessLevelName == userRegisterModel.RoleName),
 
                     };
-                    newUser.Employee=employee;
-
-                    _context.Employees.Add(employee);
-                    _context.Users.Add(newUser);
-                    _context.SaveChanges();
-                    return Ok("User registered successfully.");
                 }
+                catch (Exception ex)
+                {
+                    return BadRequest($"No access levels with such name. Error: {ex}");
+                }
+                
+                Employee employee = new Employee
+                {
+                    BirthDate = DateTime.Now,
+                    User = newUser,
+                    Email = "arrt@gmail.com",
+                    Salary = 2000,
+                    HireDate = DateTime.Now,
+                    LastName = "Aaf",
+                    FirstName = "Afds",
+                    PhoneNumber = "2131234142",
+                    PhotoFile = "",
+                };
+                newUser.Employee = employee;
+
+                _context.Employees.Add(employee);
+                _context.Users.Add(newUser);
+                _context.SaveChanges();
+                return Ok("User registered successfully.");
             }
         }
 
         private string GenerateJwtToken(string userName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var jwtkey = _configuration["Jwt:Key"];
+            var key = jwtkey != null? Encoding.ASCII.GetBytes(jwtkey) : null;
+            
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
