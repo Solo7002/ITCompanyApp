@@ -1,5 +1,7 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,7 @@ namespace ITCompanyApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class JobController : Controller
     {
         private DBContext _context;
@@ -33,12 +36,17 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Job> CreateJob(Job job)
+        public ActionResult<Job> CreateJob(JobViewModel model)
         {
-            if (job == null)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+
+            Job job = new Job
+            { 
+                JobName = model.JobName,
+            };
 
             _context.Jobs.Add(job);
             _context.SaveChanges();
@@ -47,12 +55,22 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateJob(int id, Job job)
+        public IActionResult UpdateJob(int id, JobViewModel model)
         {
-            if (job == null || id != job.JobId)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.Jobs.Any(j => j.JobId == id))
+            {
+                return NotFound();
+            }
+
+            Job job = new Job
+            {
+                JobId = id,
+                JobName = model.JobName,
+            };
 
             _context.Entry(job).State = EntityState.Modified;
             _context.SaveChanges();

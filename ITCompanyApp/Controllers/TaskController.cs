@@ -1,4 +1,6 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
+using ITCompanyApp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ namespace ITCompanyApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly DBContext _context;
@@ -34,12 +37,29 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Models.Task> CreateTask(Models.Task task)
+        public ActionResult<Models.Task> CreateTask(TaskViewModel model)
         {
-            if (task == null)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.Employees.Any(e => e.Id == model.EmployeeFor_Id) || !_context.Employees.Any(e => e.Id == model.EmployeeFrom_Id))
+            {
+                return BadRequest("No employees with such id");
+            }
+
+            Models.Task task = new Models.Task 
+            {
+                Header = model.Header,
+                Text = model.Text,
+                File = model.File,
+                Cover = model.Cover,
+                IsDone = model.IsDone,
+                UploadDate = DateTime.Now,
+                DeadLineDate = model.DeadLineDate,
+                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeFor_Id),
+                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id)
+            };
 
             _context.Tasks.Add(task);
             _context.SaveChanges();
@@ -48,12 +68,34 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateTask(int id, Models.Task task)
+        public IActionResult UpdateTask(int id, TaskViewModel model)
         {
-            if (task == null || id != task.TaskId)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.Tasks.Any(t => t.TaskId == id))
+            {
+                return NotFound();
+            }
+            else if (!_context.Employees.Any(e => e.Id == model.EmployeeFor_Id) || !_context.Employees.Any(e => e.Id == model.EmployeeFrom_Id))
+            {
+                return BadRequest("No employees with such id");
+            }
+
+            Models.Task task = new Models.Task
+            {
+                TaskId = id,
+                Header = model.Header,
+                Text = model.Text,
+                File = model.File,
+                Cover = model.Cover,
+                IsDone = model.IsDone,
+                UploadDate = DateTime.Now,
+                DeadLineDate = model.DeadLineDate,
+                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeFor_Id),
+                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id)
+            };
 
             _context.Entry(task).State = EntityState.Modified;
             _context.SaveChanges();

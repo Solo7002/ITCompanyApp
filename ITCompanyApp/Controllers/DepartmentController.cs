@@ -1,5 +1,7 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,7 @@ namespace ITCompanyApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DepartmentController : Controller
     {
         private DBContext _context;
@@ -33,12 +36,23 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Department> CreateDepartment(Department department)
+        public ActionResult<Department> CreateDepartment(DepartmentViewModel model)
         {
-            if (department == null)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.Employees.Any(e => e.Id == model.DepartmentHeadId))
+            {
+                return BadRequest("No employees with such id");
+            }
+
+            Department department = new Department
+            {
+                DepartmentName = model.DepartmentName,
+                Manager = _context.Employees.First(e => e.Id == model.DepartmentHeadId)
+            };
+
             _context.Departments.Add(department);
             _context.SaveChanges();
 
@@ -46,12 +60,25 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateDepartment(int id, Department department)
+        public IActionResult UpdateDepartment(int id, DepartmentViewModel model)
         {
-            if (department == null || id != department.DepartmentId)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.Departments.Any(d => d.DepartmentId == id))
+            {
+                return NotFound();
+            }
+            else if (!_context.Employees.Any(e => e.Id == model.DepartmentHeadId))
+            {
+                return BadRequest("No employees with such id");
+            }
+           
+            Department department = _context.Departments.First(d => d.DepartmentId == id);
+            
+            department.DepartmentName = model.DepartmentName;
+            department.Manager = _context.Employees.First(e => e.Id == model.DepartmentHeadId);
 
             _context.Entry(department).State = EntityState.Modified;
             _context.SaveChanges();

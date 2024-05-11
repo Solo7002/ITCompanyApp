@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using ITCompanyApp.Models.ViewModels;
 
 namespace ITCompanyApp.Controllers
 {
@@ -40,12 +41,19 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<AccessLevel> CreateAccessLevel(AccessLevel accessLevel)
+        public ActionResult<AccessLevel> CreateAccessLevel(AccessLevelViewModel model)
         {
-            if (accessLevel == null) 
+            if (model == null || !ModelState.IsValid) 
             {
                 return BadRequest();
             }
+
+            AccessLevel accessLevel = new AccessLevel 
+            {
+                AccessLevelName = model.AccessLevelName,
+                AccessLevelMark = model.AccessLevelMark
+            };
+
             _context.AccessLevels.Add(accessLevel);
             _context.SaveChanges();
 
@@ -53,12 +61,23 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAccessLevel(int id, AccessLevel accessLevel)
+        public IActionResult UpdateAccessLevel(int id, AccessLevelViewModel model)
         {
-            if (accessLevel == null || id != accessLevel.AccessLevelId)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.AccessLevels.Any(al => al.AccessLevelId == id))
+            {
+                return NotFound();
+            }
+
+            AccessLevel accessLevel = new AccessLevel
+            {
+                AccessLevelId = id,
+                AccessLevelName = model.AccessLevelName,
+                AccessLevelMark = model.AccessLevelMark
+            };
 
             _context.Entry(accessLevel).State = EntityState.Modified;
             _context.SaveChanges();

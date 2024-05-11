@@ -57,35 +57,41 @@ namespace ITCompanyApp.Controllers.Sign_Auth
                 {
                     return BadRequest($"Such login already exists");
                 }
+                else if (!_context.AccessLevels.Any(al => al.AccessLevelName == userRegisterModel.RoleName))
+                {
+                    return BadRequest($"No roles with such name");
+                }
+                else if (!_context.Departments.Any(d => d.DepartmentName == userRegisterModel.DepartmentName))
+                {
+                    return BadRequest($"No departments with such name");
+                }
+                else if (!_context.Jobs.Any(j => j.JobName == userRegisterModel.JobName))
+                {
+                    return BadRequest($"No jobs wth siuch name");
+                }
 
                 string hashPassword = BCrypt.Net.BCrypt.HashPassword(userRegisterModel.Password, 10).ToString();
-                User newUser;
-                try
+                User newUser = new User
                 {
-                    newUser = new User
-                    {
-                        Login = userRegisterModel.Login,
-                        Password = hashPassword,
-                        AccessLevel = _context.AccessLevels.First(a => a.AccessLevelName == userRegisterModel.RoleName),
-
-                    };
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest($"No access levels with such name. Error: {ex}");
-                }
+                    Login = userRegisterModel.Login,
+                    Password = hashPassword,
+                    AccessLevel = _context.AccessLevels.First(a => a.AccessLevelName == userRegisterModel.RoleName),
+                };
                 
                 Employee employee = new Employee
                 {
-                    BirthDate = DateTime.Now,
+                    BirthDate = userRegisterModel.BirthDate,
                     User = newUser,
-                    Email = "arrt@gmail.com",
-                    Salary = 2000,
+                    Email = userRegisterModel.Email,
+                    Salary = userRegisterModel.Salary,
                     HireDate = DateTime.Now,
-                    LastName = "Aaf",
-                    FirstName = "Afds",
-                    PhoneNumber = "2131234142",
-                    PhotoFile = "",
+                    FireDate = null,
+                    LastName = userRegisterModel.LastName,
+                    FirstName = userRegisterModel.FirstName,
+                    PhoneNumber = userRegisterModel.PhoneNumber,
+                    PhotoFile = userRegisterModel.PhotoFile,
+                    Department = _context.Departments.First(d => d.DepartmentName == userRegisterModel.DepartmentName),
+                    Job = _context.Jobs.First(j => j.JobName == userRegisterModel.JobName),
                 };
                 newUser.Employee = employee;
 

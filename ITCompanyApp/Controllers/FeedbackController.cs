@@ -1,5 +1,7 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ namespace ITCompanyApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FeedbackController : ControllerBase
     {
         private readonly DBContext _context;
@@ -35,12 +38,25 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<FeedBack> CreateFeedback(FeedBack feedback)
+        public ActionResult<FeedBack> CreateFeedback(FeedbackViewModel model)
         {
-            if (feedback == null)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.Employees.Any(e => e.Id == model.EmployeeForId) || !_context.Employees.Any(e => e.Id == model.EmployeeFromId))
+            {
+                return BadRequest("No employees with such id");
+            }
+
+            FeedBack feedback = new FeedBack 
+            {
+                FeedBackText = model.FeedBackText,
+                FeedBackMark = model.FeedBackMark,
+                FeedBackDate = DateTime.Now,
+                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeForId),
+                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFromId),
+            };
 
             _context.FeedBacks.Add(feedback);
             _context.SaveChanges();
@@ -49,14 +65,32 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateFeedback(int id, FeedBack feedBack)
+        public IActionResult UpdateFeedback(int id, FeedbackViewModel model)
         {
-            if (feedBack == null || id != feedBack.FeedBackId)
+            if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
+            else if (!_context.FeedBacks.Any(f => f.FeedBackId == id))
+            {
+                return NotFound();
+            }
+            else if (!_context.Employees.Any(e => e.Id == model.EmployeeForId) || !_context.Employees.Any(e => e.Id == model.EmployeeFromId))
+            {
+                return BadRequest("No employees with such id");
+            }
 
-            _context.Entry(feedBack).State = EntityState.Modified;
+            FeedBack feedback = new FeedBack
+            {
+                FeedBackId = id,
+                FeedBackText = model.FeedBackText,
+                FeedBackMark = model.FeedBackMark,
+                FeedBackDate = DateTime.Now,
+                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeForId),
+                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFromId),
+            };
+
+            _context.Entry(feedback).State = EntityState.Modified;
             _context.SaveChanges();
 
             return RedirectToAction("GetFeedbacks");
