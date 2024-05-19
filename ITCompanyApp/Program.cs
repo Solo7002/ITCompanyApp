@@ -44,7 +44,15 @@ builder.Services.AddAuthorization(options => options.DefaultPolicy =
     .RequireAuthenticatedUser()
     .Build()
 );// Authorization user
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 builder.Services.AddIdentity<IdentityUser<long>, IdentityRole<long>>()
     .AddEntityFrameworkStores<DBContext>()
     .AddUserManager<UserManager<IdentityUser<long>>>()
@@ -58,6 +66,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors();
 
 app.UseHttpsRedirection();
 

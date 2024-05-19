@@ -32,7 +32,7 @@ namespace ITCompanyApp.Controllers.Sign_Auth
                 User user = _context.Users.First(u => u.Login == model.Login);
                 if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 {
-                    var token = GenerateJwtToken(model.Login);
+                    var token = GenerateJwtToken(user.Login,user.Id);
 
                     return Ok(new { token });
                 }
@@ -102,7 +102,7 @@ namespace ITCompanyApp.Controllers.Sign_Auth
             }
         }
 
-        private string GenerateJwtToken(string userName)
+        private string GenerateJwtToken(string userName,int id)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtkey = _configuration["Jwt:Key"];
@@ -112,7 +112,8 @@ namespace ITCompanyApp.Controllers.Sign_Auth
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, userName) 
+                new Claim(ClaimTypes.Name, userName), 
+                new Claim(ClaimTypes.NameIdentifier, id.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),//time live token
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
