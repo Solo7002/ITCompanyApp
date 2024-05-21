@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from "../../../hooks/useAuth";
 
 const Sidebar = () => {
 
     const [isOpened, setIsOpened] = useState(false);
+    const { signOut } = useAuth();
 
     const ChangePropertiesOfSidebar = () => {
         let sideBar = document.querySelector(".sidebar");
@@ -28,6 +30,13 @@ const Sidebar = () => {
         setIsOpened(!isOpened);
     }
 
+    const signOutHandler = () => {
+        let divFog = document.getElementById("div-fogging");
+        divFog.style.zIndex = '-1';
+        divFog.style.opacity = '0';
+        signOut();
+    }
+    
     return (
         <div>
             <nav className="sidebar" onMouseEnter={ChangePropertiesOfSidebar} onMouseLeave={ChangePropertiesOfSidebar}>
@@ -40,17 +49,17 @@ const Sidebar = () => {
                 <div className="sidebar-main-div">
                     <NavLink to="/"><div><i className="fa-solid fa-house"></i> <span>Home</span></div></NavLink>
                     <NavLink to="/profile"><div><i className="fa-solid fa-address-card"></i> <span>Profile</span></div></NavLink>
-                    <NavLink to="/tasks"><div><i class="fa-solid fa-list-check"></i> <span>Tasks</span></div></NavLink>
-                    <NavLink to="/projects"><div><i class="fa-solid fa-diagram-project"></i> <span>Projects</span></div></NavLink>
-                    <NavLink to="/employees"><div><i class="fa-solid fa-users-gear"></i> <span>Employees</span></div></NavLink>
-                    <NavLink to="/depsjobs"><div><i class="fa-solid fa-layer-group"></i> <span>Deps/Jobs</span></div></NavLink>
-                    <NavLink to="/financies"><div><i class="fa-solid fa-money-bill-transfer"></i> <span>Finances</span></div></NavLink>
-                    <NavLink to="/feedbacks"><div><i class="fa-solid fa-comments"></i> <span>Feedbacks</span></div></NavLink>
-                    <NavLink to="/settings"><div><i class="fa-solid fa-gear"></i> <span>Settings</span></div></NavLink>
+                    <NavLink to="/tasks"><div><i className="fa-solid fa-list-check"></i> <span>Tasks</span></div></NavLink>
+                    <NavLink to="/projects"><div><i className="fa-solid fa-diagram-project"></i> <span>Projects</span></div></NavLink>
+                    <NavLink to="/employees"><div><i className="fa-solid fa-users-gear"></i> <span>Employees</span></div></NavLink>
+                    <NavLink to="/depsjobs"><div><i className="fa-solid fa-layer-group"></i> <span>Deps/Jobs</span></div></NavLink>
+                    <NavLink to="/financies"><div><i className="fa-solid fa-money-bill-transfer"></i> <span>Finances</span></div></NavLink>
+                    <NavLink to="/feedbacks"><div><i className="fa-solid fa-comments"></i> <span>Feedbacks</span></div></NavLink>
+                    <NavLink to="/settings"><div><i className="fa-solid fa-gear"></i> <span>Settings</span></div></NavLink>
                 </div>
                 <br />
                 <footer>
-                    <NavLink href="#"><div><span>Log out</span><i className="fa-solid fa-right-from-bracket"></i></div></NavLink>
+                    <NavLink href="/login" onClick={() => signOutHandler()}><div><span>Log out</span><i className="fa-solid fa-right-from-bracket"></i></div></NavLink>
                 </footer>
             </nav>
         </div>

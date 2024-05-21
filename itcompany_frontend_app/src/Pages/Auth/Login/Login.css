@@ -17,3 +17,9 @@ body {
 .form-check-label {
   font-weight: normal;
 }
+
+h5{
+  color: red;
+  text-align: right;
+  margin-right: 5px;
+}

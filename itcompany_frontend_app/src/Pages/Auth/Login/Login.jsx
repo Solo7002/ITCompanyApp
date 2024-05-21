@@ -1,44 +1,65 @@
 import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import "./Login.css";
+import { useState } from "react";
 
 const Login=()=>{
-    const {signIn}=useAuth();
+    const { signIn } = useAuth();
+    const navigate = useNavigate();
 
-    const submitHandler=(event)=>{
-      event.preventDefault();
-      const form=event.target;
-      const username=form.username.value;
-      const password=form.password.value;
-      signIn({login:username,password:password})
+    const [username, setUserName] = useState(Cookies.get('username') || '');
+    const [password, setPassword] = useState(Cookies.get('password') || '');
+    const [errorDisplay, setErrorDisplay] = useState('none');
+
+    const onClickHandler = async ()=>{
+      const rememberMe = document.getElementById("rememberMe").checked;
+
+      if(rememberMe){
+        Cookies.set('username', username, { expires: 4 });
+        Cookies.set('password', password, { expires: 4 });
+      }
+
+      try {
+        await signIn({ login: username, password: password });
+        navigate("/");
+    } catch (e) {
+        setPassword('');
+        document.getElementById('username').style.border = '1px solid red';
+        document.getElementById('password').style.border = '1px solid red';
+        setErrorDisplay('block');
     }
+    }
+
     return(
-        <div class="container mt-5">
-          <div class="row justify-content-center">
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header"> Log in </div>
-                <div class="card-body">
-                  <form onSubmit={submitHandler}>
-                    <div class="form-group">
-                      <label for="username">Username:</label>
-                      <input type="text" required class="form-control" id="username" name="username" />
-                    </div>
-                    <div class="form-group">
-                      <label for="password">Password:</label>
-                      <input type="password" required class="form-control" id="password" name="password" />
-                    </div>
-                    <div class="form-group form-check">
-                      <input type="checkbox" class="form-check-input" id="rememberMe" />
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <a href="#" class="float-right">Forgot password?</a>
-                  </form>
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-header"> Log in </div>
+              <div className="card-body">
+                <div>
+                  <div className="form-group">
+                    <label>Username:</label>
+                    <input type="text" className="form-control" id="username" name="username" value={username} onChange={(event) => setUserName(event.target.value)} required/>
+                  </div>
+                  <div className="form-group">
+                    <label>Password:</label>
+                    <input type="password" className="form-control" id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)}required/>
+                  </div>
+                  <h5 style={{display: errorDisplay}}>wrong login or password!</h5>
+                  <div className="form-group form-check">
+                    <input type="checkbox" className="form-check-input" id="rememberMe" />
+                    <label className="form-check-label">Remember me</label>
+                  </div>
+                  <button type="button" className="btn btn-primary" onClick={onClickHandler}>Login</button>
+                  <a href="#" className="float-right">Forgot password?</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     )
 };
 

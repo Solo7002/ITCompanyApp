@@ -10,7 +10,7 @@ import { Finances } from './Pages/Finances/Finances.jsx';
 import { Feedbacks } from './Pages/Feedbacks/Feedbacks.jsx';
 import { Settings } from './Pages/Settings/Settings.jsx';
 import { Route, Routes } from 'react-router-dom';
-import {Login} from './Pages/Auth/Login/Login.jsx'
+import { Login } from './Pages/Auth/Login/Login.jsx'
 import { RequireAuth } from './RequireAuth/RequireAuth.js';
 import { AuthProvider } from './RequireAuth/AuthProvider.js';
 function App() {
@@ -18,7 +18,7 @@ function App() {
     <AuthProvider>
     <div className="App">
       <Routes>
-        <Route path='/' element={<MainLayout/>}>
+        <Route path='/' element={<RequireAuth><MainLayout/></RequireAuth>}>
           <Route index element={<Home/>}/>
           <Route path='/profile' element={<Profile/>}/>
           <Route path='/tasks' element={<Tasks/>}/>
@@ -28,8 +28,8 @@ function App() {
           <Route path='/financies' element={<Finances/>}/>
           <Route path='/feedbacks' element={<Feedbacks/>}/>
           <Route path='/settings' element={<Settings/>}/>
-          <Route path='/login' element={<Login/>}/>
         </Route>
+        <Route path='/login' element={<Login/>}/>
       </Routes>
     </div>
     </AuthProvider>

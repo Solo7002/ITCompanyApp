@@ -8,13 +8,16 @@ export const AuthProvider=({children})=>{
     const navigete=useNavigate();
     const [token,setToken]=useState(null);
 
-    const signIn=(newUser)=>{
-        axios.post(`${keys.ServerConnection}/Auth/login`,{login:newUser.login,password:newUser.password}).then(res=>{
+    const signIn = async (newUser) => {
+        try {
+            const res = await axios.post(`${keys.ServerConnection}/Auth/login`, { login: newUser.login, password: newUser.password });
             console.log(res.data.token);
             setToken(res.data.token);
-            navigete('/');
-        }).catch(err=>console.log(err));
-    }
+        } catch (err) {
+            throw new Error('Login failed');
+        }
+    };
+    
     const signOut=()=>{
         setToken(null);
         navigete('/login');
