@@ -14,8 +14,6 @@ const Sidebar = () => {
         let headerI = document.querySelector(".header-i");
         let divFog = document.getElementById("div-fogging");
 
-        console.log("let");
-
         sideBar.style.left = isOpened? '-170px' : '0px';
         sideBarMainChildren.forEach(el => {
             el.firstElementChild.firstElementChild.style.left = isOpened? '178px' : '0px';

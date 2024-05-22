@@ -1,4 +1,5 @@
-﻿using ITCompanyApp.Helpers.DBClasses;
+﻿using ITCompanyApp.Helpers;
+using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -51,9 +52,11 @@ namespace ITCompanyApp.Controllers
                 return NotFound();
             }
 
+            string hashPassword = BCrypt.Net.BCrypt.HashPassword(model.Password, 10).ToString();
+
             User user = _context.Users.First(u => u.Id == id);
             user.Login = model.Login;
-            user.Password = model.Password;
+            user.Password = hashPassword;
             user.AccessLevel = _context.AccessLevels.First(al => al.AccessLevelId == model.AccessLevelId);
 
             _context.Entry(user).State = EntityState.Modified;

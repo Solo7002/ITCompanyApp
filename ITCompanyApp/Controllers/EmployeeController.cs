@@ -40,7 +40,7 @@ namespace ITCompanyApp.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest("ModelState");
             }
             else if (!_context.Employees.Any(e => e.Id == id))
             {
