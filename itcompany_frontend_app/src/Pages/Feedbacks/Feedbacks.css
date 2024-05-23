@@ -12,3 +12,7 @@
 .list-group-item {
     position: relative;
 }
+
+#reviewsTabContent .list-group-item {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.4px 1.4px 2px;
+}

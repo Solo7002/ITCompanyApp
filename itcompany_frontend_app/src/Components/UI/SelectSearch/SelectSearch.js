@@ -20,12 +20,14 @@ const SelectSearch =props => {
   const handleFocus = () => {
     setIsOpen(true);
   };
-
+  
   const handleBlur = () => {
-    setTimeout(() => setIsOpen(false), 100); 
+    setTimeout(() => setIsOpen(false), 500); 
   };
+
   const typeInput=props.type||'text';
   const placeholderInput=props.placeholder||'';
+  const elementId=props.id||'';
   return (
     <div className="select-search">
       <input
@@ -35,6 +37,8 @@ const SelectSearch =props => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         placeholder={placeholderInput}
+        id={elementId}
+        className="form-control"
       />
       {isOpen && (
         <ul className="options-list">
@@ -45,7 +49,6 @@ const SelectSearch =props => {
           ))}
         </ul>
       )}
-      
     </div>
   );
 };

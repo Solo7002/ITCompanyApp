@@ -1,10 +1,12 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.SpecialModels.FeedBack;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ITCompanyApp.Controllers
 {
@@ -35,6 +37,64 @@ namespace ITCompanyApp.Controllers
             }
 
             return _context.FeedBacks.First(f => f.FeedBackId == id);
+        }
+
+        [HttpGet("EmployeeFor/{id}")]
+        public ActionResult<IEnumerable<FeedBackByEmployeeForFrom>> GetFeedbackByEmployeeFor(int id)
+        {
+            if (!_context.Employees.Any(e => e.Id == id))
+            {
+                return NotFound();
+            }
+
+            List<FeedBackByEmployeeForFrom> feedbacksForSend = new List<FeedBackByEmployeeForFrom>();
+
+            foreach (FeedBack feedBack in _context.FeedBacks.Where(f => f.EmployeeForId == id))
+            {
+                Employee employeeFor = _context.Employees.First(e => e.Id ==  feedBack.EmployeeForId);
+                Employee employeeFrom = _context.Employees.First(e => e.Id ==  feedBack.EmployeeFromId);
+
+                feedbacksForSend.Add(new FeedBackByEmployeeForFrom
+                {
+                    FeedBackId = feedBack.FeedBackId,
+                    FeedBackText = feedBack.FeedBackText,
+                    FeedBackMark = feedBack.FeedBackMark,
+                    FeedBackDate = feedBack.FeedBackDate.ToShortDateString(),
+                    EmployeeForName = employeeFor.LastName + " " + employeeFor.FirstName,
+                    EmployeeFromName = employeeFrom.LastName + " " + employeeFrom.FirstName
+                });
+            }
+
+            return Ok(feedbacksForSend);
+        }
+
+        [HttpGet("EmployeeFrom/{id}")]
+        public ActionResult<IEnumerable<FeedBackByEmployeeForFrom>> GetFeedbackByEmployeeFrom(int id)
+        {
+            if (!_context.Employees.Any(e => e.Id == id))
+            {
+                return NotFound();
+            }
+
+            List<FeedBackByEmployeeForFrom> feedbacksForSend = new List<FeedBackByEmployeeForFrom>();
+
+            foreach (FeedBack feedBack in _context.FeedBacks.Where(f => f.EmployeeFromId == id))
+            {
+                Employee employeeFor = _context.Employees.First(e => e.Id == feedBack.EmployeeForId);
+                Employee employeeFrom = _context.Employees.First(e => e.Id == feedBack.EmployeeFromId);
+
+                feedbacksForSend.Add(new FeedBackByEmployeeForFrom
+                {
+                    FeedBackId = feedBack.FeedBackId,
+                    FeedBackText = feedBack.FeedBackText,
+                    FeedBackMark = feedBack.FeedBackMark,
+                    FeedBackDate = feedBack.FeedBackDate.ToShortDateString(),
+                    EmployeeForName = employeeFor.LastName + " " + employeeFor.FirstName,
+                    EmployeeFromName = employeeFrom.LastName + " " + employeeFrom.FirstName
+                });
+            }
+
+            return Ok(feedbacksForSend);
         }
 
         [HttpPost]
