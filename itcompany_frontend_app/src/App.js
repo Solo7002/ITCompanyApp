@@ -13,23 +13,25 @@ import { Route, Routes } from 'react-router-dom';
 import { Login } from './Pages/Auth/Login/Login.jsx'
 import { RequireAuth } from './RequireAuth/RequireAuth.js';
 import { AuthProvider } from './RequireAuth/AuthProvider.js';
+import { Bootstrap452Helmet, Bootstrap530Helmet } from './Components/UI/Helmet/HelmetLinks.js';
+
 function App() {
   return (
     <AuthProvider>
     <div className="App">
       <Routes>
         <Route path='/' element={<RequireAuth><MainLayout/></RequireAuth>}>
-          <Route index element={<Home/>}/>
-          <Route path='/profile' element={<Profile/>}/>
-          <Route path='/tasks' element={<Tasks/>}/>
+          <Route index element={ <Bootstrap452Helmet><Home/></Bootstrap452Helmet>}/>
+          <Route path='/profile' element={<Bootstrap452Helmet><Profile/></Bootstrap452Helmet>}/>
+          <Route path='/tasks' element={<Bootstrap530Helmet><Tasks/></Bootstrap530Helmet>}/>
           <Route path='/projects' element={<Projects/>}/>
-          <Route path='/employees' element={<Employees/>}/>
+          <Route path='/employees' element={<Bootstrap452Helmet><Employees/></Bootstrap452Helmet>}/>
           <Route path='/depsJobs' element={<DepsJobs/>}/>
           <Route path='/financies' element={<Finances/>}/>
-          <Route path='/feedbacks' element={<Feedbacks/>}/>
+          <Route path='/feedbacks' element={<Bootstrap530Helmet><Feedbacks/></Bootstrap530Helmet>}/>
           <Route path='/settings' element={<Settings/>}/>
         </Route>
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
       </Routes>
     </div>
     </AuthProvider>

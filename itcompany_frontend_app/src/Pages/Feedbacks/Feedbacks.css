@@ -1,0 +1,14 @@
+.star-rating .fa-star {
+    color: rgb(255, 174, 0);
+}
+.review-date {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 0.9em;
+    color: grey;
+}
+
+.list-group-item {
+    position: relative;
+}

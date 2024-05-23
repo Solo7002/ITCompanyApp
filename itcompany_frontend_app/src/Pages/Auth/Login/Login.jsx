@@ -47,7 +47,7 @@ const Login=()=>{
                     <label>Password:</label>
                     <input type="password" className="form-control" id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)}required/>
                   </div>
-                  <h5 style={{display: errorDisplay}}>wrong login or password!</h5>
+                  <h5 style={{display: errorDisplay}} className="login-h5">wrong login or password!</h5>
                   <div className="form-group form-check">
                     <input type="checkbox" className="form-check-input" id="rememberMe" />
                     <label className="form-check-label">Remember me</label>
