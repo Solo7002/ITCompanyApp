@@ -14,6 +14,7 @@ import { Login } from './Pages/Auth/Login/Login.jsx'
 import { RequireAuth } from './RequireAuth/RequireAuth.js';
 import { AuthProvider } from './RequireAuth/AuthProvider.js';
 import { Bootstrap452Helmet, Bootstrap530Helmet } from './Components/UI/Helmet/HelmetLinks.js';
+import { CreateEmployee } from './Pages/Employees/CreateEmployee/CreateEmployee.jsx';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path='/financies' element={<Finances/>}/>
           <Route path='/feedbacks' element={<Bootstrap530Helmet><Feedbacks/></Bootstrap530Helmet>}/>
           <Route path='/settings' element={<Settings/>}/>
+          <Route path='/employee/create' element={<CreateEmployee/>}/>
         </Route>
         <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
       </Routes>
