@@ -16,3 +16,40 @@
 #reviewsTabContent .list-group-item {
     box-shadow: rgba(0, 0, 0, 0.15) 1.4px 1.4px 2px;
 }
+
+#recent-reviews > .list-group{
+    position: relative;
+}
+
+.absoluteDeletebtn{
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 1;
+    cursor: pointer;
+    display: none;
+}
+
+.create-feedback-input-employee{
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.star-rating > i{
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+#create-review label{
+    font-weight: 500;
+}
+
+@media screen and (max-width: 1200px) {
+    #create-feedback-flex-cont {
+        display: inline-block !important;
+    }
+}

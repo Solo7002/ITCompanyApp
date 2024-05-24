@@ -9,23 +9,43 @@ import "./Feedbacks.css";
 
 const Feedbacks=()=>{
     const {token} = useAuth();
+    const [reload, setReload] = useState(false);
 
+    const [nowEmployeeName, setNowEmployeeName] = useState("");
     const [myFeedbacks, setMyFeedbacks] = useState([]);
     const [byMeFeedbacks, setByMeFeedbacks] = useState([]);
     const [employeeFeedbacks, setEmployeeFeedbacks] = useState([]);
-
     const [isMyFeedbacksLoading, setIsMyFeedbacksLoading] = useState(true);
     const [isByMeFeedbacksLoading, setIsByMeFeedbacksLoading] = useState(true);
     const [isEmployeeFeedbacksLoading, setIsEmployeeFeedbacksLoading] = useState(false);
-
     const [employees, setEmployees] = useState([]);
-
     const [displayForError, setDisplayForError] = useState("none");
+    const [displayForErrorCreate, setDisplayForErrorCreate] = useState("none");
+    const [displayForErrorCreate2, setDisplayForErrorCreate2] = useState("none");
+
+    const [feedbackForCreate, setFeedbackForCreate] = useState({
+        feedBackText: "",
+        feedBackMark: 1,
+        employeeForName: "",
+        employeeFromName: ""
+    });
+    const [tempMark, setTempMark] = useState(1);
+
 
     useEffect(()=>{
         if(token){
             try {
                 const decoded = jwtDecode(token);
+
+                axios.get(`${keys.ServerConnection}/Employee/${decoded.nameid}`, {headers: {
+                    Authorization:`Bearer ${token}`
+                }})
+                .then(res => {
+                    setNowEmployeeName(res.data.lastName + " " + res.data.firstName);
+                })
+                .then(() => {
+                    setIsMyFeedbacksLoading(false);
+                });
 
                 axios.get(`${keys.ServerConnection}/Feedback/EmployeeFor/${decoded.nameid}`, {headers: {
                     Authorization:`Bearer ${token}`
@@ -60,7 +80,11 @@ const Feedbacks=()=>{
                 console.log(error);
             }
         }
-    }, [token]);
+    }, [token, reload]);
+
+    const forceReload = () => {
+        setReload(prev => !prev);
+    };
 
     const btnClickHandler = () => {
         setIsEmployeeFeedbacksLoading(true);
@@ -97,6 +121,82 @@ const Feedbacks=()=>{
         });
     }
 
+    const onHoverStarHandler = (event) => {
+        setFeedbackForCreate({
+            ...feedbackForCreate,
+            feedBackMark: event.target.getAttribute("value")
+        });
+    }
+
+    const onMouseLeaveStarHandler = () => {
+        setFeedbackForCreate({
+            ...feedbackForCreate,
+            feedBackMark: tempMark
+        });
+    }
+
+    const onClickStarHandler = () => {
+        setTempMark(feedbackForCreate.feedBackMark);
+    }
+
+    const createFormsSubmitHandler = (event) => {
+        event.preventDefault();
+
+        setFeedbackForCreate({
+            ...feedbackForCreate,
+            employeeFromName: nowEmployeeName
+        });
+        setFeedbackForCreate({
+            ...feedbackForCreate,
+            employeeForName: document.getElementById("userForInput").value
+        });
+
+        if (document.getElementById("userForInput").value == nowEmployeeName){
+            setDisplayForErrorCreate2("block");
+            console.log(feedbackForCreate.employeeForName);
+            return;
+        }
+
+        
+        console.log(feedbackForCreate);
+        axios.post(`${keys.ServerConnection}/Feedback`, { 
+            employeeFromName: nowEmployeeName, 
+            employeeForName: document.getElementById("userForInput").value,
+            feedBackMark: feedbackForCreate.feedBackMark,
+            feedBackText: feedbackForCreate.feedBackText
+         }, {headers: {
+            Authorization:`Bearer ${token}`
+        }})
+        .then(res => {
+            forceReload();
+            setDisplayForErrorCreate("none");
+            setDisplayForErrorCreate2("none");
+        })
+        .catch(err => {
+            if (err.response && err.response.status === 404){
+                setDisplayForErrorCreate("block");
+            }
+            else
+            {
+                console.log("Create error: ", err);
+            }
+        });
+    }
+
+    const onDeleteFeedbackHandler = (index) => {
+        console.log(index);
+
+        axios.delete(`${keys.ServerConnection}/Feedback/${index}`, {headers: {
+            Authorization:`Bearer ${token}`
+        }})
+        .then(res => {
+            forceReload();
+        })
+        .catch(err => {
+            console.log("Delete error: ", err);
+        });
+    }
+
     return(
         <div className="container my-5">
             <h1 className="text-center mb-4">Feedbacks</h1>
@@ -109,6 +209,9 @@ const Feedbacks=()=>{
                 </li>
                 <li className="nav-item" role="presentation">
                     <button className="nav-link" id="search-reviews-tab" data-bs-toggle="tab"       data-bs-target="#search-reviews" type="button" role="tab" aria-controls="search-reviews"    aria-selected="false">Employees feedbacks</button>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="create-review-tab" data-bs-toggle="tab"       data-bs-target="#create-review" type="button" role="tab" aria-controls="create-review"    aria-selected="false">Create feedback</button>
                 </li>
             </ul>
             <div className="tab-content" id="reviewsTabContent">
@@ -147,38 +250,42 @@ const Feedbacks=()=>{
                 </div>
                 <div className="tab-pane fade" id="recent-reviews" role="tabpanel" aria-labelledby="recent-reviews-tab">
                 {
-                        isByMeFeedbacksLoading ?
-                        <h3>Loading ...</h3> 
+                    isByMeFeedbacksLoading ?
+                    <h3>Loading ...</h3> 
+                    :
+                    (byMeFeedbacks.lenght == 0?
+                        <h3>No feedbacks yet</h3>
                         :
-                        (byMeFeedbacks.lenght == 0?
-                            <h3>No feedbacks yet</h3>
-                            :
-                            byMeFeedbacks.map((feedback) => {
-                                return (<div className="list-group mt-3">
-                                    <div className="list-group-item">
-                                        <h5>For: <b><i>{feedback.employeeForName}</i></b></h5>
-                                        <div className="star-rating">
-                                            {
-                                                [...Array(feedback.feedBackMark)].map((_, i) => (
-                                                    <i key={i} className="fa-solid fa-star"></i>
-                                                ))
-                                            }
-                                            {
-                                                [...Array(5 - feedback.feedBackMark)].map((_, i) => (
-                                                    <i key={i + feedback.feedBackMark} className="fa-regular fa-star"></i>
-                                                ))
-                                            }
-                                        </div>
-                                        <p className="mt-2">{feedback.feedBackText}</p>
-                                        <div className="review-date">{feedback.feedBackDate}</div>
-                                    </div></div>
+                        byMeFeedbacks.map((feedback, index) => {
+                            return (<div className="list-group mt-3" onMouseEnter={(event) => {
+                                document.getElementById(`absoluteDeletebtn${index}`).setAttribute("style", "display: block !important");
+                            }} onMouseLeave={() => {
+                                document.getElementById(`absoluteDeletebtn${index}`).setAttribute("style", "display: none !important");
+                            }}>
+                                <div className="absoluteDeletebtn" id={`absoluteDeletebtn${index}`} onClick={() => onDeleteFeedbackHandler(feedback.feedBackId)} value={feedback.feedBackId}>
+                                    <i className="fa-solid fa-trash-can"></i>
+                                </div>
+                                <div className="list-group-item">
+                                    <h5>For: <b><i>{feedback.employeeForName}</i></b></h5>
+                                    <div className="star-rating">
+                                        {
+                                            [...Array(feedback.feedBackMark)].map((_, i) => (
+                                                <i key={i} className="fa-solid fa-star"></i>
+                                            ))
+                                        }
+                                        {
+                                            [...Array(5 - feedback.feedBackMark)].map((_, i) => (
+                                                <i key={i + feedback.feedBackMark} className="fa-regular fa-star"></i>
+                                            ))
+                                        }
+                                    </div>
+                                    <p className="mt-2">{feedback.feedBackText}</p>
+                                    <div className="review-date">{feedback.feedBackDate}</div>
+                                </div></div>
                                 )
                             })
                         )
                     }
-                    <div className="mt-4 text-center">
-                        <button className="btn btn-primary">Add feedback</button>
-                    </div>
                 </div>
                 <div className="tab-pane fade" id="search-reviews" role="tabpanel" aria-labelledby="search-reviews-tab">
                     <div className="mt-4">
@@ -222,6 +329,41 @@ const Feedbacks=()=>{
                                 })
                             )
                         }
+                    </div>
+                </div>
+                <div className="tab-pane fade" id="create-review" role="tabpanel" aria-labelledby="create-review-tab">
+                    <div className="mt-4">
+                        <div className="container my-5">
+                            <h2>Create feedback</h2>
+                            <form onSubmit={createFormsSubmitHandler}>
+                                <div style={{width: "900px", display: "flex", justifyContent: "space-between",  alignItems: "center"}} id="create-feedback-flex-cont">
+                                <div>
+                                    <div className="create-feedback-input-employee mb-3">
+                                      <label htmlFor="fromUser" className="form-label">From whom</label>
+                                      <SelectSearch options={[]} disabled="true" id="user-from" placeholder="Solod Ihor"/> 
+                                    </div>
+                                    <div className="create-feedback-input-employee mb-3">
+                                      <label htmlFor="fromUser" className="form-label">For whom</label>
+                                      <SelectSearch options={employees.map(employee => employee.lastName + " " +        employee.firstName)} id="userForInput" required/> 
+                                    </div>
+                                    <h5 style={{width: "320px", color: "red", textAlign: "right", display: displayForErrorCreate}}  >* No users with such name</h5>
+                                    <div className="create-feedback-input-employee mb-5">
+                                      <label className="form-label">Mark</label>
+                                      <div className="star-rating" onMouseLeave={onMouseLeaveStarHandler}>
+                                        {[1, 2, 3, 4, 5].map((value) => (
+                                            <i key={value} value={value} className={`fa-star ${value <=     feedbackForCreate.feedBackMark ? "fa-solid" : "fa-regular"}`}   onMouseEnter={onHoverStarHandler} onClick={onClickStarHandler}></i>
+                                        ))}
+                                      </div>
+                                    </div>
+                                </div>
+                                <div className="mb-3">
+                                  <label htmlFor="reviewText" className="form-label mb-3">Feedback text</label>
+                                  <textarea className="form-control" id="reviewText" rows="5" style={{width:    "400px"}} required="true" minLength={10} maxLength={500} value={feedbackForCreate.feedBackText} onChange={(event => setFeedbackForCreate({...feedbackForCreate, feedBackText: event.target.value}))}></textarea>
+                                </div>
+                              </div>
+                              <button type="submit" className="btn btn-primary">Send feedback</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

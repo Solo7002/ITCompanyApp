@@ -18,8 +18,9 @@ const SelectSearch =props => {
     setIsOpen(false);
   };
 
-  const handleFocus = () => {
+  const handleFocus = (event) => {
     setIsOpen(true);
+    handleInputChange(event);
   };
   
   const handleBlur = () => {
@@ -30,6 +31,7 @@ const SelectSearch =props => {
   const placeholderInput=props.placeholder||'';
   const elementId=props.id||'';
   const elementName=props.name||'';
+  const disabled=props.disabled||'';
   return (
     <div className="select-search">
       <input
@@ -42,6 +44,9 @@ const SelectSearch =props => {
         id={elementId}
         name={elementName}
         className="form-control"
+        disabled={disabled}
+        required={props.required||''}
+        autocomplete="off"  
       />
       {isOpen && (
         <ul className="options-list">

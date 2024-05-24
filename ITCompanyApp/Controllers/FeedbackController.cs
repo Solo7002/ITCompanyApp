@@ -104,9 +104,9 @@ namespace ITCompanyApp.Controllers
             {
                 return BadRequest();
             }
-            else if (!_context.Employees.Any(e => e.Id == model.EmployeeForId) || !_context.Employees.Any(e => e.Id == model.EmployeeFromId))
+            else if (!_context.Employees.Any(e => e.LastName + " " + e.FirstName == model.EmployeeForName) || !_context.Employees.Any(e => e.LastName + " " + e.FirstName == model.EmployeeFromName))
             {
-                return BadRequest("No employees with such id");
+                return NotFound("No employees with such id");
             }
 
             FeedBack feedback = new FeedBack 
@@ -114,14 +114,14 @@ namespace ITCompanyApp.Controllers
                 FeedBackText = model.FeedBackText,
                 FeedBackMark = model.FeedBackMark,
                 FeedBackDate = DateTime.Now,
-                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeForId),
-                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFromId),
+                EmployeeFor = _context.Employees.First(e => e.LastName + " " + e.FirstName == model.EmployeeForName),
+                EmployeeFrom = _context.Employees.First(e => e.LastName + " " + e.FirstName == model.EmployeeFromName),
             };
 
             _context.FeedBacks.Add(feedback);
             _context.SaveChanges();
 
-            return RedirectToAction("GetFeedbacks");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -135,9 +135,9 @@ namespace ITCompanyApp.Controllers
             {
                 return NotFound();
             }
-            else if (!_context.Employees.Any(e => e.Id == model.EmployeeForId) || !_context.Employees.Any(e => e.Id == model.EmployeeFromId))
+            else if (!_context.Employees.Any(e => e.LastName + " " + e.FirstName == model.EmployeeForName) || !_context.Employees.Any(e => e.LastName + " " + e.FirstName == model.EmployeeFromName))
             {
-                return BadRequest("No employees with such id");
+                return NotFound("No employees with such id");
             }
 
             FeedBack feedback = new FeedBack
@@ -146,14 +146,14 @@ namespace ITCompanyApp.Controllers
                 FeedBackText = model.FeedBackText,
                 FeedBackMark = model.FeedBackMark,
                 FeedBackDate = DateTime.Now,
-                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeForId),
-                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFromId),
+                EmployeeFor = _context.Employees.First(e => e.LastName + " " + e.FirstName == model.EmployeeForName),
+                EmployeeFrom = _context.Employees.First(e => e.LastName + " " + e.FirstName == model.EmployeeFromName),
             };
 
             _context.Entry(feedback).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("GetFeedbacks");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -168,7 +168,7 @@ namespace ITCompanyApp.Controllers
             _context.FeedBacks.Remove(feedback);
             _context.SaveChanges();
 
-            return RedirectToAction("GetAccessLevels");
+            return Ok();
         }
     }
 }
