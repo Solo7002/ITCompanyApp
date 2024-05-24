@@ -1,6 +1,6 @@
-﻿using ITCompanyApp.Helpers;
-using ITCompanyApp.Helpers.DBClasses;
+﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.AuthModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

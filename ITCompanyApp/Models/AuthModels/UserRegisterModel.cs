@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ITCompanyApp.Helpers
+namespace ITCompanyApp.Models.AuthModels
 {
     public class UserRegisterModel
     {
@@ -13,8 +13,8 @@ namespace ITCompanyApp.Helpers
         public string Password { get; set; }
         [StringLength(50, MinimumLength = 8, ErrorMessage = "From 8 to 50 characters")]
         [Required(ErrorMessage = "The field must be filled")]
-        [Compare(nameof(Password),ErrorMessage = "Values do not match")]
-        public string ConfirmPassword { get; set; } 
+        [Compare(nameof(Password), ErrorMessage = "Values do not match")]
+        public string ConfirmPassword { get; set; }
 
         public string RoleName { get; set; }
 

@@ -7,35 +7,39 @@ import { Link } from "react-router-dom";
 const Employees = () => {
     const { token } = useAuth();
     const [employees, setEmployees] = useState([]);
+    const fetchEmployees = async () => {
+        try {
+            const employeeRes = await axios.get(`${keys.ServerConnection}/Employee`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const employeesData = employeeRes.data;
+
+            const employeesWithJobs = await Promise.all(employeesData.map(async (employee) => {
+                try {
+                    if(employee.jobId!=null)
+                    {const jobRes = await axios.get(`${keys.ServerConnection}/Job/${employee.jobId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    return { ...employee, jobName: jobRes.data.jobName };
+                }
+                else{
+                    return { ...employee, jobName: 'No job' };
+                }
+                } catch (error) {
+                   console.log(error);
+                   
+                }
+            }));
+            setEmployees(employeesWithJobs);
+        } catch (error) {
+            console.error("Error fetching employees", error);
+        }
+    };
     useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                const employeeRes = await axios.get(`${keys.ServerConnection}/Employee`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const employeesData = employeeRes.data;
-
-                const employeesWithJobs = await Promise.all(employeesData.map(async (employee) => {
-                    try {
-                        const jobRes = await axios.get(`${keys.ServerConnection}/Job/${employee.jobId}`, {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        });
-                        return { ...employee, jobName: jobRes.data.jobName };
-                    } catch (error) {
-                        console.error(`Error fetching job title for employee ${employee.id}`, error);
-                        return { ...employee, jobName: 'No job' };
-                    }
-                }));
-                setEmployees(employeesWithJobs);
-            } catch (error) {
-                console.error("Error fetching employees", error);
-            }
-        };
-
         fetchEmployees();
     }, [token]);
     const [searchEmployee, setSearchEmployee] = useState('');
@@ -49,12 +53,40 @@ const Employees = () => {
         employee.email.toLowerCase().includes(searchEmployee.toLowerCase())||
         employee.jobName.toLowerCase().includes(searchEmployee.toLowerCase())
     )
+    const fireClick=(id)=>{
+        console.log(id);
+        if(id!=null){
+            axios.post(`${keys.ServerConnection}/Employee/fire/${id}`,{},{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res=>{
+                fetchEmployees();
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
+    }
+    const appointClick=(id)=>{
+        console.log(id);
+        if(id!=null){
+            axios.post(`${keys.ServerConnection}/Employee/appoint/${id}`,{},{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res=>{
+                fetchEmployees();
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
+    }
 
     return (
         <div className="employeesContainer">
             <h1>Employees</h1>
             <hr />
-            <div class="container mt-5">
+            <div className="container mt-5">
             <input
                         type="text"
                         className="form-control mb-2"
@@ -63,8 +95,8 @@ const Employees = () => {
                         onChange={searchHandler}
                        
                     />
-                <table class="table table-striped">
-                    <thead class="thead-dark">
+                <table className="table table-striped">
+                    <thead className="thead-dark">
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Surname</th>
@@ -76,19 +108,31 @@ const Employees = () => {
                     </thead>
                     <tbody>
                         {
-                            filteredEmployees.map((employee) => {
+                            filteredEmployees.map((employee,index) => {
+                                
                                 return (
-                                    <tr>
+                                   employee.fireDate!=null? <tr className="tr-fired" key={index}>
                                         <td>{employee.firstName}</td>
                                         <td>{employee.lastName}</td>
                                         <td>{employee.phoneNumber}</td>
                                         <td>{employee.email}</td>
                                         <td>{employee.jobName}</td>
                                         <td>
-                                            <Link to={`/employee/details/${employee.id}`}> <button class="btn btn-info btn-sm">View</button></Link>
-                                            <button class="btn btn-danger btn-sm">Ban</button>
+                                            <Link to={`/employee/details/${employee.id}`}> <button className="btn btn-info btn-sm">View</button></Link>
+                                            <button className="btn btn-warning btn-sm" type="submit"  onClick={()=>appointClick(employee.id)}>Appoint</button>
                                         </td>
-                                    </tr>
+                                    </tr>:
+                                    <tr className="tr-notFired"   key={index}>
+                                    <td>{employee.firstName}</td>
+                                    <td>{employee.lastName}</td>
+                                    <td>{employee.phoneNumber}</td>
+                                    <td>{employee.email}</td>
+                                    <td>{employee.jobName}</td>
+                                    <td>
+                                        <Link to={`/employee/details/${employee.id}`}> <button className="btn btn-info btn-sm">View</button></Link>
+                                        <button className="btn btn-danger btn-sm" type="submit"  onClick={()=>fireClick(employee.id)}>Fire</button>
+                                    </td>
+                                </tr>
                                 );
                             })
                         }
@@ -96,7 +140,7 @@ const Employees = () => {
 
                     </tbody>
                 </table>
-                <div> <Link to={`/employee/create`}> <button class="btn btn-success ">Create</button></Link></div>
+                <div> <Link to={`/employee/create`}> <button className="btn btn-success ">Create</button></Link></div>
             </div>
             
         </div>

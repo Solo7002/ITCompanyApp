@@ -89,5 +89,35 @@ namespace ITCompanyApp.Controllers
 
             return RedirectToAction("GetEmployees");
         }
+        [HttpPost]
+        [Route("fire/{id}")]
+        public IActionResult FireEmployee(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return NotFound();
+            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
+            employee.FireDate = DateTime.Now;
+            _context.Entry(employee).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("GetEmployees");
+        }
+        [HttpPost]
+        [Route("appoint/{id}")]
+       public IActionResult AppointEmployee(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return NotFound();
+            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
+            employee.FireDate = null;
+            _context.Entry(employee).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("GetEmployees");
+        }
+
+
     }   
 }

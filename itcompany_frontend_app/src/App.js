@@ -31,7 +31,7 @@ function App() {
           <Route path='/financies' element={<Finances/>}/>
           <Route path='/feedbacks' element={<Bootstrap530Helmet><Feedbacks/></Bootstrap530Helmet>}/>
           <Route path='/settings' element={<Settings/>}/>
-          <Route path='/employee/create' element={<CreateEmployee/>}/>
+          <Route path='/employee/create' element={<Bootstrap452Helmet><CreateEmployee/></Bootstrap452Helmet>}/>
         </Route>
         <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
       </Routes>

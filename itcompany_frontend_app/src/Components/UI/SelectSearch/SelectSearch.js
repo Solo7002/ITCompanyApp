@@ -10,6 +10,7 @@ const SelectSearch =props => {
     setFilteredOptions(props.options.filter(option => 
       option.toLowerCase().startsWith(value.toLowerCase())
     ));
+
   };
 
   const handleOptionClick = (option) => {
@@ -28,6 +29,7 @@ const SelectSearch =props => {
   const typeInput=props.type||'text';
   const placeholderInput=props.placeholder||'';
   const elementId=props.id||'';
+  const elementName=props.name||'';
   return (
     <div className="select-search">
       <input
@@ -38,6 +40,7 @@ const SelectSearch =props => {
         onBlur={handleBlur}
         placeholder={placeholderInput}
         id={elementId}
+        name={elementName}
         className="form-control"
       />
       {isOpen && (
