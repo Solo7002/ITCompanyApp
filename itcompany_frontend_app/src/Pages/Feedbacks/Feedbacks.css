@@ -30,6 +30,13 @@
     display: none;
 }
 
+.absoluteDeletebtn:hover{
+    color: rgb(60, 60, 60);
+    font-size: 1.1em;
+    top: 9px;
+    right: 14px;
+}
+
 .create-feedback-input-employee{
     width: 320px;
     display: flex;

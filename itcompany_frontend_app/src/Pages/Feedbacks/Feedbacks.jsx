@@ -4,6 +4,8 @@ import { useAuth } from "../../hooks/useAuth";
 import axios from "axios";
 import keys from "../../config/keys";
 import SelectSearch from "../../Components/UI/SelectSearch/SelectSearch";
+import ModalWindow from "../../Components/Other/ModalWindow/ModalWindow.js";
+import Notification from "../../Components/Other/Notification/Notification.js";
 
 import "./Feedbacks.css";
 
@@ -22,6 +24,9 @@ const Feedbacks=()=>{
     const [displayForError, setDisplayForError] = useState("none");
     const [displayForErrorCreate, setDisplayForErrorCreate] = useState("none");
     const [displayForErrorCreate2, setDisplayForErrorCreate2] = useState("none");
+    const [showModalWindow, setShowModalWindow] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
+    const [tempDelIndex, setTempDelIndex] = useState(0);
 
     const [feedbackForCreate, setFeedbackForCreate] = useState({
         feedBackText: "",
@@ -171,6 +176,14 @@ const Feedbacks=()=>{
             forceReload();
             setDisplayForErrorCreate("none");
             setDisplayForErrorCreate2("none");
+            
+            setFeedbackForCreate({
+                ...feedbackForCreate,
+                feedBackText: "",
+                feedBackMark: 1
+            });
+
+            setShowNotification(true);
         })
         .catch(err => {
             if (err.response && err.response.status === 404){
@@ -183,10 +196,13 @@ const Feedbacks=()=>{
         });
     }
 
-    const onDeleteFeedbackHandler = (index) => {
-        console.log(index);
+    const onDeleteBeforeConfirm = (index) => {
+        setTempDelIndex(index);
+        setShowModalWindow(true);
+    }
 
-        axios.delete(`${keys.ServerConnection}/Feedback/${index}`, {headers: {
+    const onDeleteFeedbackHandler = () => {
+        axios.delete(`${keys.ServerConnection}/Feedback/${tempDelIndex}`, {headers: {
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
@@ -195,10 +211,28 @@ const Feedbacks=()=>{
         .catch(err => {
             console.log("Delete error: ", err);
         });
+
+        setShowModalWindow(false);
     }
 
     return(
         <div className="container my-5">
+            <ModalWindow
+                show={showModalWindow} 
+                handleClose={() => setShowModalWindow(false)} 
+                handleConfirm={onDeleteFeedbackHandler}
+                question="Are you sure that you want to delete that feedback?" 
+                confirmText="Yes" 
+                cancelText="Cancel">
+            </ModalWindow>
+            <Notification
+                show={showNotification}
+                setShow={setShowNotification}
+                text="New feedback added"
+                color="success"
+                icon="fa-regular fa-circle-check"
+            ></Notification>
+
             <h1 className="text-center mb-4">Feedbacks</h1>
             <ul className="nav nav-tabs" id="reviewsTab" role="tablist">
                 <li className="nav-item" role="presentation">
@@ -257,12 +291,12 @@ const Feedbacks=()=>{
                         <h3>No feedbacks yet</h3>
                         :
                         byMeFeedbacks.map((feedback, index) => {
-                            return (<div className="list-group mt-3" onMouseEnter={(event) => {
+                            return (<div className="list-group mt-3" onMouseEnter={() => {
                                 document.getElementById(`absoluteDeletebtn${index}`).setAttribute("style", "display: block !important");
                             }} onMouseLeave={() => {
                                 document.getElementById(`absoluteDeletebtn${index}`).setAttribute("style", "display: none !important");
                             }}>
-                                <div className="absoluteDeletebtn" id={`absoluteDeletebtn${index}`} onClick={() => onDeleteFeedbackHandler(feedback.feedBackId)} value={feedback.feedBackId}>
+                                <div className="absoluteDeletebtn" id={`absoluteDeletebtn${index}`} onClick={() => onDeleteBeforeConfirm(feedback.feedBackId)} value={feedback.feedBackId}>
                                     <i className="fa-solid fa-trash-can"></i>
                                 </div>
                                 <div className="list-group-item">
@@ -340,7 +374,7 @@ const Feedbacks=()=>{
                                 <div>
                                     <div className="create-feedback-input-employee mb-3">
                                       <label htmlFor="fromUser" className="form-label">From whom</label>
-                                      <SelectSearch options={[]} disabled="true" id="user-from" placeholder="Solod Ihor"/> 
+                                      <SelectSearch options={[]} disabled="true" id="user-from" placeholder={nowEmployeeName}/>
                                     </div>
                                     <div className="create-feedback-input-employee mb-3">
                                       <label htmlFor="fromUser" className="form-label">For whom</label>

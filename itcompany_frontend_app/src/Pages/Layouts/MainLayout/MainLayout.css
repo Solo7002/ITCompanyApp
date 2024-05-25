@@ -9,7 +9,7 @@
     transition: left 0.3s;
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    z-index: 9999;
+    z-index: 1000;
 }
 
 .sidebar a {
