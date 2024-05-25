@@ -1,0 +1,57 @@
+h1 {
+    color: #343a40;
+}
+
+.card {
+    margin-bottom: 20px;
+    border: none;
+    margin: 10px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+
+.card-img-top {
+  width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 3px solid #007bff;
+}
+
+.card-title {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.card-text {
+    color: #6c757d;
+}
+
+.project-dates {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.badge-done {
+    background-color: #28a745;
+}
+
+.badge{
+    width: auto;
+}
+.badge-pending {
+    background-color: #dc3545;
+}
+.myCon{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.alignBtn{
+    text-align: center;
+}
+.alignBtn>button{
+   width: 70%;
+}

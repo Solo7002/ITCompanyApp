@@ -26,7 +26,7 @@ function App() {
           <Route index element={ <Bootstrap452Helmet><Home/></Bootstrap452Helmet>}/>
           <Route path='/profile' element={<Bootstrap452Helmet><Profile/></Bootstrap452Helmet>}/>
           <Route path='/tasks' element={<Bootstrap530Helmet><Tasks/></Bootstrap530Helmet>}/>
-          <Route path='/projects' element={<Projects/>}/>
+          <Route path='/projects' element={<Bootstrap530Helmet><Projects/></Bootstrap530Helmet>}/>
           <Route path='/employees' element={<Bootstrap452Helmet><Employees/></Bootstrap452Helmet>}/>
           <Route path='/depsJobs' element={<DepsJobs/>}/>
           <Route path='/financies' element={<Finances/>}/>
