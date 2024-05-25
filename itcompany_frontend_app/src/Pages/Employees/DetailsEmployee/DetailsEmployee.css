@@ -1,0 +1,30 @@
+.employee-info-container {
+    padding: 50px 0;
+  }
+  
+  .employee-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 20px;
+  }
+  
+  .card-body {
+    border-radius: 20px;
+    background-color: #f8f9fa;
+    
+  }
+  
+  .text-muted {
+    font-size: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .card-body {
+      padding: 20px;
+    }
+  }

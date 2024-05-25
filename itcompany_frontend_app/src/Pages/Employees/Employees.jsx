@@ -18,7 +18,7 @@ const Employees = () => {
 
             const employeesWithJobs = await Promise.all(employeesData.map(async (employee) => {
                 try {
-                    if(employee.jobId!=null)
+                    if(employee.jobId)
                     {const jobRes = await axios.get(`${keys.ServerConnection}/Job/${employee.jobId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`

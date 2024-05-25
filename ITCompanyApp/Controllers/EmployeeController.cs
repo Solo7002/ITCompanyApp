@@ -117,7 +117,18 @@ namespace ITCompanyApp.Controllers
             _context.SaveChanges();
             return RedirectToAction("GetEmployees");
         }
-
+        [HttpGet]
+        [Route("lastProjects/{id}")]
+        public IEnumerable<Project> GetLastThreeProjectsByEmployeeId(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return null ;
+            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
+            List<Project> projects = employee.Projects.Where(p => p.IsDone).OrderBy(p => Math.Abs((p.DeadLineProjectDate - DateTime.Today).TotalDays)).Take(3).ToList();
+            return projects;
+        }
 
     }   
 }

@@ -15,6 +15,7 @@ import { RequireAuth } from './RequireAuth/RequireAuth.js';
 import { AuthProvider } from './RequireAuth/AuthProvider.js';
 import { Bootstrap452Helmet, Bootstrap530Helmet } from './Components/UI/Helmet/HelmetLinks.js';
 import { CreateEmployee } from './Pages/Employees/CreateEmployee/CreateEmployee.jsx';
+import { DetailsEmployee } from './Pages/Employees/DetailsEmployee/DetailsEmployee.jsx';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path='/feedbacks' element={<Bootstrap530Helmet><Feedbacks/></Bootstrap530Helmet>}/>
           <Route path='/settings' element={<Settings/>}/>
           <Route path='/employee/create' element={<Bootstrap452Helmet><CreateEmployee/></Bootstrap452Helmet>}/>
+          <Route path='/employee/details/:id' element={<Bootstrap452Helmet><DetailsEmployee/></Bootstrap452Helmet>}/>
         </Route>
         <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
       </Routes>
