@@ -1,0 +1,35 @@
+.DepsJobscontainer .limited-height {
+  max-height: 194px;
+  overflow-y: auto;
+}
+
+.DepsJobscontainer .readonly-input {
+  background-color: #e9ecef;
+  pointer-events: none;
+}
+
+.DepsJobscontainer .depjobs-table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.DepsJobscontainer .table {
+  width: 100%;
+}
+
+.DepsJobscontainer .table th, .table td {
+  padding-left: 15px;
+}
+
+.DepsJobscontainer thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: rgb(83, 83, 83);
+  color: white;
+}
+
+.DepsJobscontainer .depjobs-buttons > button{
+  margin-right: 15px;
+}
