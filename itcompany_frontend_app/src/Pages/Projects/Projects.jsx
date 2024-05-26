@@ -43,6 +43,7 @@ const Projects = () => {
     const filteredProjects = projects.filter(project =>
         project.projectName.toLowerCase().includes(searchProject.toLowerCase()) ||
         project.description.toLowerCase().includes(searchProject.toLowerCase()) ||
+        project.status.toLowerCase().includes(searchProject.toLowerCase()) ||
         project.startProjectDate.toLowerCase().includes(searchProject.toLowerCase()) ||
         project.deadLineProjectDate.toLowerCase().includes(searchProject.toLowerCase())
     );
@@ -52,13 +53,14 @@ const Projects = () => {
             <h1>Projects</h1>
             <hr />
             <div className="container mt-5 myCon">
+            <Link to={`/projects/create`}> <button className="btn btn-success ">Create</button></Link>
                 <input
                     type="text"
                     className="form-control mb-2"
                     placeholder="Search projects"
                     value={searchProject}
                     onChange={searchProjectHandler}
-                />
+                /> 
                 {filteredProjects.map((project, index) => (
                     <div className="col-lg-3 col-md-6 mb-4" key={index}>
                         <div className="card">

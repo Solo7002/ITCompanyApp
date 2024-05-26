@@ -98,23 +98,23 @@ const CreateEmployee = () => {
                 <form onSubmit={submitHandler}>
                     <div className="form-group">
                         <label >Login</label>
-                        <input type="text" minLength={4} className="form-control" required name="login" placeholder="Input Login" />
+                        <input type="text" className="form-control" required name="login" placeholder="Input Login" />
                     </div>
                     <div className="form-group">
                         <label >Password</label>
-                        <input type="password" minLength={8} className="form-control" required name="password" placeholder="Input Password" />
+                        <input type="password"  className="form-control" required name="password" placeholder="Input Password" />
                     </div>
                     <div className="form-group">
                         <label >Confirm password</label>
-                        <input type="password" minLength={8} className="form-control" required name="confirmPassword" placeholder="Input Confirm Password" />
+                        <input type="password"  className="form-control" required name="confirmPassword" placeholder="Input Confirm Password" />
                     </div>
                     <div className="form-group">
                         <label >Lastname</label>
-                        <input type="text" minLength={4} className="form-control" required name="lastname" placeholder="Input Lastname" />
+                        <input type="text"  className="form-control" required name="lastname" placeholder="Input Lastname" />
                     </div>
                     <div className="form-group">
                         <label >Firstname</label>
-                        <input type="text" minLength={4} className="form-control" required name="firstname" placeholder="Input Firstname" />
+                        <input type="text"  className="form-control" required name="firstname" placeholder="Input Firstname" />
                     </div>
                     <div className="form-group">
                         <label >Birthdate</label>
@@ -150,7 +150,7 @@ const CreateEmployee = () => {
                     </div>
                     <div className="form-group">
                         <label>Photo</label>
-                        <input type="file" className="form-control-file" name="photo" />
+                        <input type="file" className="form-control-file" name="photo" accept="image/jpeg,image/png,image/gif"/>
                     </div>
                     
                     

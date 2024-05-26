@@ -1,0 +1,26 @@
+.form-container {
+        
+         
+    background-color: #ffffff;
+    min-width: 300px;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.form-header {
+    margin-bottom: 20px;
+}
+.form-group label {
+    font-weight: bold;
+}
+.btn-custom {
+    background-color: #007bff;
+    color: #ffffff;
+}
+.btn-custom:hover {
+    background-color: #0056b3;
+}
+.btn{
+    margin: 5px;
+}
