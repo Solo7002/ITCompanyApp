@@ -36,6 +36,7 @@ const DepsJobs=()=>{
     const [showDelJobModal, setShowDelJobModal] = useState(false);
 
     const [tempDepName, setTempDepName] = useState("");
+    const [tempJobName, setTempJobName] = useState("");
 
     const [notification, setNotification] = useState({
         show: false,
@@ -145,6 +146,7 @@ const DepsJobs=()=>{
         }})
         .then(res => {
             setSelectedJob(res.data);
+            setTempJobName(res.data.jobName);
         });
 
         axios.get(`${keys.ServerConnection}/Employee/byJobId/${jobId}`, {headers: {
@@ -181,6 +183,30 @@ const DepsJobs=()=>{
         else if ((!isEdit && departments.filter(d => d.departmentHeadId == currentEmp.id).length > 0)||(isEdit && departments.filter(d => d.departmentHeadId == currentEmp.id).length > 0 && selectedDepartment.departmentHeadName != depHeadInput.value)){
             depHeadInput.setCustomValidity('That employee is already head of another department');
             depHeadInput.reportValidity();
+        }
+        else {
+            return true;
+        }
+        return false;
+    }
+
+    const isJobValid = (jobNameInput, isEdit) => {
+        if (jobNameInput.value.trim() === ''){
+            jobNameInput.setCustomValidity('This field is required');
+            jobNameInput.reportValidity();
+        }
+        else if (jobNameInput.value.length < 2){
+            jobNameInput.setCustomValidity('Min lenght is 2 symbols');
+            jobNameInput.reportValidity();
+        }
+        else if (jobs.filter(job => job.jobName == jobNameInput.value).length != 0){
+            if (isEdit && selectedJob.jobName == jobNameInput.value){
+                jobNameInput.setCustomValidity(`New job name can't be like old`);
+            } 
+            else{
+                jobNameInput.setCustomValidity('Job with such name already exists!');
+            }
+            jobNameInput.reportValidity();
         }
         else {
             return true;
@@ -268,6 +294,78 @@ const DepsJobs=()=>{
         });
     }
 
+    const addJobHandler = () => {
+        let jobNameInput = document.getElementById("add-job-name-input");
+
+        if (isJobValid(jobNameInput, false)){
+            axios.post(`${keys.ServerConnection}/Job`, { 
+                jobName: jobNameInput.value,
+             }, {headers: {
+                Authorization:`Bearer ${token}`
+            }})
+            .then(res => {
+                setShowAddJobModal(false);
+                
+                setNotification({
+                    ...notification,
+                    show: true,
+                    text: `Job ${jobNameInput.value} added`,
+                    color: "success",
+                    icon: "fa-regular fa-circle-check"
+                });
+
+                jobNameInput.value = "";
+    
+                forceReload();
+            });
+        }
+    }
+
+    const updateJobHandler = () => {
+        let jobNameInput = document.getElementById("edit-job-name-input");
+
+        if (isJobValid(jobNameInput, true)){
+            axios.put(`${keys.ServerConnection}/Job/${selectedJob.jobId}`, { 
+                jobName: jobNameInput.value
+             }, {headers: {
+                Authorization:`Bearer ${token}`
+            }})
+            .then(res => {
+                setShowEditJobModal(false);
+                
+                setNotification({
+                    ...notification,
+                    show: true,
+                    text: `Job ${jobNameInput.value} updated`,
+                    color: "success",
+                    icon: "fa-regular fa-circle-check"
+                });
+                jobNameInput.value = "";
+   
+                forceReload();
+            });
+        }
+    }
+
+    const deleteJobHandler = () => {
+        axios.delete(`${keys.ServerConnection}/Job/${selectedJob.jobId}`, {headers: {
+            Authorization:`Bearer ${token}`
+        }})
+        .then(res => {
+            setShowDelJobModal(false);
+            
+            setNotification({
+                ...notification,
+                show: true,
+                text: `Job deleted`,
+                color: "success",
+                icon: "fa-regular fa-circle-check"
+            });
+
+            forceReload();
+        });
+    }
+
     return(
         <div className="DepsJobscontainer">
             <ModalWindow
@@ -315,7 +413,47 @@ const DepsJobs=()=>{
                 handleConfirm={deleteDepartmentHandler}
                 confirmText="Delete" 
                 cancelText="Cancel">
+            <p>Are you sure that you want to delete that department?</p>
             </ModalWindow>
+
+            <ModalWindow
+                title="Adding job"
+                show={showAddJobModal} 
+                handleClose={() => setShowAddJobModal(false)} 
+                handleConfirm={addJobHandler}
+                confirmText="Add new job" 
+                cancelText="Cancel">
+                <div className="modal-form">
+                    <div className="row">
+                        <label className="col-md-5">Job name</label>
+                        <input className="form-control col-md-6" type="text" style={{marginLeft: "15px"}}   id="add-job-name-input" minLength={2} maxLength={50}/>
+                    </div>
+                </div>
+            </ModalWindow>
+            <ModalWindow
+                title="Editing job"
+                show={showEditJobModal} 
+                handleClose={() => setShowEditJobModal(false)} 
+                handleConfirm={updateJobHandler}
+                confirmText="Update job" 
+                cancelText="Cancel">
+            <div className="modal-form">
+                <div className="row">
+                    <label className="col-md-5">Job name</label>
+                    <input className="form-control col-md-6" type="text" style={{marginLeft: "15px"}}id="edit-job-name-input" minLength={2} maxLength={50} value={tempJobName} onChange={(event) => setTempJobName(event.target.value)}/>
+                </div>
+            </div>
+            </ModalWindow>
+            <ModalWindow
+                title="Confirm job deletion"
+                show={showDelJobModal} 
+                handleClose={() => setShowDelJobModal(false)} 
+                handleConfirm={deleteJobHandler}
+                confirmText="Delete" 
+                cancelText="Cancel">
+            <p>Are you sure that you want to delete that job?</p>
+            </ModalWindow>
+
             <Notification
                 show={notification.show}
                 setShow={notification.setShow}
@@ -485,33 +623,58 @@ const DepsJobs=()=>{
                                     <label>Staff Count</label>
                                     <input type="number" className="form-control" id="job-staff-count"readOnly={true} value={selectedJob.amountOfEmployees}/>
                                 </div>
-                                <div className="form-group">
-                                    <label>Employees on this job</label>
-                                    <div className="table-responsive limited-height" style={{maxHeight:"281px", height: "281px"}}>
-                                        <table className="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            {
-                                                employeesInSelJob.map((emp, index)=>(
-                                                    <tr key={index}>
-                                                        <td>{emp.lastName + " " + emp.firstName}</td>
-                                                        <td>{emp.salary} $</td>
+                                {
+                                    selectedJob.amountOfEmployees > 0 &&
+                                    (!employeesInSelJob? <h4>loading ....</h4>
+                                    :
+                                    <div className="form-group">
+                                        <label>Employees on this job</label>
+                                        <div className="table-responsive limited-height" style={{maxHeight:"281px", height: "281px"}}>
+                                            <table className="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Salary</th>
                                                     </tr>
-                                                ))
-                                            }
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    employeesInSelJob.map((emp, index)=>(
+                                                        <tr key={index}>
+                                                            <td>{emp.lastName + " " + emp.firstName}</td>
+                                                            <td>{emp.salary} $</td>
+                                                        </tr>
+                                                    ))
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
+                                    )
+                                }
                                 <div className="form-group depjobs-buttons">
-                                    <button type="button" className="btn btn-success">Add Job</button>
-                                    <button type="button" className="btn btn-warning">Edit Job</button>
-                                    <button type="button" className="btn btn-danger">Delete Job</button>
+                                    <button type="button" className="btn btn-success" onClick={() => setShowAddJobModal(true)}>Add Job</button>
+                                    {
+                                        selectedJob.jobName && 
+                                        <button type="button" className="btn btn-warning" onClick={() => setShowEditJobModal(true)}>Edit Job</button>
+                                    }
+                                    {
+                                        selectedJob.jobName && 
+                                        <button type="button" className="btn btn-danger" onClick={() => {
+                                            if (selectedJob.amountOfEmployees > 0){
+                                                setNotification({
+                                                    ...notification,
+                                                    show: true,
+                                                    text: `You can't delete job with workers in it!`,
+                                                    color: "danger",
+                                                    icon: "fa-solid fa-ban",
+                                                });
+                                            }
+                                            else {
+                                                setShowDelJobModal(true);
+                                            }
+                                        }}>Delete Job</button>
+                                    }
                                 </div>
                             </form>
                         </div>

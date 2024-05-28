@@ -72,7 +72,7 @@ namespace ITCompanyApp.Controllers
             _context.Jobs.Add(job);
             _context.SaveChanges();
 
-            return RedirectToAction("GetJobs");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -96,7 +96,7 @@ namespace ITCompanyApp.Controllers
             _context.Entry(job).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("GetJobs");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -111,7 +111,7 @@ namespace ITCompanyApp.Controllers
             _context.Jobs.Remove(job);
             _context.SaveChanges();
 
-            return RedirectToAction("GetJobs");
+            return Ok();
         }
     }
 }
