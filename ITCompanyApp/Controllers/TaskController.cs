@@ -1,4 +1,5 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
+using ITCompanyApp.Models;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -57,10 +58,10 @@ namespace ITCompanyApp.Controllers
                 IsDone = model.IsDone,
                 UploadDate = DateTime.Now,
                 DeadLineDate = model.DeadLineDate,
+                Project=_context.Projects.First(e=>e.ProjectId==model.ProjectId),
                 EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeFor_Id),
                 EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id)
             };
-
             _context.Tasks.Add(task);
             _context.SaveChanges();
 

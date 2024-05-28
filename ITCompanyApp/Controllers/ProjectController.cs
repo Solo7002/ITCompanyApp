@@ -114,5 +114,28 @@ namespace ITCompanyApp.Controllers
 
             return RedirectToAction("GetProjects");
         }
+
+        [HttpGet]
+        [Route("getEmployeeInProject/{id}")]
+        public IEnumerable<Employee> GetEmployeeInProjectById(int id)
+        {
+            if (_context.Projects == null || !_context.Projects.Any(p => p.ProjectId == id))
+            {
+                return null;
+            }
+            Project project = _context.Projects.First(p => p.ProjectId == id);
+            return project.Employees;
+        }
+        [HttpGet]
+        [Route("getTasksInProject/{id}")]
+        public IEnumerable<Models.Task> GetTasksInProjectById(int id)
+        {
+            if (_context.Projects == null || !_context.Projects.Any(p => p.ProjectId == id))
+            {
+                return null;
+            }
+            Project project = _context.Projects.First(p => p.ProjectId == id);
+            return project.Tasks;
+        }
     }
 }

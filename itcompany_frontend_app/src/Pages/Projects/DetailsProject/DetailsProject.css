@@ -1,0 +1,45 @@
+.project-details-container  body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+.project-details-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.project-details-container .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.project-details-container .card-title {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.project-details-container .list-group-item {
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.project-details-container .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.project-details-container h1, h5 {
+    color: #343a40;
+}
+
+.project-details-container .card-body p {
+    color: #6c757d;
+}
+
+.project-details-container  .badge-done {
+    background-color: #28a745;
+}
+
+.project-details-container  .badge{
+    width: auto;
+}
+.project-details-container .badge-pending {
+    background-color: #dc3545;
+}

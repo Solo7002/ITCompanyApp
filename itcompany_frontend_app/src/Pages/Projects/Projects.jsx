@@ -4,12 +4,11 @@ import "./Projects.css";
 import axios from "axios";
 import keys from "../../config/keys";
 import { Link } from "react-router-dom";
+import DateReduction from "../../Function/DateReduction";
 const Projects = () => {
     const { token } = useAuth();
     const [projects, setProjects] = useState([]);
-    const DateReduction = (date) => {
-        return date.substring(0, date.indexOf('T'));
-    }
+    
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -77,7 +76,7 @@ const Projects = () => {
                                 </span>
                             </div>
                           
-                            <Link className="alignBtn" to={`project/details/${project.projectId}`}><button className="btn btn-info">Info</button></Link>
+                            <Link className="alignBtn" to={`/projects/details/${project.projectId}`}><button className="btn btn-info">Info</button></Link>
                             
                         </div>
                     </div>

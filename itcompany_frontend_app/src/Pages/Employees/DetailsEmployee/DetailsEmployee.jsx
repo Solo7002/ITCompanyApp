@@ -4,16 +4,14 @@ import axios from "axios";
 import keys from "../../../config/keys";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import './DetailsEmployee.css';
+import DateReduction from "../../../Function/DateReduction";
 const DetailsEmployee = () => {
     const { token } = useAuth();
     const [employee, setEmployee] = useState();
-    const [projects, setProjects] = useState();
     const { id } = useParams();
     const navigate=useNavigate();
 
-    const DateReduction = (date) => {
-        return date.substring(0, date.indexOf('T'));
-    }
+
     const fetchEmployee = async () => {
         const employeeRes = await axios.get(`${keys.ServerConnection}/Employee/${id}`, {
             headers: {
