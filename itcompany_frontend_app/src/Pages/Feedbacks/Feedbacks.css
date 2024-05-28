@@ -1,7 +1,12 @@
-.star-rating .fa-star {
+.feedback-container{
+    height: 100vh;
+}
+
+.feedback-container .star-rating .fa-star {
     color: rgb(255, 174, 0);
 }
-.review-date {
+
+.feedback-container .review-date {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -9,19 +14,19 @@
     color: grey;
 }
 
-.list-group-item {
+.feedback-container .list-group-item {
     position: relative;
 }
 
-#reviewsTabContent .list-group-item {
+.feedback-container #reviewsTabContent .list-group-item {
     box-shadow: rgba(0, 0, 0, 0.15) 1.4px 1.4px 2px;
 }
 
-#recent-reviews > .list-group{
+.feedback-container #recent-reviews > .list-group{
     position: relative;
 }
 
-.absoluteDeletebtn{
+.feedback-container .absoluteDeletebtn{
     position: absolute;
     right: 15px;
     top: 10px;
@@ -30,14 +35,14 @@
     display: none;
 }
 
-.absoluteDeletebtn:hover{
+.feedback-container .absoluteDeletebtn:hover{
     color: rgb(60, 60, 60);
     font-size: 1.1em;
     top: 9px;
     right: 14px;
 }
 
-.create-feedback-input-employee{
+.feedback-container .create-feedback-input-employee{
     width: 320px;
     display: flex;
     justify-content: space-between;
@@ -45,18 +50,18 @@
     margin-top: 30px;
 }
 
-.star-rating > i{
+.feedback-container .star-rating > i{
     font-size: 1.5em;
     cursor: pointer;
     margin-left: 3px;
 }
 
-#create-review label{
+.feedback-container #create-review label{
     font-weight: 500;
 }
 
 @media screen and (max-width: 1200px) {
-    #create-feedback-flex-cont {
+    .feedback-container #create-feedback-flex-cont {
         display: inline-block !important;
     }
 }

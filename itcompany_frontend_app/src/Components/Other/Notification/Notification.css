@@ -1,0 +1,19 @@
+#corner1{
+    top: 0;
+    right: 0;
+}
+
+#corner2{
+    top: 0;
+    left: 15;
+}
+
+#corner3{
+    bottom: 0;
+    left: 15;
+}
+
+#corner4{
+    bottom: 0;
+    right: 0;
+}

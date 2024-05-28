@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import './SelectSearch.css';
-const SelectSearch =props => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SelectSearch = props => {
+  const [searchTerm, setSearchTerm] = useState(props.value||'');
   const [isOpen, setIsOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState(props.options);
+  const [isAlreadyOnChange, setIsAlreadyOnChange] = useState(false);
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
     setFilteredOptions(props.options.filter(option => 
       option.toLowerCase().startsWith(value.toLowerCase())
     ));
-
+    setIsAlreadyOnChange(true);
   };
 
   const handleOptionClick = (option) => {
     setSearchTerm(option);
     setIsOpen(false);
+    setIsAlreadyOnChange(true);
   };
 
   const handleFocus = (event) => {
@@ -33,17 +36,17 @@ const SelectSearch =props => {
   const elementName=props.name||'';
   const disabled=props.disabled||'';
   return (
-    <div className="select-search">
+    <div className={`select-search ${props.classListDiv}`} style={props.styleDiv}>
       <input
         type={typeInput}
-        value={searchTerm}
+        value={isAlreadyOnChange?searchTerm:props.value}
         onChange={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         placeholder={placeholderInput}
         id={elementId}
         name={elementName}
-        className="form-control"
+        className={`form-control ${props.classList}`}
         disabled={disabled}
         required={props.required||''}
         autocomplete="off"

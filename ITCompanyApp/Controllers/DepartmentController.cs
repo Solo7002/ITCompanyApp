@@ -1,9 +1,11 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.SpecialModels.Department;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ITCompanyApp.Controllers
 {
@@ -33,6 +35,27 @@ namespace ITCompanyApp.Controllers
             }
 
             return _context.Departments.First(d => d.DepartmentId == id);
+        }
+
+        [HttpGet("getInfo/{id}")]
+        public ActionResult<DepartmentInfoModel> GetDepartmentInfo(int id)
+        {
+            if (!_context.Departments.Any(d => d.DepartmentId == id))
+            {
+                return NotFound();
+            }
+            Department dep = _context.Departments.First(d => d.DepartmentId == id);
+            Employee DepartmentHead = _context.Employees.First(e => e.Id == dep.DepartmentHeadId);
+
+            DepartmentInfoModel model = new DepartmentInfoModel
+            {
+                DepartmentId = dep.DepartmentId,
+                DepartmentName = dep.DepartmentName,
+                DepartmentHeadName = DepartmentHead.LastName + " " + DepartmentHead.FirstName,
+                AmountOfWorkers = _context.Employees.Where(e => e.DepartmentId == dep.DepartmentId).Count()
+            };
+
+            return Ok(model);
         }
 
         [HttpPost]
@@ -83,7 +106,7 @@ namespace ITCompanyApp.Controllers
             _context.Entry(department).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("GetDepartments");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -98,7 +121,7 @@ namespace ITCompanyApp.Controllers
             _context.Departments.Remove(department);
             _context.SaveChanges();
 
-            return RedirectToAction("GetDepartments");
+            return Ok();
         }
     }
 }

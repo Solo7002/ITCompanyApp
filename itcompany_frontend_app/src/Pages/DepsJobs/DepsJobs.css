@@ -1,6 +1,12 @@
+.DepsJobscontainer{
+  height: 100vh;
+}
+
 .DepsJobscontainer .limited-height {
+  height: 194px;
   max-height: 194px;
   overflow-y: auto;
+  border: 1px solid #ccc;
 }
 
 .DepsJobscontainer .readonly-input {
@@ -9,6 +15,7 @@
 }
 
 .DepsJobscontainer .depjobs-table-container {
+  height: 400px;
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid #ccc;
@@ -22,6 +29,10 @@
   padding-left: 15px;
 }
 
+.DepsJobscontainer .depjobs-table-container .table td {
+  cursor: pointer;
+}
+
 .DepsJobscontainer thead th {
   position: sticky;
   top: 0;
@@ -32,4 +43,19 @@
 
 .DepsJobscontainer .depjobs-buttons > button{
   margin-right: 15px;
+}
+
+.DepsJobscontainer .depjob-active{
+  background-color: rgb(223, 223, 223);
+  font-weight: 500;
+}
+
+/* .DepsJobscontainer .modal-form .row{
+  display: flex;
+  justify-content: space-between;
+} */
+
+.DepsJobscontainer .modal-form .col-md-5{
+  margin-top: 6px;
+  font-size: 13pt;
 }

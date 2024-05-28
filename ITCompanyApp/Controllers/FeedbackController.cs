@@ -109,7 +109,7 @@ namespace ITCompanyApp.Controllers
                 return NotFound("No employees with such id");
             }
 
-            FeedBack feedback = new FeedBack 
+            FeedBack feedback = new FeedBack
             {
                 FeedBackText = model.FeedBackText,
                 FeedBackMark = model.FeedBackMark,

@@ -1,5 +1,7 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.SpecialModels.Department;
+using ITCompanyApp.Models.SpecialModels.Jobs;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,25 @@ namespace ITCompanyApp.Controllers
             }
 
             return _context.Jobs.First(j => j.JobId == id);
+        }
+
+        [HttpGet("getInfo/{id}")]
+        public ActionResult<JobInfoModel> GetJobInfo(int id)
+        {
+            if (!_context.Jobs.Any(j => j.JobId == id))
+            {
+                return NotFound();
+            }
+            Job job = _context.Jobs.First(j => j.JobId == id);
+
+            JobInfoModel model = new JobInfoModel
+            {
+                JobId = job.JobId,
+                JobName = job.JobName,
+                AmountOfEmployees = _context.Employees.Where(e => e.JobId == id).Count()
+            };
+
+            return Ok(model);
         }
 
         [HttpPost]

@@ -35,6 +35,28 @@ namespace ITCompanyApp.Controllers
             return _context.Employees.First(e => e.Id == id);
         }
 
+        [HttpGet("byDepartmentId/{id}")]
+        public ActionResult<IEnumerable<Employee>> GetEmployeesByDepartmentId(int id)
+        {
+            if (!_context.Departments.Any(d => d.DepartmentId == id))
+            {
+                return NotFound();
+            }
+
+            return Ok(_context.Employees.Where(e => e.DepartmentId == id));
+        }
+
+        [HttpGet("byJobId/{id}")]
+        public ActionResult<IEnumerable<Employee>> GetEmployeesByJobId(int id)
+        {
+            if (!_context.Jobs.Any(j => j.JobId == id))
+            {
+                return NotFound();
+            }
+
+            return Ok(_context.Employees.Where(e => e.JobId == id));
+        }
+
         [HttpPut("{id}")]
         public IActionResult UpdateEmployee(int id, EmployeeViewModel model)
         {

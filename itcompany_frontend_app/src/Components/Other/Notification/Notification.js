@@ -1,26 +1,31 @@
 import React, { useEffect } from 'react';
 
-const Notification = ({ show, setShow, text, color, icon }) => {
+import './Notification.css'
+
+const Notification = (props) => {
   useEffect(() => {
-    if (show) {
-      const timer = setTimeout(() => setShow(false), 3000);
+    if (props.show) {
+      const timer = setTimeout(() => props.setShow(false), 3000);
       return () => clearTimeout(timer);
     }
-  }, [show, setShow]);
+  }, [props.show, props.setShow]);
 
   return (
     <div
-      className={`toast position-fixed bottom-0 end-0 m-3 ${show ? 'show' : 'hide'}`}
-      style={{ transition: 'opacity 0.5s' }}
+      className={`toast position-fixed m-3 ${props.show ? 'show' : 'hide'}`}
+      style={{ transition: 'opacity 0.5s', zIndex: "100"}}
+      id={`corner${props.corner||"4"}`}
     >
-      <div className={`toast-header text-white bg-${color}`}>
-        <i className={`me-2 ${icon}`}></i>
-        <strong className="me-auto">Notification</strong>
-        <button type="button" className={`ml-2 mb-1 close bg-${color} text-white`} onClick={() => setShow(false)} style={{border: "none"}}>
+      <div className={`toast-header text-white bg-${props.color}`} style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div>
+          <i className={`me-2 ${props.icon} mr-3`}></i>
+          <strong className="me-auto">Notification</strong>
+        </div>
+        <button type="button" className={`ml-2 mb-1 close bg-${props.color} text-white`}onClick={() => props.setShow(false)} style={{border: "none", textAlign: "right"}}>
           <span>&times;</span>
         </button>
       </div>
-      <div className="toast-body">{text}</div>
+      <div className="toast-body">{props.text}</div>
     </div>
   );
 };

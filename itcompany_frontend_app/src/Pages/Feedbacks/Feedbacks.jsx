@@ -162,8 +162,6 @@ const Feedbacks=()=>{
             return;
         }
 
-        
-        console.log(feedbackForCreate);
         axios.post(`${keys.ServerConnection}/Feedback`, { 
             employeeFromName: nowEmployeeName, 
             employeeForName: document.getElementById("userForInput").value,
@@ -192,6 +190,12 @@ const Feedbacks=()=>{
             else
             {
                 console.log("Create error: ", err);
+                console.log({ 
+                    employeeFromName: nowEmployeeName, 
+                    employeeForName: document.getElementById("userForInput").value,
+                    feedBackMark: feedbackForCreate.feedBackMark,
+                    feedBackText: feedbackForCreate.feedBackText
+                 });
             }
         });
     }
@@ -216,14 +220,16 @@ const Feedbacks=()=>{
     }
 
     return(
+        <div className="feedback-container">
         <div className="container my-5">
             <ModalWindow
+                title="Confirm deletion"
                 show={showModalWindow} 
                 handleClose={() => setShowModalWindow(false)} 
                 handleConfirm={onDeleteFeedbackHandler}
-                question="Are you sure that you want to delete that feedback?" 
                 confirmText="Yes" 
                 cancelText="Cancel">
+            <p>Are you sure that you want to delete that feedback?</p>
             </ModalWindow>
             <Notification
                 show={showNotification}
@@ -249,7 +255,6 @@ const Feedbacks=()=>{
                 </li>
             </ul>
             <div className="tab-content" id="reviewsTabContent">
-                { /*Reviews about the current user*/ }
                 <div className="tab-pane fade show active" id="user-reviews" role="tabpanel"        aria-labelledby="user-reviews-tab">
                     {
                         isMyFeedbacksLoading ?
@@ -401,6 +406,7 @@ const Feedbacks=()=>{
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 };
