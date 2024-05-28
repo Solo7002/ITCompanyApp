@@ -92,7 +92,7 @@ namespace ITCompanyApp.Controllers
             _context.Entry(employee).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("GetEmployees");
+            return Ok();
         }
 
         [HttpDelete("{id}")]

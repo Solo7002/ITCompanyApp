@@ -98,40 +98,40 @@ const CreateEmployee = () => {
                 <form onSubmit={submitHandler}>
                     <div className="form-group">
                         <label >Login</label>
-                        <input type="text" className="form-control" required name="login" placeholder="Input Login" />
+                        <input type="text" className="form-control"   name="login" placeholder="Input Login" />
                     </div>
                     <div className="form-group">
                         <label >Password</label>
-                        <input type="password"  className="form-control" required name="password" placeholder="Input Password" />
+                        <input type="password"  className="form-control"   name="password" placeholder="Input Password" />
                     </div>
                     <div className="form-group">
                         <label >Confirm password</label>
-                        <input type="password"  className="form-control" required name="confirmPassword" placeholder="Input Confirm Password" />
+                        <input type="password"  className="form-control"   name="confirmPassword" placeholder="Input Confirm Password" />
                     </div>
                     <div className="form-group">
                         <label >Lastname</label>
-                        <input type="text"  className="form-control" required name="lastname" placeholder="Input Lastname" />
+                        <input type="text"  className="form-control"   name="lastname" placeholder="Input Lastname" />
                     </div>
                     <div className="form-group">
                         <label >Firstname</label>
-                        <input type="text"  className="form-control" required name="firstname" placeholder="Input Firstname" />
+                        <input type="text"  className="form-control"   name="firstname" placeholder="Input Firstname" />
                     </div>
                     <div className="form-group">
                         <label >Birthdate</label>
-                        <input type="date" className="form-control" required name="birthdate" placeholder="Input Birthdate" />
+                        <input type="date" className="form-control"   name="birthdate" placeholder="Input Birthdate" />
                     </div>
 
                     <div className="form-group">
                         <label >Phone number</label>
-                        <input type="text"  className="form-control" required name="phone" placeholder="Input Phone" />
+                        <input type="text"  className="form-control"   name="phone" placeholder="Input Phone" />
                     </div>
                     <div className="form-group">
                         <label >Email</label>
-                        <input type="email"  className="form-control" required name="email" placeholder="Input Email" />
+                        <input type="email"  className="form-control"   name="email" placeholder="Input Email" />
                     </div>
                     <div className="form-group">
                         <label>Salary</label>
-                        <input type="number" min={1}  className="form-control" required name="salary" placeholder="Input Salary" />
+                        <input type="number" min={1}  className="form-control"   name="salary" placeholder="Input Salary" />
                     </div>
                     <div className="form-group">
                         <label >Department</label>
@@ -149,8 +149,8 @@ const CreateEmployee = () => {
                         <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.jobsDisplay}}>* No job with such name</h5>
                     </div>
                     <div className="form-group">
-                        <label>Photo</label>
-                        <input type="file" className="form-control-file" name="photo" accept="image/jpeg,image/png,image/gif"/>
+                        <label >Photo File</label>
+                        <input type="file"  className="form-control"   name="file" placeholder="Input Photo" accept="image/jpeg,image/png,image/gif" />
                     </div>
                     
                     
@@ -161,11 +161,12 @@ const CreateEmployee = () => {
                             <li key={index}><h6 style={{ color: "red", marginLeft: "5px" }}>{error}</h6></li>
                         ))}
                     
-                    
+                    <div>
                     <button type="submit" className="btn btn-success">Create</button>
                     <button type="submit" className="btn btn-dark" onClick={()=>{
                         navigate(-1);
                     }}>Back</button>
+                    </div>
                 </form>
             </div>
         </div>

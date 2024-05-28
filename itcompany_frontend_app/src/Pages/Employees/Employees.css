@@ -1,15 +1,15 @@
-.btn-info{
+.employeesContainer .btn-info{
     background-color:rgb(55, 190, 243);
   }
   
-  .btn-danger{
+ .employeesContainer .btn-danger{
     background-color: rgb(236, 78, 78);
   }
 
-  .tr-fired{
+ .employeesContainer .tr-fired{
     background-color: rgba(227, 20, 20, 0.299)!important;
   }
-  .tr-notFired{
+ .employeesContainer .tr-notFired{
     background-color: rgba(0, 0, 0, .05)!important;
   }
 
