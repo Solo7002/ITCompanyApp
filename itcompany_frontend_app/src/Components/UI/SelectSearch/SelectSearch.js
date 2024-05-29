@@ -49,7 +49,7 @@ const SelectSearch = props => {
         className={`form-control ${props.classList}`}
         disabled={disabled}
         required={props.required||''}
-        autocomplete="off"
+        autoComplete="off"
       />
       {isOpen && (
         <ul className="options-list">

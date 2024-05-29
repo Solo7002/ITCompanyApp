@@ -37,6 +37,17 @@ namespace ITCompanyApp.Controllers
             return _context.Tasks.First(t => t.TaskId == id);
         }
 
+        [HttpGet("employeeFor/{id}")]
+        public ActionResult<IEnumerable<Models.Task>> GetTasByEmployeeeForId(int id)
+        {
+            if (!_context.Employees.Any(e => e.Id == id))
+            {
+                return NotFound();
+            }
+
+            return Ok(_context.Tasks.Where(t => t.EmployeeFor_Id == null || t.EmployeeFor_Id == id));
+        }
+
         [HttpPost]
         public ActionResult<Models.Task> CreateTask(TaskViewModel model)
         {
@@ -44,7 +55,7 @@ namespace ITCompanyApp.Controllers
             {
                 return BadRequest();
             }
-            else if (!_context.Employees.Any(e => e.Id == model.EmployeeFor_Id) || !_context.Employees.Any(e => e.Id == model.EmployeeFrom_Id))
+            else if ((model.EmployeeFor_Id != null && !_context.Employees.Any(e => e.Id == model.EmployeeFor_Id)) || !_context.Employees.Any(e => e.Id == model.EmployeeFrom_Id))
             {
                 return BadRequest("No employees with such id");
             }
@@ -59,7 +70,6 @@ namespace ITCompanyApp.Controllers
                 UploadDate = DateTime.Now,
                 DeadLineDate = model.DeadLineDate,
                 Project=_context.Projects.First(e=>e.ProjectId==model.ProjectId),
-                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeFor_Id),
                 EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id)
             };
             _context.Tasks.Add(task);
@@ -102,6 +112,24 @@ namespace ITCompanyApp.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("GetTasks");
+        }
+
+        [HttpPut("setDone/{id}")]
+        public IActionResult setDoneTask(int id)
+        {
+            if (!_context.Tasks.Any(t => t.TaskId == id))
+            {
+                return NotFound();
+            }
+
+            Models.Task task = _context.Tasks.First(t => t.TaskId == id);
+            task.IsDone = true;
+            task.DoneDate = DateTime.Now;
+
+            _context.Entry(task).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]

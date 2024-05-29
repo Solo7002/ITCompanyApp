@@ -22,6 +22,7 @@ namespace ITCompanyApp.Models
         [StringLength(100, ErrorMessage = "To 100 characters")]
         [Required(ErrorMessage = "The field must be filled")]
         public string Header { get; set; }
+
         [StringLength(500, ErrorMessage = "To 500 characters")]
 
         public string Text { get; set; }

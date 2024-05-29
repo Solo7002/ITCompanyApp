@@ -1,59 +1,64 @@
-.card {
-  margin-bottom: 20px;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-}
-
-.card-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.divWithButtons{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
-.divWithButtons a{
-    width: 45%;
-    margin: 5px;
-}
-
-.card-body > h5{
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.task-type-h2{
-  margin: 15px;
+.task-page-container .task-container {
+  border-radius: 0.25rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  height: 300px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   margin-bottom: 30px;
+  transition: box-shadow 0.25s;
 }
 
-.done-div{
-  position: absolute;
-  top: calc(50% - 37.5px);
-  left: calc(50% - 37.5px);
-  border-radius: 50%;
-  padding: 20px 8px;
-  background-color: lightgreen;
-  font-size: 18pt;
+.task-page-container .task-container:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
 }
 
-@media (min-width: 1200px) {
-  .adaptive-div {
-    width: 25%;
-  }
+.task-page-container .task-cover img {
+  height: 150px;
+  width: 100%;
+  object-fit: cover;
 }
-@media (max-width: 1200px) and (min-width: 991px) {
-  .adaptive-div {
-    width: 33.33%;
-  }
+
+.task-page-container .task-content {
+  padding: 1rem;
 }
-@media (max-width: 990px) and (min-width: 601px) {
-  .adaptive-div {
-  }
+
+.task-page-container .task-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
 }
-@media (max-width: 600px) {
-  .adaptive-div {
+
+.task-page-container .task-deadline, .task-page-container .task-done-date {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.task-page-container .task-obligatory {
+  background-color: #d1ecf1;
+}
+
+.task-page-container .task-optional {
+  background-color: #fedf77;
+}
+.task-page-container .task-done {
+  background-color: #85f19e;
+}
+
+.task-page-container .task-overdue {
+  background-color: #d4555f;
+  color: white;
+}
+
+.task-page-container .task-overdue .task-deadline{
+  color: rgb(207, 207, 207);
+}
+
+.task-page-container .noTasks{
+  margin: 60px 50px;
+}
+
+@media (max-width: 767px) {
+  .task-page-container .task-container {
+    height: auto;
   }
 }

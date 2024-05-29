@@ -28,7 +28,7 @@ function App() {
         <Route path='/' element={<RequireAuth><MainLayout/></RequireAuth>}>
           <Route index element={ <Bootstrap452Helmet><Home/></Bootstrap452Helmet>}/>
           <Route path='/profile' element={<Bootstrap452Helmet><Profile/></Bootstrap452Helmet>}/>
-          <Route path='/tasks' element={<Bootstrap530Helmet><Tasks/></Bootstrap530Helmet>}/>
+          <Route path='/tasks' element={<Bootstrap452Helmet><Tasks/></Bootstrap452Helmet>}/>
           <Route path='/projects' element={<Bootstrap530Helmet><Projects/></Bootstrap530Helmet>}/>
           <Route path='/projects/create' element={<Bootstrap530Helmet><CreateProject/> </Bootstrap530Helmet>}/>
           <Route path='/projects/details/:id' element={<Bootstrap530Helmet><DetailsProject/></Bootstrap530Helmet>}/>
