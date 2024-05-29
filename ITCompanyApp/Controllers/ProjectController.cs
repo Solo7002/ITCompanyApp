@@ -55,7 +55,7 @@ namespace ITCompanyApp.Controllers
                 Description = model.Description,
                 File = model.File,
                 IsDone = model.IsDone,
-                StartProjectDate = model.StartProjectDate,
+                StartProjectDate = DateTime.Now,
                 DeadLineProjectDate = model.DeadLineProjectDate,
                 EmployeeProjectHead = _context.Employees.First(e => e.Id == model.EmployeeId)
             };

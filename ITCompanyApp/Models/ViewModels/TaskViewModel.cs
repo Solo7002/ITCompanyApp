@@ -16,6 +16,7 @@ namespace ITCompanyApp.Models.ViewModels
         [StringLength(500, ErrorMessage = "To 500 characters")]
         public string Text { get; set; }
         public string File { get; set; }
+        public string DoneFile { get; set; }
         public string Cover { get; set; }
         public bool IsDone { get; set; }
         public int? ProjectId { get; set; }

@@ -4,16 +4,19 @@ using ITCompanyApp.Helpers.DBClasses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ITCompanyApp.Migrations
+namespace ITCompanyApp.data_access.migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240529181840_intial")]
+    partial class intial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,6 +258,10 @@ namespace ITCompanyApp.Migrations
 
                     b.Property<DateTime?>("DoneDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("DoneFile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("EmployeeFor_Id")
                         .HasColumnType("int");

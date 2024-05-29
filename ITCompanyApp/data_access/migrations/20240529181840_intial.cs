@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ITCompanyApp.Migrations
+namespace ITCompanyApp.data_access.migrations
 {
     /// <inheritdoc />
-    public partial class IntialCreate : Migration
+    public partial class intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -202,6 +202,7 @@ namespace ITCompanyApp.Migrations
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Text = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     File = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoneFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cover = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDone = table.Column<bool>(type: "bit", nullable: false),
                     DoneDate = table.Column<DateTime>(type: "datetime2", nullable: true)

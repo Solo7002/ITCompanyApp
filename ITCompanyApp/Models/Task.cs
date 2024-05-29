@@ -27,6 +27,7 @@ namespace ITCompanyApp.Models
 
         public string Text { get; set; }
         public string File { get; set; }
+        public string DoneFile { get; set; }
         public string Cover { get; set; }
         public bool IsDone { get; set; }
         [DataType(DataType.Date)]
