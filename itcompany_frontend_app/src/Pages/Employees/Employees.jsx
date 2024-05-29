@@ -6,6 +6,7 @@ import keys from "../../config/keys";
 import { Link } from "react-router-dom";
 const Employees = () => {
     const { token } = useAuth();
+    const{signOut}=useAuth();
     const [employees, setEmployees] = useState([]);
     const fetchEmployees = async () => {
         try {
@@ -13,6 +14,9 @@ const Employees = () => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
             const employeesData = employeeRes.data;
 
@@ -63,7 +67,9 @@ const Employees = () => {
             }).then(res=>{
                 fetchEmployees();
             }).catch(err=>{
-                console.log(err);
+                if(err.response.status===401)
+                    signOut();
+                
             })
         }
     }
@@ -77,8 +83,9 @@ const Employees = () => {
             }).then(res=>{
                 fetchEmployees();
             }).catch(err=>{
-                console.log(err);
-            })
+            if(err.response.status===401)
+                signOut();
+        })
         }
     }
 

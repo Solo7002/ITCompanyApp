@@ -27,7 +27,7 @@ const Feedbacks=()=>{
     const [showModalWindow, setShowModalWindow] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
     const [tempDelIndex, setTempDelIndex] = useState(0);
-
+    const {signOut}=useAuth()
     const [feedbackForCreate, setFeedbackForCreate] = useState({
         feedBackText: "",
         feedBackMark: 1,
@@ -50,6 +50,9 @@ const Feedbacks=()=>{
                 })
                 .then(() => {
                     setIsMyFeedbacksLoading(false);
+                }).catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
 
                 axios.get(`${keys.ServerConnection}/Feedback/EmployeeFor/${decoded.nameid}`, {headers: {
@@ -61,6 +64,10 @@ const Feedbacks=()=>{
                 })
                 .then(() => {
                     setIsMyFeedbacksLoading(false);
+                })
+                .catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
 
                 axios.get(`${keys.ServerConnection}/Feedback/EmployeeFrom/${decoded.nameid}`, {headers: {
@@ -72,6 +79,10 @@ const Feedbacks=()=>{
                 })
                 .then(() => {
                     setIsByMeFeedbacksLoading(false);
+                })
+                .catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
 
                 axios.get(`${keys.ServerConnection}/Employee`, {headers: {
@@ -80,6 +91,10 @@ const Feedbacks=()=>{
                 .then(res => {
                     console.log("employees: ", res.data);
                     setEmployees(res.data);
+                })
+                .catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
             } catch (error) {
                 console.log(error);
@@ -114,6 +129,9 @@ const Feedbacks=()=>{
             setDisplayForError("none");
         })
         .catch(err => {
+            if(err.response.status===401)
+                signOut();
+        
             if (err.response && err.response.status === 404){
                 setEmployeeFeedbacks([]);
                 setDisplayForError("block");
@@ -184,6 +202,8 @@ const Feedbacks=()=>{
             setShowNotification(true);
         })
         .catch(err => {
+            if(err.response.status===401)
+                signOut();
             if (err.response && err.response.status === 404){
                 setDisplayForErrorCreate("block");
             }
@@ -213,6 +233,8 @@ const Feedbacks=()=>{
             forceReload();
         })
         .catch(err => {
+            if(err.response.status===401)
+                signOut();
             console.log("Delete error: ", err);
         });
 

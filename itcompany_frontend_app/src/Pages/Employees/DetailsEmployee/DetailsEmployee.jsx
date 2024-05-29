@@ -10,20 +10,26 @@ const DetailsEmployee = () => {
     const [employee, setEmployee] = useState();
     const { id } = useParams();
     const navigate=useNavigate();
-
+    const{signOut}=useAuth();
 
     const fetchEmployee = async () => {
         const employeeRes = await axios.get(`${keys.ServerConnection}/Employee/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
         const jobName = employeeRes.data.jobId
             ? await axios.get(`${keys.ServerConnection}/Job/${employeeRes.data.jobId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            }).then(res => res.data.jobName)
+            }).then(res => res.data.jobName).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
+            })
             : 'No job';
 
         const departmentName = employeeRes.data.departmentId
@@ -31,7 +37,10 @@ const DetailsEmployee = () => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            }).then(res => res.data.departmentName)
+            }).then(res => res.data.departmentName).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
+            })
             : 'No department';
         employeeRes.data.hireDate = DateReduction(employeeRes.data.hireDate);
         employeeRes.data.birthDate = DateReduction(employeeRes.data.birthDate);
@@ -44,6 +53,9 @@ const DetailsEmployee = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
 
         const projects = projectsRes.data;

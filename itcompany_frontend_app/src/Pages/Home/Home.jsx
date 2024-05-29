@@ -6,8 +6,8 @@ import axios from "axios";
 import keys from "../../config/keys";
 const Home=()=>{
     const {token}=useAuth();
-  
-    
+    const {signOut}=useAuth();
+    console.log(token);
        const handlerInfo=()=>{
         if(token){
             try {
@@ -29,6 +29,9 @@ const Home=()=>{
             Authorization:`Bearer ${token}`
         }}).then(res=>{
             console.log(res);
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         })
     }
     }

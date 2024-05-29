@@ -29,6 +29,9 @@ const UpdateEmployee=()=>{
             }}).then(res=>{
                 
                 setEmployee({...res.data,birthDate:DateReduction(res.data.birthDate)});
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
 
 
@@ -38,18 +41,25 @@ const UpdateEmployee=()=>{
                 Authorization: `Bearer ${token}`
             }}).then(res=>{
                 setDepartments(res.data);
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             })//request get departments
 
             await axios.get(`${keys.ServerConnection}/Job`,{headers: {
                 Authorization: `Bearer ${token}`
             }}).then(res=>{
                 setJobs(res.data);
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             })//request get jobs
 
         } catch (error) {
             console.log(error);
         }
     }
+    const{signOut}=useAuth();
     const submitHandler=(event)=>{
         event.preventDefault();
         const form=event.target;
@@ -84,6 +94,10 @@ const UpdateEmployee=()=>{
                 navigate('/employees');
                 
             }).catch(err=>{
+              
+                    if(err.response.status===401)
+                        signOut();
+                
                 if(err.response.data.errors!=null){
                     const errorMessages = Object.values(err.response.data.errors)
                     .flatMap(errorArray => errorArray.map(errorMessage => errorMessage));

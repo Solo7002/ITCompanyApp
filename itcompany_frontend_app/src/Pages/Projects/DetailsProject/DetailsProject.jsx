@@ -7,6 +7,7 @@ import keys from '../../../config/keys';
 import DateReduction from '../../../Function/DateReduction';
 const DetailsProject=()=>{
     const {token}=useAuth();
+    const {signOut}=useAuth();
     const navigate=useNavigate();
     const [project,setProject]=useState();
     const {id}=useParams();
@@ -15,12 +16,18 @@ const DetailsProject=()=>{
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then(res=>{return res.data}).catch(err=>console.log(err));
+        }).then(res=>{return res.data}).catch(err=>{
+            if(err.response.status===401)
+                signOut();
+            console.log(err)});
         const employees=await axios.get(`${keys.ServerConnection}/Project/getEmployeeInProject/${id}`,{
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then(res=>{return res.data}).catch(err=>console.log(err));
+        }).then(res=>{return res.data}).catch(err=>{
+            if(err.response.status===401)
+                signOut();
+            console.log(err)});
         const employeesWithJobs = await Promise.all(employees.map(async (employee) => {
             try {
                 if(employee.jobId)
@@ -28,7 +35,11 @@ const DetailsProject=()=>{
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
+                }).catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
+    
                 return { ...employee, jobName: jobRes.data.jobName };
             }
             else{
@@ -40,7 +51,10 @@ const DetailsProject=()=>{
             }}));
             const tasksRes=await axios.get(`${keys.ServerConnection}/Project/getTasksInProject/${project.projectId}`,{ headers: {
                 Authorization: `Bearer ${token}`
-            }}).then(res=>{return res.data}).catch(err=>console.log(err));
+            }}).then(res=>{return res.data}).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
+                console.log(err)});
             const tasksStatus=tasksRes.map(task=>({
                 ...task,status:task.isDone ? 'Completed' : 'Pending'
             }));
@@ -48,7 +62,10 @@ const DetailsProject=()=>{
             console.log(project.projectId);
             const employeeProjectHead=await axios.get(`${keys.ServerConnection}/Employee/${project.employeeId}`,{ headers: {
                 Authorization: `Bearer ${token}`
-            }}).then(res=>{return res.data}).catch(err=>console.log(err));
+            }}).then(res=>{return res.data}).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
+                console.log(err)});
         
         project.startProjectDate=DateReduction(project.startProjectDate);
         project.deadLineProjectDate=DateReduction(project.deadLineProjectDate);

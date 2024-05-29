@@ -5,6 +5,7 @@ import axios from "axios";
 import keys from "../../../config/keys";
 import SelectSearch from "../../../Components/UI/SelectSearch/SelectSearch";
 const CreateProject=()=>{
+    const {signOut}=useAuth();
     const navigate=useNavigate();
     const {token}=useAuth();
     const [errors,setErrors]=useState();
@@ -17,7 +18,11 @@ const CreateProject=()=>{
             }}).then(res=>{return res.data}).catch(err=>console.log(err));
         const employeesWithFullName=await Promise.all(response.map(async(employee)=>{
             return {...employee,fullName:`${employee.lastName} ${employee.firstName}`};
-        }));
+        })).catch(err=>{
+            if(err.response.status===401)
+                signOut();
+        });
+;
         setEmployees(employeesWithFullName);
     }
     useEffect(()=>{
@@ -45,6 +50,8 @@ const CreateProject=()=>{
                 console.log(res);
                 navigate('/projects');
             }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
                 if(err.response.data.errors!=null){
                     const errorMessages = Object.values(err.response.data.errors)
                     .flatMap(errorArray => errorArray.map(errorMessage => errorMessage));

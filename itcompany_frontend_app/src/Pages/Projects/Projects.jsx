@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import DateReduction from "../../Function/DateReduction";
 const Projects = () => {
     const { token } = useAuth();
+    const { signOut } = useAuth();
     const [projects, setProjects] = useState([]);
     
     useEffect(() => {
@@ -16,7 +17,11 @@ const Projects = () => {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
+                }).catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
+    
               
                 const transformedProjects = response.data.map(project => ({
                     ...project,

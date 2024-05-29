@@ -49,7 +49,7 @@ const DepsJobs=()=>{
         icon: "fa-regular fa-circle-check",
         corner: "1"
     });
-
+    const{ signOut}=useAuth();
     useEffect(()=> {
         if(token){
             const decoded = jwtDecode(token);
@@ -63,6 +63,9 @@ const DepsJobs=()=>{
             })
             .then(() => {
                 setDepartmentsLoading(false);
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
 
             axios.get(`${keys.ServerConnection}/Job`, {headers: {
@@ -74,14 +77,22 @@ const DepsJobs=()=>{
             })
             .then(() => {
                 setJobsLoading(false);
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
+
 
             axios.get(`${keys.ServerConnection}/Employee`, {headers: {
                 Authorization:`Bearer ${token}`
             }})
             .then(res => {
                 setEmployees(res.data);
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
+
         }
     }, [token, reload]);
 
@@ -125,14 +136,22 @@ const DepsJobs=()=>{
         .then(res => {
             setSelectedDepartment(res.data);
             setTempDepName(res.data.departmentName);
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
+
 
         axios.get(`${keys.ServerConnection}/Employee/byDepartmentId/${depId}`, {headers: {
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
             setEmployeesInSelDep(res.data);
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
+
     }
 
     const jobChooseHandler = (event, jobId) => {
@@ -147,14 +166,22 @@ const DepsJobs=()=>{
         .then(res => {
             setSelectedJob(res.data);
             setTempJobName(res.data.jobName);
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
+
 
         axios.get(`${keys.ServerConnection}/Employee/byJobId/${jobId}`, {headers: {
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
             setEmployeesInSelJob(res.data);
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
+
     }
 
     const isDepartmentValid = (depNameInput, depHeadInput, emps, isEdit) => {
@@ -241,7 +268,11 @@ const DepsJobs=()=>{
                 depHeadInput.value = "";
     
                 forceReload();
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
+
         }
     }
 
@@ -271,7 +302,11 @@ const DepsJobs=()=>{
                 depHeadInput.value = "";
    
                 forceReload();
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
+
         }
     }
 
@@ -291,7 +326,11 @@ const DepsJobs=()=>{
             });
 
             forceReload();
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
+
     }
 
     const addJobHandler = () => {
@@ -317,7 +356,11 @@ const DepsJobs=()=>{
                 jobNameInput.value = "";
     
                 forceReload();
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
+
         }
     }
 
@@ -343,7 +386,11 @@ const DepsJobs=()=>{
                 jobNameInput.value = "";
    
                 forceReload();
+            }).catch(err=>{
+                if(err.response.status===401)
+                    signOut();
             });
+
         }
     }
 
@@ -363,7 +410,11 @@ const DepsJobs=()=>{
             });
 
             forceReload();
+        }).catch(err=>{
+            if(err.response.status===401)
+                signOut();
         });
+
     }
 
     return(

@@ -31,11 +31,12 @@ builder.Services.AddAuthentication(opt =>
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = false,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            ClockSkew=TimeSpan.Zero
         };
     });//default validation token
 
@@ -53,12 +54,17 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+
+
 builder.Services.AddIdentity<IdentityUser<long>, IdentityRole<long>>()
     .AddEntityFrameworkStores<DBContext>()
     .AddUserManager<UserManager<IdentityUser<long>>>()
     .AddSignInManager<SignInManager<IdentityUser<long>>>();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -70,7 +76,9 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 

@@ -8,11 +8,12 @@ import "./Profile.css";
 
 const Profile=()=>{
     const {token} = useAuth();
+    const {signOut}=useAuth();
     const [employee, setEmployee] = useState({});
     const [user, setUser] = useState({});
     const [department, setDepartment] = useState({});
     const [job, setJob] = useState({});
-
+    
     useEffect(()=>{
         if(token){
             try {
@@ -24,6 +25,9 @@ const Profile=()=>{
                 .then(res => {
                     res.data.password = '';
                     setUser(res.data);
+                }).catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
 
                 axios.get(`${keys.ServerConnection}/Employee/${decoded.nameid}`, {headers: {
@@ -40,15 +44,27 @@ const Profile=()=>{
                     }})
                     .then(res1 => {
                         setDepartment(res1.data);
+                    }).catch(err=>{
+                        if(err.response.status===401)
+                            signOut();
                     });
+        
 
                     axios.get(`${keys.ServerConnection}/Job/${res.data.jobId}`, {headers: {
                         Authorization:`Bearer ${token}`
                     }})
                     .then(res1 => {
                         setJob(res1.data);
+                    }).catch(err=>{
+                        if(err.response.status===401)
+                            signOut();
                     });
+        
+                }).catch(err=>{
+                    if(err.response.status===401)
+                        signOut();
                 });
+    
 
             } catch (error) {
                 console.log(error);
@@ -86,6 +102,8 @@ const Profile=()=>{
             console.log("resEmployee: ", res.data);
         })
         .catch((err) => {
+            if(err.response.status===401)
+                signOut();
             console.log("Error in put: ", err);
         });
         
@@ -96,6 +114,8 @@ const Profile=()=>{
             console.log("resEmployee: ", res.data);
         })
         .catch((err) => {
+            if(err.response.status===401)
+                signOut();
             console.log("Error in put: ", err);
         });
     }

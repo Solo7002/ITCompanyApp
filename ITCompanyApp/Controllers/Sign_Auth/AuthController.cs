@@ -32,7 +32,8 @@ namespace ITCompanyApp.Controllers.Sign_Auth
                 User user = _context.Users.First(u => u.Login == model.Login);
                 if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 {
-                    var token = GenerateJwtToken(user.Login,user.Id);
+                    string accessLevel = _context.AccessLevels.First(a => a.AccessLevelId == user.AccessLevelId).AccessLevelName;
+                    var token = GenerateJwtToken(user, accessLevel);
 
                     return Ok(new { token });
                 }
@@ -102,20 +103,22 @@ namespace ITCompanyApp.Controllers.Sign_Auth
             }
         }
 
-        private string GenerateJwtToken(string userName,int id)
+        private string GenerateJwtToken(User user,string accessLevels)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtkey = _configuration["Jwt:Key"];
             var key = jwtkey != null? Encoding.ASCII.GetBytes(jwtkey) : null;
-            
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, userName), 
-                new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Login),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Actor, accessLevels)
                 }),
-                Expires = DateTime.UtcNow.AddHours(2),//time live token
+                Expires = DateTime.UtcNow.Add(TimeSpan.FromHours(2)),//time live token,
+                NotBefore = DateTime.UtcNow,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -43,6 +43,7 @@ const CreateEmployee = () => {
             console.log(error);
         }
     },[token]);
+    const {signOut}=useAuth();
     const submitHandler=(event)=>{
         event.preventDefault();
         const form=event.target;
@@ -77,6 +78,10 @@ const CreateEmployee = () => {
             navigate('/employees');
             
         }).catch(err=>{
+           
+                if(err.response.status===401)
+                    signOut();
+            
             if(err.response.data.errors!=null){
                 const errorMessages = Object.values(err.response.data.errors)
                 .flatMap(errorArray => errorArray.map(errorMessage => errorMessage));
