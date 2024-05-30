@@ -38,7 +38,7 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet("employeeFor/{id}")]
-        public ActionResult<IEnumerable<Models.Task>> GetTasByEmployeeeForId(int id)
+        public ActionResult<IEnumerable<Models.Task>> GetTaskByEmployeeeForId(int id)
         {
             if (!_context.Employees.Any(e => e.Id == id))
             {
@@ -51,6 +51,7 @@ namespace ITCompanyApp.Controllers
         [HttpPost]
         public ActionResult<Models.Task> CreateTask(TaskViewModel model)
         {
+            model.DoneFile = "";
             if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
@@ -65,12 +66,14 @@ namespace ITCompanyApp.Controllers
                 Header = model.Header,
                 Text = model.Text,
                 File = model.File,
+                DoneFile = model.DoneFile,
                 Cover = model.Cover,
                 IsDone = model.IsDone,
                 UploadDate = DateTime.Now,
                 DeadLineDate = model.DeadLineDate,
                 Project=_context.Projects.First(e=>e.ProjectId==model.ProjectId),
-                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id)
+                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id),
+                EmployeeFor = model.EmployeeFor_Id != null? _context.Employees.First(e => e.Id == model.EmployeeFor_Id) : null
             };
             _context.Tasks.Add(task);
             _context.SaveChanges();
@@ -81,6 +84,7 @@ namespace ITCompanyApp.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateTask(int id, TaskViewModel model)
         {
+            model.DoneFile = "";
             if (model == null || !ModelState.IsValid)
             {
                 return BadRequest();
@@ -100,6 +104,7 @@ namespace ITCompanyApp.Controllers
                 Header = model.Header,
                 Text = model.Text,
                 File = model.File,
+                DoneFile = model.DoneFile,
                 Cover = model.Cover,
                 IsDone = model.IsDone,
                 UploadDate = DateTime.Now,

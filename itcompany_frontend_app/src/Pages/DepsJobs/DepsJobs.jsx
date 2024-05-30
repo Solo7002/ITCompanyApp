@@ -134,11 +134,14 @@ const DepsJobs=()=>{
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
+            console.log(res.data);
             setSelectedDepartment(res.data);
             setTempDepName(res.data.departmentName);
-        }).catch(err=>{
-            if(err.response.status===401)
+        })
+        .catch(err=>{
+            if(err.response.status===401){
                 signOut();
+            }  
         });
 
 

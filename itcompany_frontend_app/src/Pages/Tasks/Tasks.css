@@ -57,6 +57,10 @@
   margin: 60px 50px;
 }
 
+.task-page-container #all-tasks, .task-page-container #obligatory, .task-page-container #optional, .task-page-container #done{
+  margin-left: 30px;
+}
+
 @media (max-width: 767px) {
   .task-page-container .task-container {
     height: auto;
