@@ -65,13 +65,15 @@ const Projects = () => {
                     value={searchProject}
                     onChange={searchProjectHandler}
                 /> 
-                {filteredProjects.map((project, index) => (
+                {
+                projects.length>0
+                ?
+                filteredProjects.map((project, index) => (
                     <div className="col-lg-3 col-md-6 mb-4" key={index}>
                         <div className="card">
                             <img src="https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" className="card-img-top" alt="Project Alpha" />
                             <div className="card-body">
                                 <h5 className="card-title">{project.projectName}</h5>
-                                <p className="card-text">{project.description}</p>
                                 <p className="project-dates">
                                     <div><strong>Start Date:</strong> {project.startProjectDate}</div>
                                     <div><strong>Deadline:</strong> {project.deadLineProjectDate}</div>
@@ -85,7 +87,11 @@ const Projects = () => {
                             
                         </div>
                     </div>
-                ))}
+                    
+                ))
+                :
+                <div>No Projects</div>
+            }
             </div>
         </div>
     );

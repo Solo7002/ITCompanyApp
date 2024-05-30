@@ -19,6 +19,7 @@ import { DetailsEmployee } from './Pages/Employees/DetailsEmployee/DetailsEmploy
 import { CreateProject } from './Pages/Projects/CreateProject/CreateProject.jsx';
 import { DetailsProject } from './Pages/Projects/DetailsProject/DetailsProject.jsx';
 import { UpdateEmployee } from './Pages/Employees/UpdateEmployee/UpdateEmployee.jsx';
+import { UpdateProject } from './Pages/Projects/UpdateProject/UpdateProject.jsx';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path='/projects' element={<Bootstrap530Helmet><Projects/></Bootstrap530Helmet>}/>
           <Route path='/projects/create' element={<Bootstrap530Helmet><CreateProject/> </Bootstrap530Helmet>}/>
           <Route path='/projects/details/:id' element={<Bootstrap530Helmet><DetailsProject/></Bootstrap530Helmet>}/>
+          <Route path='/projects/update/:id' element={<Bootstrap530Helmet><UpdateProject/></Bootstrap530Helmet>}/>
           <Route path='/employees' element={<Bootstrap452Helmet><Employees/></Bootstrap452Helmet>}/>
           <Route path='/depsJobs' element={<Bootstrap452Helmet><DepsJobs/></Bootstrap452Helmet>}/>
           <Route path='/financies' element={<Finances/>}/>

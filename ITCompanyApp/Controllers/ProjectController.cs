@@ -48,7 +48,10 @@ namespace ITCompanyApp.Controllers
             {
                 return BadRequest("No employees with such id");
             }
-
+            else if (model.DeadLineProjectDate <= DateTime.Now)
+            {
+                return BadRequest("DeadLine incorrect");
+            }
             Project project = new Project
             {
                 ProjectName = model.ProjectName,
@@ -81,6 +84,11 @@ namespace ITCompanyApp.Controllers
             {
                 return BadRequest("No employees with such id");
             }
+            else if (model.DeadLineProjectDate <= DateTime.Now)
+            {
+                return BadRequest("DeadLine incorrect");
+            }
+
 
             Project project = new Project
             {
@@ -97,7 +105,7 @@ namespace ITCompanyApp.Controllers
             _context.Entry(project).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("GetProjects");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -112,7 +120,7 @@ namespace ITCompanyApp.Controllers
             _context.Projects.Remove(project);
             _context.SaveChanges();
 
-            return RedirectToAction("GetProjects");
+            return Ok();
         }
 
         [HttpGet]

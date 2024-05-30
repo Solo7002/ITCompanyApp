@@ -22,7 +22,6 @@ const CreateProject=()=>{
             if(err.response.status===401)
                 signOut();
         });
-;
         setEmployees(employeesWithFullName);
     }
     useEffect(()=>{
@@ -73,16 +72,16 @@ const CreateProject=()=>{
                 <form onSubmit={submitHandler}>
                     <div className="form-group">
                         <label >Project Name</label>
-                        <input type="text"  className="form-control" required name="projectName" placeholder="Input Project Name" />
+                        <input type="text"  className="form-control"   name="projectName" placeholder="Input Project Name" />
                     </div>
                     
                     <div className="form-group">
                         <label >Photo File</label>
-                        <input type="file"  className="form-control" required name="file" placeholder="Input Photo" accept="image/jpeg,image/png,image/gif" />
+                        <input type="file"  className="form-control"   name="file" placeholder="Input Photo" accept="image/jpeg,image/png,image/gif" />
                     </div>
                     <div className="form-group">
                         <label >DeadLine Project Date</label>
-                        <input type="date"  className="form-control" required name="deadlineProjectDate" placeholder="Input Deadeline" />
+                        <input type="date"  className="form-control"   name="deadlineProjectDate" placeholder="Input Deadeline" />
                     </div>
                     <div className="form-group">
                         <label >Team Lead</label>
@@ -92,7 +91,7 @@ const CreateProject=()=>{
 
                     <div className="form-group">
                         <label >Description</label>
-                        <input type="text"  className="form-control" required name="description" placeholder="Input Description" multiple  />
+                        <textarea type="text"  className="form-control"   name="description" placeholder="Input Description" aria-multiline={3}  />
                     </div>
                     <hr />
                         {

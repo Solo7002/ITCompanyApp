@@ -74,6 +74,19 @@ const DetailsProject=()=>{
 
 
     }
+    const deleteHandler=()=>{
+        axios.delete(`${keys.ServerConnection}/Project/${id}`,{ headers: {
+            Authorization: `Bearer ${token}`
+        }}).then(res=>{
+            console.log(res);
+            navigate('/projects');
+        }).catch(err=>{
+            
+            if(err.response.status===401)
+                signOut();
+            console.log(err)
+        });
+    }
     useEffect(()=>{
         fetchProjects();
     },[token]);
@@ -136,8 +149,8 @@ const DetailsProject=()=>{
             
         </div>
         <div>
-        <Link ><button className='btn btn-success '>Update</button></Link>
-        <Link ><button className='btn btn-danger '>Delete</button></Link>
+        <Link to={`/projects/update/${project.projectId}`} ><button className='btn btn-success '>Update</button></Link>
+        <Link ><button className='btn btn-danger ' onClick={deleteHandler}>Delete</button></Link>
         <Link ><button className='btn btn-dark ' onClick={()=>{
                         navigate(-1);
                     }}>Back</button></Link>

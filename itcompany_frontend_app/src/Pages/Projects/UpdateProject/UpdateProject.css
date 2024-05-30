@@ -1,4 +1,4 @@
-.projectsContainer .form-container {
+.updateProjectContainer .form-container {
         
          
     background-color: #ffffff;
@@ -8,19 +8,22 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.projectsContainer .form-header {
+.updateProjectContainer .form-header {
     margin-bottom: 20px;
 }
-.projectsContainer .form-group label {
+.updateProjectContainer .form-group label {
     font-weight: bold;
 }
-.projectsContainer .btn-custom {
+.updateProjectContainer .btn-custom {
     background-color: #007bff;
     color: #ffffff;
 }
-.projectsContainer .btn-custom:hover {
+.updateProjectContainer .btn-custom:hover {
     background-color: #0056b3;
 }
-.projectsContainer .btn{
+.updateProjectContainer .btn{
     margin: 5px;
+}
+.updateProjectContainer .form-group{
+    margin-bottom: 10px;
 }
