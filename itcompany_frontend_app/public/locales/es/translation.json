@@ -85,6 +85,8 @@
         }
     },
     "profile": {
+        "Completedtasks": "Tareas completadas",
+        "Tasks": "Tareas",
         "name": "Nombre",
         "settings": "Ajustes",
         "userInformation": "Información del usuario",
@@ -281,6 +283,20 @@
         "Remember me": "Recuérdame",
         "Login": "Iniciar sesión",
         "Forgot password?": "¿Olvidaste tu contraseña?"
+    },
+    "Month": {
+        "January": "Enero",
+        "February": "Febrero",
+        "March": "Marzo",
+        "April": "Abril",
+        "May": "Mayo",
+        "June": "Junio",
+        "July": "Julio",
+        "August": "Agosto",
+        "September": "Septiembre",
+        "October": "Octubre",
+        "November": "Noviembre",
+        "December": "Diciembre"
     }
     
 }

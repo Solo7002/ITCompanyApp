@@ -4,6 +4,7 @@ using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Task = ITCompanyApp.Models.Task;
 
 namespace ITCompanyApp.Controllers
 {
@@ -127,7 +128,7 @@ namespace ITCompanyApp.Controllers
         }
         [HttpPost]
         [Route("appoint/{id}")]
-       public IActionResult AppointEmployee(int id)
+        public IActionResult AppointEmployee(int id)
         {
             if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
             {
@@ -145,12 +146,44 @@ namespace ITCompanyApp.Controllers
         {
             if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
             {
-                return null ;
+                return null;
             }
             Employee employee = _context.Employees.First(e => e.Id == id);
             List<Project> projects = employee.Projects.Where(p => p.IsDone).OrderBy(p => Math.Abs((p.DeadLineProjectDate - DateTime.Today).TotalDays)).Take(3).ToList();
             return projects;
         }
+        [HttpGet]
+        [Route("getCountTasks/{id}")]
+        public IEnumerable<int> GetCountTaskInMonth(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return null;
+            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
+            List<Task> tasks = _context.Tasks
+    .Where(t => t.EmployeeFor_Id == employee.Id
+                && t.IsDone
+                && t.DoneDate.HasValue
+                && t.DoneDate.Value.Year == DateTime.Now.Year)
+    .OrderBy(t => t.DoneDate)
+    .ToList();
+            var completedTasksByMonth = tasks
+                .GroupBy(t => t.DoneDate.Value.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
 
+            int[] monthlyTaskCounts = new int[12];
+            foreach (var result in completedTasksByMonth)
+            {
+                monthlyTaskCounts[result.Month - 1] = result.Count; 
+            }
+            return monthlyTaskCounts;
+
+        }
     }   
 }

@@ -38,3 +38,7 @@
 #image-container:active #overlay {
   background-color: rgba(0, 0, 0, 0.8);
 }
+#statistick{
+  width:500px;
+  height:200px;
+}

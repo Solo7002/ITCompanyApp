@@ -85,6 +85,8 @@
         }
     },
     "profile": {
+        "Completedtasks": "Виконані завдання",
+        "Tasks": "Завдання",
         "name": "Ім'я",
         "settings": "Налаштування",
         "userInformation": "Інформація про користувача",
@@ -281,8 +283,21 @@
         "Remember me": "Запам'ятати мене",
         "Login": "Увійти",
         "Forgot password?": "Забули пароль?"
+    },
+    "Month": {
+        "January": "Січень",
+        "February": "Лютий",
+        "March": "Березень",
+        "April": "Квітень",
+        "May": "Травень",
+        "June": "Червень",
+        "July": "Липень",
+        "August": "Серпень",
+        "September": "Вересень",
+        "October": "Жовтень",
+        "November": "Листопад",
+        "December": "Грудень"
     }
-    
     
     
 }

@@ -85,6 +85,8 @@
         }
     },
     "profile": {
+        "Completedtasks": "完了したタスク",
+        "Tasks": "タスク",
         "name": "名前",
         "settings": "設定",
         "userInformation": "ユーザー情報",
@@ -282,5 +284,19 @@
         "Remember me": "私を覚えてますか",
         "Login": "ログイン",
         "Forgot password?": "パスワードをお忘れですか？"
+    },
+    "Month": {
+        "January": "一月",
+        "February": "二月",
+        "March": "三月",
+        "April": "四月",
+        "May": "五月",
+        "June": "六月",
+        "July": "七月",
+        "August": "八月",
+        "September": "九月",
+        "October": "十月",
+        "November": "十一月",
+        "December": "十二月"
     }
 }

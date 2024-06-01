@@ -5,6 +5,7 @@ import axios from "axios";
 import keys from "../../config/keys";
 import { useTranslation } from "react-i18next"; 
 import "./Profile.css";
+import { MyStatistics } from "../../Components/UI/MyStatistics/MyStatistics";
 
 const Profile = () => {
     const { t } = useTranslation(); 
@@ -14,7 +15,7 @@ const Profile = () => {
     const [user, setUser] = useState({});
     const [department, setDepartment] = useState({});
     const [job, setJob] = useState({});
-
+    const[countTask,setCountTasks]=useState([]);
     useEffect(() => {
         if (token) {
             try {
@@ -56,6 +57,12 @@ const Profile = () => {
                         if (err.response.status === 401)
                             signOut();
                     });
+                    axios.get(`${keys.ServerConnection}/Employee/getCountTasks/${decoded.nameid}`,{ headers: { Authorization: `Bearer ${token}` } }).then(res=>{
+                        setCountTasks(res.data);
+                    }).catch(err => {
+                        if (err.response.status === 401)
+                            signOut();
+                    });
 
 
             } catch (error) {
@@ -64,6 +71,7 @@ const Profile = () => {
         }
     }, [token])
 
+    const Month=[t("Month.January"),t("Month.February"),t("Month.March"),t("Month.April"),t("Month.May"),t("Month.June"),t("Month.July"),t("Month.August"),t("Month.September"),t("Month.October"),t("Month.November"),t("Month.December"),]
     const inputUserChangeHandler = (event) => {
         const { name, value } = event.target;
         setUser({
@@ -201,8 +209,8 @@ const Profile = () => {
                                 </div>
                             </div>
                             <hr />
-                            <div className="row mt-3">
-                                <img src="https://codyshop.ru/wp-content/uploads/2019/06/grafik.jpg" style={{ width: "100%" }} />
+                            <div className="row mt-3" id="statistick">
+                               <MyStatistics labels={Month} label={t('profile.Tasks')} text={t('profile.Completedtasks')} data={countTask} />
                             </div>
                         </div>
                     </div>
