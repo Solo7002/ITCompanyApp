@@ -8,13 +8,14 @@ import ModalWindow from "../../Components/Other/ModalWindow/ModalWindow.js";
 import Notification from "../../Components/Other/Notification/Notification.js";
 
 import "./DepsJobs.css";
+import { useTranslation } from "react-i18next";
 
 const DepsJobs=()=>{
     const {token} = useAuth();
     const [reload, setReload] = useState(false);
-
+    const{t}=useTranslation();
     const [employees, setEmployees] = useState([]);
-    const [nowPageName, setNowPageName] = useState("Departments");
+    const [nowPageName, setNowPageName] = useState(t("DepsJobs.department.Departments"));
     const [departments, setDepartments] = useState([]);
     const [filteredDepartments, setFilteredDepartments] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState({});
@@ -191,27 +192,27 @@ const DepsJobs=()=>{
         let currentEmp = emps[0];
 
         if (depNameInput.value.trim() === ''){
-            depNameInput.setCustomValidity('This field is required');
+            depNameInput.setCustomValidity(t("DepsJobs.errors.ThisRequired"));
             depNameInput.reportValidity();
         }
         else if (depNameInput.value.length < 2){
-            depNameInput.setCustomValidity('Min lenght is 2 symbols');
+            depNameInput.setCustomValidity(t("DepsJobs.errors.MinLenght"));
             depNameInput.reportValidity();
         }
         else if ((!isEdit && departments.filter(dep => dep.departmentName == depNameInput.value).length != 0)||(isEdit && departments.filter(dep => dep.departmentName == depNameInput.value).length != 0 && selectedDepartment.departmentName != depNameInput.value)){
-            depNameInput.setCustomValidity('Department with such name already exists!');
+            depNameInput.setCustomValidity(t("DepsJobs.errors.DepartmentExists"));
             depNameInput.reportValidity();
         }
         else if (depHeadInput.value.trim() === ''){
-            depHeadInput.setCustomValidity('This field is required.');
+            depHeadInput.setCustomValidity(t("DepsJobs.errors.ThisRequired"));
             depHeadInput.reportValidity();
         } 
         else if (emps.length == 0){
-            depHeadInput.setCustomValidity('No employees with such name');
+            depHeadInput.setCustomValidity(t("DepsJobs.errors.NoEmployees"));
             depHeadInput.reportValidity();
         }
         else if ((!isEdit && departments.filter(d => d.departmentHeadId == currentEmp.id).length > 0)||(isEdit && departments.filter(d => d.departmentHeadId == currentEmp.id).length > 0 && selectedDepartment.departmentHeadName != depHeadInput.value)){
-            depHeadInput.setCustomValidity('That employee is already head of another department');
+            depHeadInput.setCustomValidity(t("DepsJobs.errors.EmployeeAlready"));
             depHeadInput.reportValidity();
         }
         else {
@@ -222,19 +223,19 @@ const DepsJobs=()=>{
 
     const isJobValid = (jobNameInput, isEdit) => {
         if (jobNameInput.value.trim() === ''){
-            jobNameInput.setCustomValidity('This field is required');
+            jobNameInput.setCustomValidity(t("DepsJobs.errors.ThisRequired"));
             jobNameInput.reportValidity();
         }
         else if (jobNameInput.value.length < 2){
-            jobNameInput.setCustomValidity('Min lenght is 2 symbols');
+            jobNameInput.setCustomValidity(t("DepsJobs.errors.MinLenght"));
             jobNameInput.reportValidity();
         }
         else if (jobs.filter(job => job.jobName == jobNameInput.value).length != 0){
             if (isEdit && selectedJob.jobName == jobNameInput.value){
-                jobNameInput.setCustomValidity(`New job name can't be like old`);
+                jobNameInput.setCustomValidity(t("DepsJobs.errors.JobNameCant"));
             } 
             else{
-                jobNameInput.setCustomValidity('Job with such name already exists!');
+                jobNameInput.setCustomValidity(t("DepsJobs.errors.JobSuch"));
             }
             jobNameInput.reportValidity();
         }
@@ -262,7 +263,7 @@ const DepsJobs=()=>{
                 setNotification({
                     ...notification,
                     show: true,
-                    text: `Department ${depNameInput.value} added`,
+                    text: `${t("DepsJobs.department.Department")} ${depNameInput.value} ${t("DepsJobs.department.DepartmentAdded")}`,
                     color: "success",
                     icon: "fa-regular fa-circle-check"
                 });
@@ -297,7 +298,7 @@ const DepsJobs=()=>{
                 setNotification({
                     ...notification,
                     show: true,
-                    text: `Department ${depNameInput.value} updated`,
+                    text: `${t("DepsJobs.department.Department")} ${depNameInput.value} ${t("DepsJobs.department.DepartmentUpdated")}`,
                     color: "success",
                     icon: "fa-regular fa-circle-check"
                 });
@@ -323,7 +324,7 @@ const DepsJobs=()=>{
             setNotification({
                 ...notification,
                 show: true,
-                text: `Department deleted`,
+                text: `${t("DepsJobs.department.DepartmentDeleted")}`,
                 color: "success",
                 icon: "fa-regular fa-circle-check"
             });
@@ -351,7 +352,7 @@ const DepsJobs=()=>{
                 setNotification({
                     ...notification,
                     show: true,
-                    text: `Job ${jobNameInput.value} added`,
+                    text: `${t("DepsJobs.job.Job")} ${jobNameInput.value} ${t("DepsJobs.job.JobAdded")}`,
                     color: "success",
                     icon: "fa-regular fa-circle-check"
                 });
@@ -382,7 +383,7 @@ const DepsJobs=()=>{
                 setNotification({
                     ...notification,
                     show: true,
-                    text: `Job ${jobNameInput.value} updated`,
+                    text: `${t("DepsJobs.job.Job")} ${jobNameInput.value} ${t("DepsJobs.job.JobUpdated")}`,
                     color: "success",
                     icon: "fa-regular fa-circle-check"
                 });
@@ -407,7 +408,7 @@ const DepsJobs=()=>{
             setNotification({
                 ...notification,
                 show: true,
-                text: `Job deleted`,
+                text: `${t("DepsJobs.job.JobDeleted")}`,
                 color: "success",
                 icon: "fa-regular fa-circle-check"
             });
@@ -423,89 +424,89 @@ const DepsJobs=()=>{
     return(
         <div className="DepsJobscontainer">
             <ModalWindow
-                title="Adding department"
+                title={t("DepsJobs.department.AddingDepartment")}
                 show={showAddDepModal} 
                 handleClose={() => setShowAddDepModal(false)} 
                 handleConfirm={addDepartmentHandler}
-                confirmText="Add new department" 
-                cancelText="Cancel">
+                confirmText={t("DepsJobs.department.AddNewDepartament")}
+                cancelText={t("DepsJobs.department.Cancel")}>
             <div className="modal-form">
                 <div className="row">
-                    <label className="col-md-5">Department name</label>
+                    <label className="col-md-5">{t("DepsJobs.department.DepartmentName")}</label>
                     <input className="form-control col-md-6" type="text" style={{marginLeft: "15px"}}id="add-dep-name-input" minLength={2} maxLength={50}/>
                 </div>
                 <br />
                 <div className="row">
-                    <label className="col-md-5">Department head</label>
+                    <label className="col-md-5">{t("DepsJobs.department.DepartmentHead")}</label>
                     <SelectSearch options={employees.map(employee => employee.lastName + " " + employee.firstName)} classListDiv="col-md-6" id="add-dep-dhead-input"></SelectSearch>
                 </div>
             </div>
             </ModalWindow>
             <ModalWindow
-                title="Editing department"
+                title={t("EditingDepartment")}
                 show={showEditDepModal} 
                 handleClose={() => setShowEditDepModal(false)} 
                 handleConfirm={updateDepartmentHandler}
-                confirmText="Update department" 
-                cancelText="Cancel">
+                confirmText={t("DepsJobs.department.UpdateDepartment")}
+                cancelText={t("DepsJobs.department.Cancel")}>
             <div className="modal-form">
                 <div className="row">
-                    <label className="col-md-5">Department name</label>
+                    <label className="col-md-5">{t("DepsJobs.department.DepartmentName")}</label>
                     <input className="form-control col-md-6" type="text" style={{marginLeft: "15px"}}id="edit-dep-name-input" minLength={2} maxLength={50} value={tempDepName} onChange={(event) => setTempDepName(event.target.value)}/>
                 </div>
                 <br />
                 <div className="row">
-                    <label className="col-md-5">Department head</label>
+                    <label className="col-md-5">{t("DepsJobs.department.DepartmentHead")}</label>
                     <SelectSearch options={employees.map(employee => employee.lastName + " " + employee.firstName)} classListDiv="col-md-6" id="edit-dep-dhead-input" value={selectedDepartment.departmentHeadName}></SelectSearch>
                 </div>
             </div>
             </ModalWindow>
             <ModalWindow
-                title="Confirm department deletion"
+                title={t(".ConfirmDeletion")}
                 show={showDelDepModal} 
                 handleClose={() => setShowDelDepModal(false)} 
                 handleConfirm={deleteDepartmentHandler}
-                confirmText="Delete" 
-                cancelText="Cancel">
-            <p>Are you sure that you want to delete that department?</p>
+                confirmText={t("DepsJobs.department.Delete")} 
+                cancelText={t("DepsJobs.department.Cancel")}>
+            <p>{t("DepsJobs.department.AreSure")}</p>
             </ModalWindow>
 
             <ModalWindow
-                title="Adding job"
+                title={t("DepsJobs.job.AddingJob")}
                 show={showAddJobModal} 
                 handleClose={() => setShowAddJobModal(false)} 
                 handleConfirm={addJobHandler}
-                confirmText="Add new job" 
-                cancelText="Cancel">
+                confirmText={t("DepsJobs.job.AddNewJob")}
+                cancelText={t("DepsJobs.job.Cancel")}>
                 <div className="modal-form">
                     <div className="row">
-                        <label className="col-md-5">Job name</label>
+                        <label className="col-md-5">{t("DepsJobs.job.JobName")}</label>
                         <input className="form-control col-md-6" type="text" style={{marginLeft: "15px"}}   id="add-job-name-input" minLength={2} maxLength={50}/>
                     </div>
                 </div>
             </ModalWindow>
             <ModalWindow
-                title="Editing job"
+                title={t("EditingJob")}
                 show={showEditJobModal} 
                 handleClose={() => setShowEditJobModal(false)} 
                 handleConfirm={updateJobHandler}
-                confirmText="Update job" 
-                cancelText="Cancel">
+                confirmText={t("DepsJobs.job.UpdateJob")} 
+                cancelText={t("DepsJobs.job.Cancel")}>
             <div className="modal-form">
                 <div className="row">
-                    <label className="col-md-5">Job name</label>
+                    <label className="col-md-5">{t("DepsJobs.job.JobName")}</label>
                     <input className="form-control col-md-6" type="text" style={{marginLeft: "15px"}}id="edit-job-name-input" minLength={2} maxLength={50} value={tempJobName} onChange={(event) => setTempJobName(event.target.value)}/>
                 </div>
             </div>
             </ModalWindow>
             <ModalWindow
-                title="Confirm job deletion"
+                title={t("DepsJobs.job.ConfirmJobDeletion")}
                 show={showDelJobModal} 
                 handleClose={() => setShowDelJobModal(false)} 
                 handleConfirm={deleteJobHandler}
-                confirmText="Delete" 
-                cancelText="Cancel">
-            <p>Are you sure that you want to delete that job?</p>
+                confirmText={t("DepsJobs.job.Delete")}
+                cancelText={t("DepsJobs.job.Cancel")}>
+            <p>{t("DepsJobs.job.AreYouSure")}</p>
             </ModalWindow>
 
             <Notification
@@ -519,11 +520,11 @@ const DepsJobs=()=>{
             <div className="container mt-4">
                 <h1 className="text-center mb-4">{nowPageName}</h1>
                 <ul className="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-                    <li className="nav-item" onClick={() => setNowPageName("Departments")}>
-                        <a className="nav-link active" id="departments-tab" data-toggle="tab" href="#departments" role="tab" aria-controls="departments" aria-selected="true">Departments</a>
+                    <li className="nav-item" onClick={() => setNowPageName(t("DepsJobs.department.Departments"))}>
+                        <a className="nav-link active" id="departments-tab" data-toggle="tab" href="#departments" role="tab" aria-controls="departments" aria-selected="true">{t("DepsJobs.department.Departments")}</a>
                     </li>
-                    <li className="nav-item" onClick={() => setNowPageName("Jobs")}>
-                        <a className="nav-link" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab" aria-controls="jobs" aria-selected="false">Jobs</a>
+                    <li className="nav-item" onClick={() => setNowPageName(t("DepsJobs.job.Jobs"))}>
+                        <a className="nav-link" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab" aria-controls="jobs" aria-selected="false">{t("DepsJobs.job.Jobs")}</a>
                     </li>
                 </ul>
                 <div className="tab-content mt-4" id="myTabContent">
@@ -534,18 +535,18 @@ const DepsJobs=()=>{
                             <h2>Loading ....</h2>
                             :
                             (departments.length == 0 ?
-                            <h2>No departments yet</h2>
+                            <h2>{t("DepsJobs.department.NoDepartments")}</h2>
                             :
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label>Seach department by name</label>
-                                        <input type="text" className="form-control" id="search-department"  placeholder="Search Departments" onChange={seachDepartmentChangeHandler}/>
+                                        <label>{t("")}</label>
+                                        <input type="text" className="form-control" id="search-department"  placeholder={t("DepsJobs.department.SearchDepartments")} onChange={seachDepartmentChangeHandler}/>
                                     </div>
                                     <div className="depjobs-table-container">
                                       <table className="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Choose department</th>
+                                                <th>{t("DepsJobs.department.ChooseDepartment")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -565,15 +566,15 @@ const DepsJobs=()=>{
                             <div className="col-md-6">
                                 <form>
                                     <div className="form-group">
-                                        <label>Department Name</label>
+                                        <label>{t("DepsJobs.department.DepartmentName")}</label>
                                         <input type="text" className="form-control" id="department-name" readOnly={true} value={selectedDepartment.departmentName}/>
                                     </div>
                                     <div className="form-group">
-                                        <label>Department Head</label>
+                                        <label>{t("DepsJobs.department.DepartmentHead")}</label>
                                         <input type="text" className="form-control" id="department-head" readOnly={true} value={selectedDepartment.departmentHeadName}/>
                                     </div>
                                     <div className="form-group">
-                                        <label>Amount of employees</label>
+                                        <label>{t("DepsJobs.department.AmountEmployees")}</label>
                                         <input type="number" className="form-control" id="department-staff-count" readOnly={true} value={selectedDepartment.amountOfWorkers}/>
                                     </div>
                                     {
@@ -581,13 +582,13 @@ const DepsJobs=()=>{
                                         (!employeesInSelDep? <h4>loading ....</h4>
                                         :
                                         <div className="form-group">
-                                            <label>Employees in this department</label>
+                                            <label>{t("DepsJobs.department.EmployeesInThisDepartment")}</label>
                                             <div className="table-responsive limited-height">
                                               <table className="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                      <th>Name</th>
-                                                      <th>Salary</th>
+                                                      <th>{t("DepsJobs.department.Name")}</th>
+                                                      <th>{t("DepsJobs.department.Salary")}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -606,10 +607,10 @@ const DepsJobs=()=>{
                                         )
                                     }
                                     <div className="form-group depjobs-buttons">
-                                        <button type="button" className="btn btn-success" onClick={() => setShowAddDepModal(true)}>Add Department</button>
+                                        <button type="button" className="btn btn-success" onClick={() => setShowAddDepModal(true)}>{t("DepsJobs.department.AddDepartmentBtn")}</button>
                                         {
                                             selectedDepartment.departmentName && 
-                                            <button type="button" className="btn btn-warning" onClick={() => setShowEditDepModal(true)}>Edit Department</button>
+                                            <button type="button" className="btn btn-warning" onClick={() => setShowEditDepModal(true)}>{t("DepsJobs.department.EditDepartmentBtn")}</button>
                                         }
                                         {
                                             selectedDepartment.departmentName &&
@@ -618,7 +619,7 @@ const DepsJobs=()=>{
                                                     setNotification({
                                                         ...notification,
                                                         show: true,
-                                                        text: `You can't delete department with workers in it!`,
+                                                        text: `${t("DepsJobs.department.YouCantDelete")}`,
                                                         color: "danger",
                                                         icon: "fa-solid fa-ban",
                                                     });
@@ -626,7 +627,7 @@ const DepsJobs=()=>{
                                                 else {
                                                     setShowDelDepModal(true);
                                                 }
-                                            }}>Delete Department</button>
+                                            }}>{t("DepsJobs.department.DeleteDepartmentBtn")}</button>
                                         }
                                     </div>
                                 </form>
@@ -640,18 +641,18 @@ const DepsJobs=()=>{
                             <h2>Loading ....</h2>
                             :
                             (jobs.length == 0 ?
-                            <h2>No jobs yet</h2>
+                            <h2>{t("DepsJobs.job.NoJobs")}</h2>
                             :
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Seach job by name</label>
-                                    <input type="text" className="form-control" id="search-job" placeholder="Search Jobs" onChange={seachJobChangeHandler}/>
+                                    <label>{t("DepsJobs.job.SearchJob")}</label>
+                                    <input type="text" className="form-control" id="search-job" placeholder={t("DepsJobs.job.SearchJob")} onChange={seachJobChangeHandler}/>
                                 </div>
                                 <div className="depjobs-table-container">
                                   <table className="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Job Title</th>
+                                            <th>{t("DepsJobs.job.JobTitle")}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -670,11 +671,11 @@ const DepsJobs=()=>{
                         <div className="col-md-6">
                             <form>
                                 <div className="form-group">
-                                    <label>Job Title</label>
+                                    <label>{t("DepsJobs.job.JobTitle")}</label>
                                     <input type="text" className="form-control" id="job-title" readOnly={true} value={selectedJob.jobName}/>
                                 </div>
                                 <div className="form-group">
-                                    <label>Staff Count</label>
+                                    <label>{t("DepsJobs.job.StaffCount")}</label>
                                     <input type="number" className="form-control" id="job-staff-count"readOnly={true} value={selectedJob.amountOfEmployees}/>
                                 </div>
                                 {
@@ -682,13 +683,13 @@ const DepsJobs=()=>{
                                     (!employeesInSelJob? <h4>loading ....</h4>
                                     :
                                     <div className="form-group">
-                                        <label>Employees on this job</label>
+                                        <label>{t("DepsJobs.employees.EmployeesJob")}</label>
                                         <div className="table-responsive limited-height" style={{maxHeight:"281px", height: "281px"}}>
                                             <table className="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name</th>
-                                                        <th>Salary</th>
+                                                        <th>{t("DepsJobs.employees.Name")}</th>
+                                                        <th>{t("DepsJobs.employees.Salary")}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -707,10 +708,10 @@ const DepsJobs=()=>{
                                     )
                                 }
                                 <div className="form-group depjobs-buttons">
-                                    <button type="button" className="btn btn-success" onClick={() => setShowAddJobModal(true)}>Add Job</button>
+                                    <button type="button" className="btn btn-success" onClick={() => setShowAddJobModal(true)}>{t("DepsJobs.employees.AddJob")}</button>
                                     {
                                         selectedJob.jobName && 
-                                        <button type="button" className="btn btn-warning" onClick={() => setShowEditJobModal(true)}>Edit Job</button>
+                                        <button type="button" className="btn btn-warning" onClick={() => setShowEditJobModal(true)}>{t("DepsJobs.employees.EditJob")}</button>
                                     }
                                     {
                                         selectedJob.jobName && 
@@ -719,7 +720,7 @@ const DepsJobs=()=>{
                                                 setNotification({
                                                     ...notification,
                                                     show: true,
-                                                    text: `You can't delete job with workers in it!`,
+                                                    text: `${t("DepsJobs.job.YouCantDelete")}`,
                                                     color: "danger",
                                                     icon: "fa-solid fa-ban",
                                                 });
@@ -727,7 +728,7 @@ const DepsJobs=()=>{
                                             else {
                                                 setShowDelJobModal(true);
                                             }
-                                        }}>Delete Job</button>
+                                        }}>{t("DepsJobs.job.DeleteJob")}</button>
                                     }
                                 </div>
                             </form>

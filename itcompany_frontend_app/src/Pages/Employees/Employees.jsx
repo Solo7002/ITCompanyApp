@@ -4,7 +4,11 @@ import { useAuth } from '../../hooks/useAuth';
 import axios from "axios";
 import keys from "../../config/keys";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const Employees = () => {
+
+    const{t}=useTranslation();
+   
     const { token } = useAuth();
     const{signOut}=useAuth();
     const [employees, setEmployees] = useState([]);
@@ -31,7 +35,7 @@ const Employees = () => {
                     return { ...employee, jobName: jobRes.data.jobName };
                 }
                 else{
-                    return { ...employee, jobName: 'No job' };
+                    return { ...employee, jobName: t("employees.index.NoJob") };
                 }
                 } catch (error) {
                    console.log(error);
@@ -45,6 +49,7 @@ const Employees = () => {
     };
     useEffect(() => {
         fetchEmployees();
+        
     }, [token]);
     const [searchEmployee, setSearchEmployee] = useState('');
     const searchHandler = (event) => {
@@ -91,13 +96,13 @@ const Employees = () => {
 
     return (
         <div className="employeesContainer">
-            <h1>Employees</h1>
+            <h1>{t("employees.index.Title")}</h1>
             <hr />
             <div className="container mt-5">
             <input
                         type="text"
                         className="form-control mb-2"
-                        placeholder="Search employees"
+                        placeholder={t("employees.index.searchEmployee")}
                         value={searchEmployee}
                         onChange={searchHandler}
                        
@@ -105,12 +110,12 @@ const Employees = () => {
                 <table className="table table-striped">
                     <thead className="thead-dark">
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Phone Number</th>
+                            <th scope="col">{t("employees.index.Name")}</th>
+                            <th scope="col">{t("employees.index.Surname")}</th>
+                            <th scope="col">{t("employees.index.PhoneNumber")}</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Position</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col">{t("employees.index.Position")}</th>
+                            <th scope="col">{t("employees.index.Actions")}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,8 +130,8 @@ const Employees = () => {
                                         <td>{employee.email}</td>
                                         <td>{employee.jobName}</td>
                                         <td>
-                                            <Link to={`/employee/details/${employee.id}`}> <button className="btn btn-info btn-sm">View</button></Link>
-                                            <button className="btn btn-warning btn-sm" type="submit"  onClick={()=>appointClick(employee.id)}>Appoint</button>
+                                            <Link to={`/employee/details/${employee.id}`}> <button className="btn btn-info btn-sm">{t("employees.index.btnView")}</button></Link>
+                                            <button className="btn btn-warning btn-sm" type="submit"  onClick={()=>appointClick(employee.id)}>{t("employees.index.btnAppoint")}</button>
                                         </td>
                                     </tr>:
                                     <tr className="tr-notFired"   key={index}>
@@ -136,8 +141,8 @@ const Employees = () => {
                                     <td>{employee.email}</td>
                                     <td>{employee.jobName}</td>
                                     <td>
-                                        <Link to={`/employee/details/${employee.id}`}> <button className="btn btn-info btn-sm">View</button></Link>
-                                        <button className="btn btn-danger btn-sm" type="submit"  onClick={()=>fireClick(employee.id)}>Fire</button>
+                                        <Link to={`/employee/details/${employee.id}`}> <button className="btn btn-info btn-sm">{t("employees.index.btnView")}</button></Link>
+                                        <button className="btn btn-danger btn-sm" type="submit"  onClick={()=>fireClick(employee.id)}>{t("employees.index.btnFire")}</button>
                                     </td>
                                 </tr>
                                 );
@@ -147,7 +152,7 @@ const Employees = () => {
 
                     </tbody>
                 </table>
-                <div> <Link to={`/employee/create`}> <button className="btn btn-success ">Create</button></Link></div>
+                <div> <Link to={`/employee/create`}> <button className="btn btn-success ">{t("employees.index.btnCreate")}</button></Link></div>
             </div>
             
         </div>

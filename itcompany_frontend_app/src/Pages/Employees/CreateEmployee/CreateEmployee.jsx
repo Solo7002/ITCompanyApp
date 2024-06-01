@@ -6,8 +6,12 @@ import { useAuth } from "../../../hooks/useAuth";
 import axios from "axios";
 import keys from "../../../config/keys";
 import {  useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const CreateEmployee = () => {
+
+    const{t}=useTranslation();
+
     const navigate=useNavigate();
     const {token}=useAuth();
     const [jobs,setJobs]=useState([]);
@@ -99,63 +103,63 @@ const CreateEmployee = () => {
 
         <div className="container mt-5">
             <div className="form-container  mx-auto">
-                <h2 className="form-header text-center">Create employee </h2>
+                <h2 className="form-header text-center">{t("employees.create.Title")} </h2>
                 <form onSubmit={submitHandler}>
                     <div className="form-group">
-                        <label >Login</label>
-                        <input type="text" className="form-control"   name="login" placeholder="Input Login" />
+                        <label >{t("employees.create.Login")}</label>
+                        <input type="text" className="form-control"   name="login" placeholder={t("employees.create.InputLogin")} />
                     </div>
                     <div className="form-group">
-                        <label >Password</label>
-                        <input type="password"  className="form-control"   name="password" placeholder="Input Password" />
+                        <label >{t("employees.create.Password")}</label>
+                        <input type="password"  className="form-control"   name="password" placeholder={t("employees.create.InputPassword")} />
                     </div>
                     <div className="form-group">
-                        <label >Confirm password</label>
-                        <input type="password"  className="form-control"   name="confirmPassword" placeholder="Input Confirm Password" />
+                        <label >{t("employees.create.ConfirmPassword")}</label>
+                        <input type="password"  className="form-control"   name="confirmPassword" placeholder={t("employees.create.InputConfirmPassword")} />
                     </div>
                     <div className="form-group">
-                        <label >Lastname</label>
-                        <input type="text"  className="form-control"   name="lastname" placeholder="Input Lastname" />
+                        <label >{t("employees.create.Lastname")}</label>
+                        <input type="text"  className="form-control"   name="lastname" placeholder={t("employees.create.InputLastname")}/>
                     </div>
                     <div className="form-group">
-                        <label >Firstname</label>
-                        <input type="text"  className="form-control"   name="firstname" placeholder="Input Firstname" />
+                        <label >{t("employees.create.Firstname")}</label>
+                        <input type="text"  className="form-control"   name="firstname" placeholder={t("employees.create.InputFirstname")} />
                     </div>
                     <div className="form-group">
-                        <label >Birthdate</label>
-                        <input type="date" className="form-control"   name="birthdate" placeholder="Input Birthdate" />
+                        <label >{t("employees.create.Birthdate")}</label>
+                        <input type="date" className="form-control"   name="birthdate" placeholder={t("employees.create.InputBirthdate")} />
                     </div>
 
                     <div className="form-group">
-                        <label >Phone number</label>
-                        <input type="text"  className="form-control"   name="phone" placeholder="Input Phone" />
+                        <label >{t("employees.create.PhoneNumber")}</label>
+                        <input type="text"  className="form-control"   name="phone" placeholder={t("employees.create.InputPhoneNumber")}/>
                     </div>
                     <div className="form-group">
                         <label >Email</label>
-                        <input type="email"  className="form-control"   name="email" placeholder="Input Email" />
+                        <input type="email"  className="form-control"   name="email" placeholder={t("employees.create.InputEmail")} />
                     </div>
                     <div className="form-group">
-                        <label>Salary</label>
-                        <input type="number" min={1}  className="form-control"   name="salary" placeholder="Input Salary" />
+                        <label>{t("employees.create.Salary")}</label>
+                        <input type="number" min={1}  className="form-control"   name="salary" placeholder={t("employees.create.InputSalary")} />
                     </div>
                     <div className="form-group">
-                        <label >Department</label>
-                        <SelectSearch placeholder='Input Department' name='department' options={departments} id='departmentSearch' />
-                        <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.departmentDisplay}}>* No department with such name</h5>
+                        <label >{t("employees.create.Department")}</label>
+                        <SelectSearch placeholder={t("employees.create.InputDepartment")} name='department' options={departments} id='departmentSearch' />
+                        <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.departmentDisplay}}>* {t("employees.create.NoDepartment")}</h5>
                     </div>
                     <div className="form-group">
-                        <label >Access Level</label>
-                        <SelectSearch placeholder='Input Access Level' name='accessLevel' id='accessLevelSearch' options={accessLevels} />
-                        <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.accessLevelDisplay}}>* No level with such name</h5>
+                        <label >{t("employees.create.AccessLevel")}</label>
+                        <SelectSearch placeholder={t("employees.create.InputAccessLevel")} name='accessLevel' id='accessLevelSearch' options={accessLevels} />
+                        <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.accessLevelDisplay}}>* {t("employees.create.NoAccessLevel")}</h5>
                     </div>
                     <div className="form-group">
-                        <label>Job</label>
-                        <SelectSearch placeholder='Input Job' name='job' id='jobSearch' options={jobs} />
-                        <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.jobsDisplay}}>* No job with such name</h5>
+                        <label>{t("employees.create.Job")}</label>
+                        <SelectSearch placeholder={t("employees.create.InputJob")} name='job' id='jobSearch' options={jobs} />
+                        <h5 style={{color: "red", marginLeft: "5px", display: errorInfo.jobsDisplay}}>* {t("employees.create.NoJob")}</h5>
                     </div>
                     <div className="form-group">
-                        <label >Photo File</label>
-                        <input type="file"  className="form-control"   name="file" placeholder="Input Photo" accept="image/jpeg,image/png,image/gif" />
+                        <label >{t("employees.create.PhotoFile")}</label>
+                        <input type="file"  className="form-control"   name="file" placeholder={t("employees.create.InputPhoto")}  accept="image/jpeg,image/png,image/gif" />
                     </div>
                     
                     
@@ -167,10 +171,10 @@ const CreateEmployee = () => {
                         ))}
                     
                     <div>
-                    <button type="submit" className="btn btn-success">Create</button>
+                    <button type="submit" className="btn btn-success">{t("employees.create.btnCreate")}</button>
                     <button type="submit" className="btn btn-dark" onClick={()=>{
                         navigate(-1);
-                    }}>Back</button>
+                    }}>{t("employees.create.btnBack")}</button>
                     </div>
                 </form>
             </div>

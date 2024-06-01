@@ -5,13 +5,14 @@ import keys from "../../../config/keys";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import './DetailsEmployee.css';
 import DateReduction from "../../../Function/DateReduction";
+import { useTranslation } from "react-i18next";
 const DetailsEmployee = () => {
     const { token } = useAuth();
     const [employee, setEmployee] = useState();
     const { id } = useParams();
     const navigate=useNavigate();
     const{signOut}=useAuth();
-
+    const{t}=useTranslation();
     const fetchEmployee = async () => {
         const employeeRes = await axios.get(`${keys.ServerConnection}/Employee/${id}`, {
             headers: {
@@ -30,7 +31,7 @@ const DetailsEmployee = () => {
                 if(err.response.status===401)
                     signOut();
             })
-            : 'No job';
+            : t("employees.details.NoJob");
 
         const departmentName = employeeRes.data.departmentId
             ? await axios.get(`${keys.ServerConnection}/Department/${employeeRes.data.departmentId}`, {
@@ -41,7 +42,7 @@ const DetailsEmployee = () => {
                 if(err.response.status===401)
                     signOut();
             })
-            : 'No department';
+            : t("employees.details.NoDepartment");
         employeeRes.data.hireDate = DateReduction(employeeRes.data.hireDate);
         employeeRes.data.birthDate = DateReduction(employeeRes.data.birthDate);
         if (employeeRes.data.fireDate) {
@@ -96,27 +97,27 @@ const DetailsEmployee = () => {
 
 
                                 <div className="col-md-6">
-                                    <p><strong>Birth Date:</strong> {employee.birthDate}</p>
-                                    <p><strong>Phone Number:</strong> {employee.phoneNumber}</p>
+                                    <p><strong>{t("employees.details.Birthdate")}:</strong> {employee.birthDate}</p>
+                                    <p><strong>{t("employees.details.PhoneNumber")}:</strong> {employee.phoneNumber}</p>
                                     <p><strong>Email:</strong> {employee.email}</p>
                                 </div>
                                 <div className="col-md-6">
-                                    <p><strong>Salary:</strong> ${employee.salary.toFixed(2)}</p>
-                                    <p><strong>Hire Date:</strong> {employee.hireDate}</p>
-                                    {employee.fireDate && <p><strong>Fire Date:</strong> {employee.fireDate}</p>}
+                                    <p><strong>{t("employees.details.Salary")}:</strong> ${employee.salary.toFixed(2)}</p>
+                                    <p><strong>{t("employees.details.HireDate")}:</strong> {employee.hireDate}</p>
+                                    {employee.fireDate && <p><strong>{t("employees.details.FireDate")}:</strong> {employee.fireDate}</p>}
                                 </div>
 
                             </div>
                             <hr />
                             <div className="row">
                                 <div className="col-md-12">
-                                    <h4>Projects</h4>
+                                    <h4>{t("employees.details.Projects")}</h4>
                                     <ul className="list-unstyled">
                                         {employee.projects && employee.projects.map(project => (
                                             <li key={project.id}>
                                                 <strong>{project.name}</strong> - {project.description}
-                                                <Link to={`/project/details/${project.id}`}>
-                                                    <button className="btn btn-info btn-sm">Info</button>
+                                                <Link to={`/projects/details/${project.id}`}>
+                                                    <button className="btn btn-info btn-sm">{t("employees.details.btnInfo")}</button>
                                                 </Link>
                                             </li>
                                         ))}
@@ -127,10 +128,10 @@ const DetailsEmployee = () => {
                                         
                             <div>
                             <Link to={`/employee/update/${employee.id}`}>
-                            <button className="btn btn-info btn-sm"> Update</button>
+                            <button className="btn btn-info btn-sm"> {t("employees.details.btnUpdate")}</button>
                             </Link>
                            
-                            <button className="btn btn-dark btn-sm" onClick={()=>{navigate(-1)}}> Back</button></div>
+                            <button className="btn btn-dark btn-sm" onClick={()=>{navigate(-1)}}> {t("employees.details.btnBack")}</button></div>
                         </div>
 
                     </div>

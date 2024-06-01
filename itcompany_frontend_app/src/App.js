@@ -20,12 +20,15 @@ import { CreateProject } from './Pages/Projects/CreateProject/CreateProject.jsx'
 import { DetailsProject } from './Pages/Projects/DetailsProject/DetailsProject.jsx';
 import { UpdateEmployee } from './Pages/Employees/UpdateEmployee/UpdateEmployee.jsx';
 import { UpdateProject } from './Pages/Projects/UpdateProject/UpdateProject.jsx';
+import { Suspense } from 'react';
 
 function App() {
   return (
     <AuthProvider>
     <div className="App">
+      
       <Routes>
+        
         <Route path='/' element={<RequireAuth><MainLayout/></RequireAuth>}>
           <Route index element={ <Bootstrap452Helmet><Home/></Bootstrap452Helmet>}/>
           <Route path='/profile' element={<Bootstrap452Helmet><Profile/></Bootstrap452Helmet>}/>
@@ -46,6 +49,7 @@ function App() {
         <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
       </Routes>
     </div>
+    
     </AuthProvider>
   );
 }

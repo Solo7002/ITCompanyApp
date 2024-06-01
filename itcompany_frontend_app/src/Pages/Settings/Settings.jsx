@@ -1,11 +1,35 @@
+import { useEffect, useState, useTransition } from "react";
 import "./Settings.css";
+import { useTranslation } from "react-i18next";
 
-const Settings=()=>{
-    return(
-        <div className="settingscontainer">
-            <h1>Settings</h1>
+const Settings = () => {
+    const { t, i18n } = useTranslation();
+    const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+    const changeLanguage = (event) => {
+        i18n.changeLanguage(event.target.value);
+    }
+    useEffect(() => {
+        setCurrentLanguage(i18n.language);
+    }, [i18n.language]);
+    return (
+        <div className="settings-container">
+            <h1>{t("settings.Settings")}</h1>
+            <div className="form-group">
+                <label htmlFor="languageSelect">{t("settings.selectLanguage")}</label>
+                <select
+                    className="form-control custom-select"
+                    id="languageSelect"
+                    onChange={changeLanguage}
+                    value={currentLanguage}
+                >
+                    <option value="en">English</option>
+                    <option value="ua">Українська</option>
+                    <option value="es">Español</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
         </div>
     )
 };
 
-export{Settings};
+export { Settings };

@@ -1,11 +1,15 @@
+// Projects.js
 import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { useAuth } from "../../hooks/useAuth";
 import "./Projects.css";
 import axios from "axios";
 import keys from "../../config/keys";
 import { Link } from "react-router-dom";
 import DateReduction from "../../Function/DateReduction";
+
 const Projects = () => {
+    const { t } = useTranslation();
     const { token } = useAuth();
     const { signOut } = useAuth();
     const [projects, setProjects] = useState([]);
@@ -22,13 +26,12 @@ const Projects = () => {
                         signOut();
                 });
     
-              
                 const transformedProjects = response.data.map(project => ({
                     ...project,
-                    status: project.isDone ? 'Completed' : 'Pending', 
-                    startProjectDate:DateReduction(project.startProjectDate),
-                    deadLineProjectDate:DateReduction(project.deadLineProjectDate)
-                    }));
+                    status: project.isDone ? t('projects.index.completed') : t('projects.index.pending'), 
+                    startProjectDate: DateReduction(project.startProjectDate),
+                    deadLineProjectDate: DateReduction(project.deadLineProjectDate)
+                }));
 
                 setProjects(transformedProjects);
             } catch (error) {
@@ -36,7 +39,7 @@ const Projects = () => {
             }
         };
         fetchProjects();
-    }, [token]);
+    }, [token, t]);
 
     const [searchProject, setSearchProject] = useState('');
 
@@ -54,19 +57,21 @@ const Projects = () => {
 
     return (
         <div className="projectsContainer">
-            <h1>Projects</h1>
+            <h1>{t('projects.index.title')}</h1>
             <hr />
             <div className="container mt-5 myCon">
-            <Link to={`/projects/create`}> <button className="btn btn-success ">Create</button></Link>
+                <Link to={`/projects/create`}>
+                    <button className="btn btn-success ">{t('projects.index.createButton')}</button>
+                </Link>
                 <input
                     type="text"
                     className="form-control mb-2"
-                    placeholder="Search projects"
+                    placeholder={t('projects.index.searchPlaceholder')}
                     value={searchProject}
                     onChange={searchProjectHandler}
                 /> 
                 {
-                projects.length>0
+                projects.length > 0
                 ?
                 filteredProjects.map((project, index) => (
                     <div className="col-lg-3 col-md-6 mb-4" key={index}>
@@ -75,22 +80,24 @@ const Projects = () => {
                             <div className="card-body">
                                 <h5 className="card-title">{project.projectName}</h5>
                                 <p className="project-dates">
-                                    <div><strong>Start Date:</strong> {project.startProjectDate}</div>
-                                    <div><strong>Deadline:</strong> {project.deadLineProjectDate}</div>
+                                    <div><strong>{t('projects.index.startDate')}</strong> {project.startProjectDate}</div>
+                                    <div><strong>{t('projects.index.deadline')}</strong> {project.deadLineProjectDate}</div>
                                 </p>
-                                <span className={`badge ${project.status === 'Pending' ? 'badge-pending' : 'badge-done'}`}>
+                                <span className={`badge ${project.status === t('projects.index.pending') ? 'badge-pending' : 'badge-done'}`}>
                                     {project.status}
                                 </span>
                             </div>
                           
-                            <Link className="alignBtn" to={`/projects/details/${project.projectId}`}><button className="btn btn-info">Info</button></Link>
+                            <Link className="alignBtn" to={`/projects/details/${project.projectId}`}>
+                                <button className="btn btn-info">{t('projects.index.infoButton')}</button>
+                            </Link>
                             
                         </div>
                     </div>
                     
                 ))
                 :
-                <div>No Projects</div>
+                <div>{t('projects.index.noProjects')}</div>
             }
             </div>
         </div>
