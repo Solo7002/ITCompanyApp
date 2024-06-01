@@ -20,7 +20,6 @@ const ConfirmationModal = (props) => {
                         <button type="button" className="btn btn-secondary" onClick={props.handleClose}>
                             {props.cancelText}
                         </button>
-                        {console.log("props.confirmBtnColor: ", props.confirmBtnColor)}
                         <button type="button" className={`btn btn-${props.confirmBtnColor?props.confirmBtnColor:"primary"}`} onClick={props.handleConfirm}>
                             {props.confirmText}
                         </button>

@@ -38,7 +38,7 @@ namespace ITCompanyApp.Controllers
         }
 
         [HttpGet("employeeFor/{id}")]
-        public ActionResult<IEnumerable<Models.Task>> GetTaskByEmployeeeForId(int id)
+        public ActionResult<IEnumerable<Models.Task>> GetTaskByEmployeeForId(int id)
         {
             if (!_context.Employees.Any(e => e.Id == id))
             {
@@ -46,6 +46,17 @@ namespace ITCompanyApp.Controllers
             }
 
             return Ok(_context.Tasks.Where(t => t.EmployeeFor_Id == null || t.EmployeeFor_Id == id));
+        }
+
+        [HttpGet("employeeFor/{id_for}/employeeFrom/{id_from}")]
+        public ActionResult<IEnumerable<Models.Task>> GetTaskByEmployeeForIdAndFromId(int id_for, int id_from)
+        {
+            if (!_context.Employees.Any(e => e.Id == id_for) || !_context.Employees.Any(e => e.Id == id_from))
+            {
+                return NotFound();
+            }
+
+            return Ok(_context.Tasks.Where(t => t.EmployeeFrom_Id == id_from && (t.EmployeeFor_Id == null || t.EmployeeFor_Id == id_for)));
         }
 
         [HttpPost]
@@ -71,9 +82,10 @@ namespace ITCompanyApp.Controllers
                 IsDone = model.IsDone,
                 UploadDate = DateTime.Now,
                 DeadLineDate = model.DeadLineDate,
-                Project=_context.Projects.First(e=>e.ProjectId==model.ProjectId),
+                Project = _context.Projects.First(e=>e.ProjectId==model.ProjectId),
                 EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id),
-                EmployeeFor = model.EmployeeFor_Id != null? _context.Employees.First(e => e.Id == model.EmployeeFor_Id) : null
+                EmployeeFor = model.EmployeeFor_Id != null? _context.Employees.First(e => e.Id == model.EmployeeFor_Id) : null,
+                EmployeeFrom_Id = model.EmployeeFrom_Id
             };
             _context.Tasks.Add(task);
             _context.SaveChanges();
@@ -93,7 +105,7 @@ namespace ITCompanyApp.Controllers
             {
                 return NotFound();
             }
-            else if (!_context.Employees.Any(e => e.Id == model.EmployeeFor_Id) || !_context.Employees.Any(e => e.Id == model.EmployeeFrom_Id))
+            else if ((model.EmployeeFor_Id != null && !_context.Employees.Any(e => e.Id == model.EmployeeFor_Id)) || !_context.Employees.Any(e => e.Id == model.EmployeeFrom_Id))
             {
                 return BadRequest("No employees with such id");
             }
@@ -109,8 +121,10 @@ namespace ITCompanyApp.Controllers
                 IsDone = model.IsDone,
                 UploadDate = DateTime.Now,
                 DeadLineDate = model.DeadLineDate,
-                EmployeeFor = _context.Employees.First(e => e.Id == model.EmployeeFor_Id),
-                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id)
+                Project = _context.Projects.First(p => p.ProjectId == model.ProjectId),
+                EmployeeFor = model.EmployeeFor_Id != null ? _context.Employees.First(e => e.Id == model.EmployeeFor_Id) : null,
+                EmployeeFrom = _context.Employees.First(e => e.Id == model.EmployeeFrom_Id),
+                EmployeeFrom_Id = model.EmployeeFrom_Id
             };
 
             _context.Entry(task).State = EntityState.Modified;

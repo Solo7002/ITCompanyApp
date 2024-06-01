@@ -58,6 +58,16 @@ namespace ITCompanyApp.Controllers
             return Ok(model);
         }
 
+        [HttpGet("checkIfHead/{id}")]
+        public ActionResult<Employee> CheckIfHead(int id)
+        {
+            if (_context.Departments.Any(d => d.DepartmentHeadId == id))
+            {
+                return Ok(_context.Employees.First(e => e.Id == id));
+            }
+            return Ok();
+        }
+
         [HttpPost]
         public ActionResult<Department> CreateDepartment(DepartmentViewModel model)
         {

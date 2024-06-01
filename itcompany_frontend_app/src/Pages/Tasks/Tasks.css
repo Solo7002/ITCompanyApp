@@ -49,6 +49,22 @@
   color: white;
 }
 
+.task-page-container .task-obligatory-add{
+  font-size: 56pt;
+  color: #666; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  transition: font-size 0.1s ease-in, font-weight 0.1s ease-in;
+}
+
+.task-page-container .task-obligatory-add:hover{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  font-size: 60pt;
+  font-weight: 600;
+}
+
 .task-page-container .task-overdue .task-deadline{
   color: rgb(207, 207, 207);
 }
