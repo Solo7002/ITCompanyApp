@@ -11,7 +11,7 @@ import "./DepsJobs.css";
 import { useTranslation } from "react-i18next";
 
 const DepsJobs=()=>{
-    const {token} = useAuth();
+    const {token, signOut} = useAuth();
     const [reload, setReload] = useState(false);
     const{t}=useTranslation();
     const [employees, setEmployees] = useState([]);
@@ -50,8 +50,9 @@ const DepsJobs=()=>{
         icon: "fa-regular fa-circle-check",
         corner: "1"
     });
-    const{ signOut}=useAuth();
+
     useEffect(()=> {
+        console.log("UseEffect!");
         if(token){
             const decoded = jwtDecode(token);
             
@@ -98,6 +99,7 @@ const DepsJobs=()=>{
     }, [token, reload]);
 
     const forceReload = () => {
+        console.log("Force reload!");
         setReload(!reload);
     };
 
@@ -126,6 +128,10 @@ const DepsJobs=()=>{
     }
 
     const departmentChooseHandler = (event, depId) => {
+
+        forceReload();
+
+
         Array.from(event.target.parentElement.parentElement.children).forEach((el) => {
             el.firstElementChild.classList.remove("depjob-active");
         });
@@ -135,7 +141,6 @@ const DepsJobs=()=>{
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
-            console.log(res.data);
             setSelectedDepartment(res.data);
             setTempDepName(res.data.departmentName);
         })
@@ -414,7 +419,8 @@ const DepsJobs=()=>{
             });
 
             forceReload();
-        }).catch(err=>{
+        })
+        .catch(err=>{
             if(err.response.status===401)
                 signOut();
         });

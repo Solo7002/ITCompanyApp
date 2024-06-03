@@ -19,6 +19,7 @@ const Sidebar = () => {
         sideBar.style.left = isOpened ? '-170px' : '0px';
         sideBarMainChildren.forEach(el => {
             el.firstElementChild.firstElementChild.style.left = isOpened ? '178px' : '0px';
+            el.firstElementChild.lastChild.style.opacity = isOpened ? '0' : '1';
         });
         headerSpan.style.opacity = isOpened ? '0' : '1';
         headerI.classList.toggle("fa-angle-right");

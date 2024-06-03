@@ -102,6 +102,12 @@
     margin-left: -15px;
 }
 
+.sidebar .sidebar-main-div span 
+{
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
 footer
 {
     height: 50px;

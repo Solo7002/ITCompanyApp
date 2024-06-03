@@ -13,20 +13,22 @@ const Settings = () => {
     }, [i18n.language]);
     return (
         <div className="settings-container">
-            <h1>{t("settings.Settings")}</h1>
-            <div className="form-group">
-                <label htmlFor="languageSelect">{t("settings.selectLanguage")}</label>
-                <select
-                    className="form-control custom-select"
-                    id="languageSelect"
-                    onChange={changeLanguage}
-                    value={currentLanguage}
-                >
-                    <option value="en">English</option>
-                    <option value="ua">Українська</option>
-                    <option value="es">Español</option>
-                    <option value="ja">日本語</option>
-                </select>
+            <h1 className="text-center my-4">{t("settings.Settings")}</h1>
+            <div className="container mt-4 cont">
+                <div className="form-group">
+                    <label htmlFor="languageSelect">{t("settings.selectLanguage")}</label>
+                    <select
+                        className="form-control custom-select"
+                        id="languageSelect"
+                        onChange={changeLanguage}
+                        value={currentLanguage}
+                    >
+                        <option value="en">English</option>
+                        <option value="ua">Українська</option>
+                        <option value="es">Español</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </div>
             </div>
         </div>
     )

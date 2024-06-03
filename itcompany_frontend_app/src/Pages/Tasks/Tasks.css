@@ -24,8 +24,11 @@
 }
 
 .task-page-container .task-title {
+  width: 100%;
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .task-page-container .task-deadline, .task-page-container .task-done-date {

@@ -60,7 +60,6 @@ const Feedbacks=()=>{
                     Authorization:`Bearer ${token}`
                 }})
                 .then(res => {
-                    console.log("for: ", res.data);
                     setMyFeedbacks(res.data);
                 })
                 .then(() => {
@@ -75,7 +74,6 @@ const Feedbacks=()=>{
                     Authorization:`Bearer ${token}`
                 }})
                 .then(res => {
-                    console.log("from: ", res.data);
                     setByMeFeedbacks(res.data);
                 })
                 .then(() => {
@@ -90,7 +88,6 @@ const Feedbacks=()=>{
                     Authorization:`Bearer ${token}`
                 }})
                 .then(res => {
-                    console.log("employees: ", res.data);
                     setEmployees(res.data);
                 })
                 .catch(err=>{
@@ -114,7 +111,6 @@ const Feedbacks=()=>{
         let empId = -1;
 
         employees.map(employee => {
-            console.log(employee.lastName + " " + employee.firstName, " == ", empName, " : ", employee.lastName + " " + employee.firstName == empName);
             if (employee.lastName + " " + employee.firstName == empName){
                 empId = employee.id;
             }
@@ -124,7 +120,6 @@ const Feedbacks=()=>{
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
-            console.log("Seach: ", res.data);
             setEmployeeFeedbacks(res.data);
             setIsEmployeeFeedbacksLoading(false);
             setDisplayForError("none");
@@ -177,7 +172,6 @@ const Feedbacks=()=>{
 
         if (document.getElementById("userForInput").value == nowEmployeeName){
             setDisplayForErrorCreate2("block");
-            console.log(feedbackForCreate.employeeForName);
             return;
         }
 
@@ -211,12 +205,6 @@ const Feedbacks=()=>{
             else
             {
                 console.log("Create error: ", err);
-                console.log({ 
-                    employeeFromName: nowEmployeeName, 
-                    employeeForName: document.getElementById("userForInput").value,
-                    feedBackMark: feedbackForCreate.feedBackMark,
-                    feedBackText: feedbackForCreate.feedBackText
-                 });
             }
         });
     }

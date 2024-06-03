@@ -15,19 +15,18 @@ const FileUpload = (props) => {
             Authorization:`Bearer ${token}`
         }})
         .then(res => {
-            console.log('File uploaded successfully: ', res.data);
             if (props.setFile){
                 props.setFile(res.data.folderFile);
             }
         })
         .catch(err => {
-            console.log("Upload faild, err: ", err)
+            console.log("Upload failed, err: ", err)
         });
     };
 
     return (
         <div>
-            <input id={props.id?props.id:""} type="file" onChange={handleUpload} required={true}/>
+            <input id={props.id?props.id:""} type="file" onChange={handleUpload} accept={props.accept? props.accept : ""} required={true}/>
         </div>
     );
 }
