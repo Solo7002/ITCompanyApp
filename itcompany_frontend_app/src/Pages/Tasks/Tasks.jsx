@@ -33,15 +33,23 @@ const Tasks=()=>{
 
   const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(false);
   const [showTaskCreateModal, setShowTaskCreateModal] = useState(false);
+  const [showTaskUploadDoneModal, setShowTaskUploadDoneModal] = useState(false);
+  const [showTaskDetailsInMangeModal, setShowTaskDetailsInMangeModal] = useState(false);
+  const [showTaskUpdateModal, setShowTaskUpdateModal] = useState(false);
+  const [showTaskDeleteModal, setShowTaskDeleteModal] = useState(false);
   
   const [currentEmployee, setCurrentEmployee] = useState({});
   const [currentDepEmployees, setCurrentDepEmployees] = useState([]);
   const [selectedEmp, setSelectedEmp] = useState({});
+  const [empsSeachInput, setEmpsSeachInput] = useState("");
+  const [tempChoosenIndex, setTempChoosenIndex] = useState(0);
+  const [tempProjectName, setTempProjectName] = useState("");
+  const [tempEmployeeName, setTempEmployeeName] = useState("");
 
   const [coverFilePath, setCoverFilePath] = useState("");
   const [taskFilePath, setTaskFilePath] = useState("");
+  const [doneTaskFilePath, setDoneTaskFilePath] = useState("");
 
-  
   const [notification, setNotification] = useState({
     show: false,
     text: "",
@@ -53,6 +61,7 @@ const Tasks=()=>{
     icon: "fa-regular fa-circle-check",
     corner: "4"
   });
+
 
   useEffect(()=> {
     if(token){
@@ -66,18 +75,27 @@ const Tasks=()=>{
         res.data.forEach(el => {
           el.deadLineDate = DateReduction(el.deadLineDate);
           el.uploadDate = DateReduction(el.uploadDate);
-          el.doneDate = el.isDone? DateReduction(el.doneDate) : el.doneDate;});
+          el.doneDate = el.isDone? DateReduction(el.doneDate) : el.doneDate;
+        });
 
         setObligatoryTasks(res.data.filter(t => (new Date(t.deadLineDate) > new Date()) && !t.isDone && t.employeeFor_Id));
         setExpiredTasks(res.data.filter(t => (new Date(t.deadLineDate) < new Date()) && !t.isDone && t.employeeFor_Id));
-        setOptionalTasks(res.data.filter(t => !t.isDone && !t.employeeFor_Id && !t.employeeFor_Id == decoded.nameid));
+
+        axios.get(`${keys.ServerConnection}/Employee/${decoded.nameid}`, {headers: {Authorization:`Bearer ${token}`}})
+        .then(res2 => {
+          axios.get(`${keys.ServerConnection}/Department/${res2.data.departmentId}`, {headers: {Authorization:`Bearer ${token}`}})
+          .then(res3 => {
+            setOptionalTasks(res.data.filter(t => !t.isDone && !t.employeeFor_Id && t.employeeFor_Id != decoded.nameid && t.employeeFrom_Id == res3.data.departmentHeadId));
+          });
+        });
+        
         setDoneTasks(res.data.filter(t => t.isDone));
       })
       .then(() => {
         setIsTasksLoading(false);
       })
       .catch(err=>{
-        if(err.response.status===401)
+        if(err.response && err.response.status===401)
           signOut();
       });
 
@@ -86,20 +104,34 @@ const Tasks=()=>{
       }})
       .then(res => {
         setCurrentEmployee(res.data);
-        axios.get(`${keys.ServerConnection}/Employee/byDepartmentId/${res.data.departmentId}`, {headers: {
-          Authorization:`Bearer ${token}`
-        }})
-        .then(res2 => {
-          setCurrentDepEmployees(res2.data.filter(e => e.id != decoded.nameid))
-        })
-        .catch(err=>{
-          if(err.response.status===401){
-            signOut();
-          }
-        });
+        
+        if (res.data){
+          let depId;
+          axios.get(`${keys.ServerConnection}/Department`, {headers: {
+            Authorization:`Bearer ${token}`
+          }})
+          .then(res2 => {
+            axios.get(`${keys.ServerConnection}/Employee/byDepartmentId/${res2.data.filter(d => d.departmentHeadId == res.data.id)[0].departmentId}`, {headers: {
+              Authorization:`Bearer ${token}`
+            }})
+            .then(res3 => {
+              setCurrentDepEmployees(res3.data.filter(e => e.id != decoded.nameid))
+            })
+            .catch(err=>{
+              if(err.response.status===401){
+                signOut();
+              }
+            });
+          })
+          .catch(err=>{
+            if(err.response && err.response.status===401){
+              signOut();
+            }
+          });
+        }
       })
       .catch(err=>{
-        if(err.response.status===401){
+        if(err.response && err.response.status===401){
           signOut();
         }
       });
@@ -115,6 +147,7 @@ const Tasks=()=>{
   }, [token, reload]);
 
   const forceReload = () => {
+    console.log("force reload!");
     setReload(!reload);
   }
 
@@ -166,6 +199,8 @@ const Tasks=()=>{
       Authorization:`Bearer ${token}`
     }})
     .then((res) => {
+      setTempChoosenIndex(index);
+
       console.log("res: ", res.data);
       res.data.forEach(el => {
         el.deadLineDate = DateReduction(el.deadLineDate);
@@ -189,54 +224,281 @@ const Tasks=()=>{
     });
   }
 
+  const isTaskValid = (taskHeaderInput, taskDescriptionInput, taskCoverInput, taskProjectInput, taskEmployeeInput, taskFileInput, taskDeadLineInput, isEdit) => {
+    if (taskHeaderInput.value.trim() === ''){
+      taskHeaderInput.setCustomValidity("Header is required");
+      taskHeaderInput.reportValidity();
+    }
+    else if (taskDescriptionInput.value.trim() === ''){
+      taskDescriptionInput.setCustomValidity("Description is required");
+      taskDescriptionInput.reportValidity();
+    }
+    else if (!isEdit && taskCoverInput.value.trim() === ''){
+      taskCoverInput.setCustomValidity("Cover is required");
+      taskCoverInput.reportValidity();
+    }
+    else if (isEdit && taskCoverInput.value.trim() === '' && !coverFilePath){
+      taskCoverInput.setCustomValidity("Cover is required");
+      taskCoverInput.reportValidity();
+    }
+    else if (taskProjectInput.value.trim() === ''){
+      taskProjectInput.setCustomValidity("Project is required");
+      taskProjectInput.reportValidity();
+    }
+    else if (projects.filter(p => p.projectName.toLowerCase() == taskProjectInput.value.toLowerCase()).length == 0){
+      taskProjectInput.setCustomValidity("No projects with such name");
+      taskProjectInput.reportValidity();
+    }
+    else if (taskEmployeeInput.value.trim() != '' && currentDepEmployees.filter(e => e.lastName.toLowerCase() + " " + e.firstName.toLowerCase() == taskEmployeeInput.value.toLowerCase()).length == 0){
+      taskProjectInput.setCustomValidity("No employees with such name");
+      taskProjectInput.reportValidity();
+    }
+    else if (!isEdit && taskFileInput.value.trim() === ''){
+      taskFileInput.setCustomValidity("File is required");
+      taskFileInput.reportValidity();
+    }
+    else if (isEdit && taskFileInput.value.trim() === '' && !taskFilePath){
+      taskFileInput.setCustomValidity("File is required");
+      taskFileInput.reportValidity();
+    }
+    else if (taskDeadLineInput.value.trim() === ''){
+      taskDeadLineInput.setCustomValidity("Deadline is required");
+      taskDeadLineInput.reportValidity();
+    }
+    else {
+      return true;
+    }
+    return false;
+  }
+
   const createTaskHandler = () => {
     const decoded = jwtDecode(token);
 
-    /* ------------------------ To do ---------------------------
-    /////////////////////////////////////////////////////////////
-                          Add validation 
-    /////////////////////////////////////////////////////////////
-    -----------------------------------------------------------*/
+    const taskModel = {
+      header: document.getElementById("create-task-header"),
+      text: document.getElementById("create-task-text"),
+      cover: document.getElementById("create-task-cover"),
+      project: document.getElementById("create-task-project"),
+      employeeFor: document.getElementById("create-task-employeeFor"),
+      file: document.getElementById("create-task-file"),
+      deadline: document.getElementById("create-task-deadline")
+    }
 
-    console.log("data for create: ", {
-      deadLineDate: document.getElementById("create-task-deadline").value,
-      header: document.getElementById("create-task-header").value,
-      text: document.getElementById("create-task-text").value,
-      file: taskFilePath,
-      doneFile: "doneFile",
-      cover: coverFilePath,
-      isDone: false,
-      projectId: projects.filter(p => p.projectName == document.getElementById("create-task-project").value)[0].projectId,
-      employeeFor_Id: currentDepEmployees.filter(e => e.lastName + " " + e.firstName == document.getElementById("create-task-employeeFor").value)[0].id,
-      employeeFrom_Id: parseInt(decoded.nameid)
-    });
-    axios.post(`${keys.ServerConnection}/Task`, 
-    {
-      deadLineDate: document.getElementById("create-task-deadline").value,
-      header: document.getElementById("create-task-header").value,
-      text: document.getElementById("create-task-text").value,
-      file: taskFilePath,
-      doneFile: "doneFile",
-      cover: coverFilePath,
-      isDone: false,
-      projectId: projects.filter(p => p.projectName == document.getElementById("create-task-project").value)[0].projectId,
-      employeeFor_Id: currentDepEmployees.filter(e => e.lastName + " " + e.firstName == document.getElementById("create-task-employeeFor").value)[0].id,
-      employeeFrom_Id: parseInt(decoded.nameid)
-    },
-    {headers: {Authorization:`Bearer ${token}`}})
-    .then(() => {
-      setShowTaskCreateModal(false);
+    if (isTaskValid(taskModel.header, taskModel.text, taskModel.cover, taskModel.project, taskModel.employeeFor, taskModel.file, taskModel.deadline, false)){
+      axios.post(`${keys.ServerConnection}/Task`, 
+      {
+        deadLineDate: document.getElementById("create-task-deadline").value,
+        header: document.getElementById("create-task-header").value,
+        text: document.getElementById("create-task-text").value,
+        file: taskFilePath,
+        doneFile: "doneFile",
+        cover: coverFilePath,
+        isDone: false,
+        projectId: projects.filter(p => p.projectName == document.getElementById("create-task-project").value)[0].projectId,
+        employeeFor_Id: document.getElementById("create-task-employeeFor").value? currentDepEmployees.filter(e => e.lastName + " " + e.firstName == document.getElementById("create-task-employeeFor").value)[0].id : null,
+        employeeFrom_Id: parseInt(decoded.nameid)
+      },
+      {headers: {Authorization:`Bearer ${token}`}})
+      .then(() => {
+        setShowTaskCreateModal(false);
+
+        setNotification({
+          ...notification,
+          show: true,
+          text: `Task added to ${document.getElementById("create-task-employeeFor").value}`,
+          color: "success",
+          icon: "fa-regular fa-circle-check"
+        });
+
+        document.getElementById("create-task-header").value = document.getElementById("create-task-text").value = document.getElementById("create-task-cover").value = document.getElementById("create-task-project").value = document.getElementById("create-task-employeeFor").value = document.getElementById("create-task-file").value = document.getElementById("create-task-deadline").value = "";
+  
+        forceReload();
+        document.getElementById("tasks-employees-by-department").children[tempChoosenIndex].click();
+      });
+    }
+  }
+
+  const confirmFromDetailsHandler = () => {
+    if (selectedTask.isDone){
+      setShowTaskDetailsModal(false);
+    }
+    else if (selectedTask.employeeFor_Id){
+      uploadConfirmInDetailsHandler();
+    }
+    else{
+      claimInDetailsHandler();
+    }
+  }
+
+  const claimInDetailsHandler = () => {
+    const decoded = jwtDecode(token);
+    console.log(`${keys.ServerConnection}/Task/claim/${selectedTask.taskId}/${decoded.nameid}`);
+
+    axios.put(`${keys.ServerConnection}/Task/claim/${selectedTask.taskId}/${decoded.nameid}`, {}, {headers: {
+      Authorization:`Bearer ${token}`
+    }}).then(() => {
+      setShowTaskDetailsModal(false);
 
       setNotification({
         ...notification,
         show: true,
-        text: `Task added to ${document.getElementById("create-task-employeeFor").value}`,
+        text: `Task claimed successfully`,
         color: "success",
         icon: "fa-regular fa-circle-check"
       });
 
       forceReload();
-    })
+    });
+  }
+
+  const uploadConfirmInDetailsHandler = () => {
+    setShowTaskDetailsModal(false);
+    setShowTaskUploadDoneModal(true);
+  }
+
+  const uploadDoneTaskHandler = () => {
+    let uploadDoneFileInput = document.getElementById("upload-done-task-file");
+    if (uploadDoneFileInput.value.trim() === ''){
+      uploadDoneFileInput.setCustomValidity("Header is required");
+      uploadDoneFileInput.reportValidity();
+    }
+    else
+    {
+      uploadDoneFileInput.setCustomValidity("");
+      uploadDoneFileInput.reportValidity();
+
+      console.log(doneTaskFilePath);
+
+      axios.put(`${keys.ServerConnection}/Task/setDone/${selectedTask.taskId}`,{
+        doneFilePath: doneTaskFilePath
+      }, {headers: { Authorization:`Bearer ${token}`,}})
+      .then(() => {
+        setNotification({
+          ...notification,
+          show: true,
+          text: `Done task uploaded successfully`,
+          color: "success",
+          icon: "fa-regular fa-circle-check"
+        });
+
+        forceReload();
+      });
+    }
+  }
+
+  const openDetailsInManageModalWindow = (task_type, task_index) => {
+    let temp_data = {};
+    switch (task_type){
+      case "obligatory": 
+        temp_data = obligatoryTasksForEmp[task_index];
+        temp_data.headerBackColor = "#d1ecf1";
+        break;
+      case "overdue": 
+        temp_data = expiredTasksForEmp[task_index];
+        temp_data.headerBackColor = "#d4555f";
+        break;
+      case "optional": 
+        temp_data = optionalTasksForEmp[task_index];
+        temp_data.headerBackColor = "#fedf77";
+        break;
+      case "done": 
+        temp_data = doneTasksForEmp[task_index];
+        temp_data.headerBackColor = "#85f19e";
+        break;
+    }
+    temp_data.task_type = task_type;
+
+    setSelectedTaskForEmp(temp_data);
+    setShowTaskDetailsInMangeModal(true);
+  }
+
+  const updateClickInManageHandler = () => {
+    setShowTaskUpdateModal(true);
+    setShowTaskDetailsInMangeModal(false);
+
+    document.getElementById("update-task-header").value = selectedTaskForEmp.header;
+    setCoverFilePath(selectedTaskForEmp.cover);
+    document.getElementById("update-task-text").value = selectedTaskForEmp.text;
+    setTempProjectName(projects.filter(p => p.projectId == selectedTaskForEmp.projectId)[0].projectName);
+    setTempEmployeeName(selectedEmp.lastName + " " + selectedEmp.firstName);
+    setTaskFilePath(selectedTaskForEmp.file);
+    document.getElementById("update-task-deadline").value = selectedTaskForEmp.deadLineDate;
+  }
+
+  const updateTaskHandler = () => {
+    const decoded = jwtDecode(token);
+
+    const taskModel = {
+      header: document.getElementById("update-task-header"),
+      text: document.getElementById("update-task-text"),
+      cover: document.getElementById("update-task-cover"),
+      project: document.getElementById("update-task-project"),
+      employeeFor: document.getElementById("update-task-employeeFor"),
+      file: document.getElementById("update-task-file"),
+      deadline: document.getElementById("update-task-deadline")
+    }
+
+    if (isTaskValid(taskModel.header, taskModel.text, taskModel.cover, taskModel.project, taskModel.employeeFor, taskModel.file, taskModel.deadline, true)){
+      axios.put(`${keys.ServerConnection}/Task/${selectedTaskForEmp.taskId}`, 
+      {
+        deadLineDate: taskModel.deadline.value,
+        header: taskModel.header.value,
+        text: taskModel.text.value,
+        file: taskFilePath,
+        doneFile: "",
+        cover: coverFilePath,
+        isDone: false,
+        projectId: projects.filter(p => p.projectName == taskModel.project.value)[0].projectId,
+        employeeFor_Id: taskModel.employeeFor.value? currentDepEmployees.filter(e => e.lastName.toLowerCase() + " " + e.firstName.toLowerCase() == taskModel.employeeFor.value.toLowerCase())[0].id : null,
+        employeeFrom_Id: parseInt(decoded.nameid)
+      },
+      {headers: {Authorization:`Bearer ${token}`}})
+      .then(() => {
+        setShowTaskUpdateModal(false);
+
+        setNotification({
+          ...notification,
+          show: true,
+          text: `Task updated successfully`,
+          color: "success",
+          icon: "fa-regular fa-circle-check"
+        });
+
+        taskModel.header.value = taskModel.text.value = taskModel.cover.value = taskModel.project.value = taskModel.employeeFor.value = taskModel.file.value = taskModel.deadline.value = "";
+        setTempEmployeeName("");
+        setTempProjectName("");
+        setCoverFilePath("");
+        setTaskFilePath("");
+
+        forceReload();
+        document.getElementById("tasks-employees-by-department").children[tempChoosenIndex].click();
+      });
+    }
+  }
+
+  const confirmDeletionHandler = () => {
+    setShowTaskDeleteModal(true);
+    setShowTaskDetailsInMangeModal(false);
+  }
+
+  const onDeleteTaskHandler = () => {
+    axios.delete(`${keys.ServerConnection}/Task/${selectedTaskForEmp.taskId}`, {headers: {
+      Authorization:`Bearer ${token}`
+    }})
+    .then(() => {
+      setShowTaskDeleteModal(false);
+
+      setNotification({
+        ...notification,
+        show: true,
+        text: `Task deleted successfully`,
+        color: "success",
+        icon: "fa-regular fa-circle-check"
+      });
+      
+      forceReload();
+      document.getElementById("tasks-employees-by-department").children[tempChoosenIndex].click();
+    });
   }
 
   return(
@@ -245,7 +507,7 @@ const Tasks=()=>{
         title="Task details"
         show={showTaskDetailsModal} 
         handleClose={() => setShowTaskDetailsModal(false)} 
-        handleConfirm={() => setShowTaskDetailsModal(false)}
+        handleConfirm={confirmFromDetailsHandler}
         confirmText={selectedTask.btnText}
         confirmBtnColor={selectedTask.confirmBtnColor}
         cancelText="Cancel"
@@ -254,20 +516,20 @@ const Tasks=()=>{
         <div class="col-md-12">
           <h2 className="text-center" style={{marginBottom: "15px"}}>{selectedTask.header}</h2>
           <div className="task-cover" style={{marginBottom: "15px"}}>
-            <img src={`${selectedTask.cover}`} className="task-cover" alt="Task Cover"/>
+            <img src={`${keys.ServerConnection}/Files/download${selectedTask.cover}`} className="task-cover" alt="Task Cover"/>
           </div>
-          <p>{selectedTask.text}</p>
+          <p style={{wordWrap: "break-word", whiteSpace: "normal"}}>{selectedTask.text}</p>
         </div>
         <div class="col-md-9" style={{marginBottom: "10px"}}>
           <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <h5>Task file:</h5>
-            <a href="task-file.pdf" class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+            <a href={`${keys.ServerConnection}/Files/download${selectedTask.file}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
           </div>
           {
             selectedTask.task_type == "done" && 
             <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <h5>Done task file:</h5>
-              <a href="done-task-file.pdf" class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+              <a href={`${keys.ServerConnection}/Files/download${selectedTask.doneFile}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
             </div>
           }
         </div>
@@ -293,7 +555,7 @@ const Tasks=()=>{
               <label>Header</label>
             </div>
             <div className="col-md-9">
-              <input type="text" className="form-control" required={true} id="create-task-header"/>
+              <input type="text" className="form-control" required={true} id="create-task-header" maxLength={50}/>
             </div>
           </div>
           <br />
@@ -302,7 +564,7 @@ const Tasks=()=>{
               <label>Cover</label>
             </div>
             <div className="col-md-9  ">
-              <FileUpload folder="tasks/task_covers" id="create-task-cover" setFile={setCoverFilePath}/>
+              <FileUpload folder="tasks/task_covers" id="create-task-cover" setFile={setCoverFilePath} accept="image/png, image/gif, image/jpeg"/>
             </div>
           </div>
           <br />
@@ -311,7 +573,7 @@ const Tasks=()=>{
               <label>Description</label>
             </div>
             <div className="col-md-12">
-              <textarea type="text" rows={3} className="form-control" required={true}  id="create-task-text"/>
+              <textarea type="text" rows={3} className="form-control" required={true}  id="create-task-text" maxLength={250}/>
             </div>
           </div>
           <br />
@@ -353,6 +615,150 @@ const Tasks=()=>{
       </div>
       </ModalWindow>
 
+      <ModalWindow
+        title="Done task upload"
+        show={showTaskUploadDoneModal} 
+        handleClose={() => setShowTaskUploadDoneModal(false)} 
+        handleConfirm={uploadDoneTaskHandler}
+        confirmText="Upload"
+        cancelText="Cancel">
+      <div id="modal-task-details">
+          <div className="row">
+            <div className="col-md-4 mt-1">
+              <label>Done task file</label>
+            </div>
+            <div className="col-md-8">
+              <FileUpload folder="tasks/task_files" id="upload-done-task-file" setFile={setDoneTaskFilePath}/>
+            </div>
+          </div>
+      </div>
+      </ModalWindow>
+
+      <ModalWindow
+        title="Task details"
+        show={showTaskDetailsInMangeModal} 
+        handleClose={() => setShowTaskDetailsInMangeModal(false)} 
+        handleConfirm={() => selectedTaskForEmp.isDone? setShowTaskDetailsInMangeModal(false) : updateClickInManageHandler()}
+        confirmText={selectedTaskForEmp.isDone? "Ok" : "Update"}
+        cancelText="Cancel"
+        headerBackgroundColor={selectedTaskForEmp.isDone? "primary" : selectedTaskForEmp.headerBackColor}
+        >
+      <div id="modal-task-details-2">
+        <div class="col-md-12">
+          <h2 className="text-center mb-3">{selectedTaskForEmp.header}</h2>
+          <div className="task-cover mb-3">
+            <img src={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.cover}`} className="task-cover" alt="Task Cover"/>
+          </div>
+          <p style={{wordWrap: "break-word", whiteSpace: "normal"}}>{selectedTaskForEmp.text}</p>
+        </div>
+        <div class="col-md-9 mb-2">
+          <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <h5>Task file:</h5>
+            <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.file}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+          </div>
+          {
+            selectedTaskForEmp.task_type == "done" && 
+            <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+              <h5>Done task file:</h5>
+              <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.doneFile}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+            </div>
+          }
+        </div>
+        <div class="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
+          <h6>Uploaded: <b style={{color: "black"}}>{selectedTaskForEmp.uploadDate}</b></h6>
+          <h6>Deadline: <b style={{color: "red"}}>{selectedTaskForEmp.deadLineDate}</b></h6>
+        </div>
+        <div class="col-md-12">
+          <button className="btn btn-danger" style={{width: "100%"}} onClick={confirmDeletionHandler}>Delete</button>
+        </div>
+      </div>
+      </ModalWindow>
+
+      <ModalWindow
+        title="Task editing"
+        show={showTaskUpdateModal} 
+        handleClose={() => setShowTaskUpdateModal(false)} 
+        handleConfirm={updateTaskHandler}
+        confirmText="Update"
+        cancelText="Cancel"
+        headerBackgroundColor={selectedTaskForEmp.headerBackColor}>
+      <div id="modal-update-task-details">
+        <form>
+          <div className="row">
+            <div className="col-md-3" style={{display: "flex", alignItems: "center", marginBottom: "0"}}>
+              <label>Header</label>
+            </div>
+            <div className="col-md-9">
+              <input type="text" className="form-control" required={true} id="update-task-header" maxLength={50}/>
+            </div>
+          </div>
+          <br />
+          <div className="row">
+            <div className="col-md-3 mt-1">
+              <label>Cover</label>
+            </div>
+            <div className="col-md-9  ">
+              <FileUpload folder="tasks/task_covers" id="update-task-cover" setFile={setCoverFilePath} accept="image/png, image/gif, image/jpeg"/>
+            </div>
+          </div>
+          <br />
+          <div className="row">
+            <div className="col-md-12 mb-2" style={{display: "flex", alignItems: "center", marginBottom: "0"}}>
+              <label>Description</label>
+            </div>
+            <div className="col-md-12">
+              <textarea type="text" rows={3} className="form-control" required={true}  id="update-task-text" maxLength={250}/>
+            </div>
+          </div>
+          <br />
+          <div className="row">
+            <div className="col-md-6 mb-2">
+              <label>Project</label>
+            </div>
+            <div className="col-md-6 mb-2">
+              <label style={{marginLeft: "18px"}}>Employee for</label>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-6">
+              <SelectSearch options={projects.map(p => p.projectName)} id="update-task-project" value={tempProjectName}/>
+            </div>
+            <div className="col-md-6 d-flex justify-content-end">
+              <SelectSearch options={currentDepEmployees.map(employee => employee.lastName + " " + employee.firstName)} id="update-task-employeeFor" value={tempEmployeeName}/>
+            </div>
+          </div>
+          <br />
+          <div className="row">
+            <div className="col-md-3 mt-1">
+              <label>Task file</label>
+            </div>
+            <div className="col-md-9  ">
+              <FileUpload folder="tasks/task_files" id="update-task-file" setFile={setTaskFilePath}/>
+            </div>
+          </div>
+          <br />
+          <div className="row">
+            <div className="col-md-3 d-flex align-items-center mt-2">
+              <label>Deadline</label>
+            </div>
+            <div className="col-md-9">
+              <input type="date" className="form-control" min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]} max={new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]} id="update-task-deadline"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      </ModalWindow>
+
+      <ModalWindow
+        title="Confirm deletion"
+        show={showTaskDeleteModal} 
+        handleClose={() => setShowTaskDeleteModal(false)} 
+        handleConfirm={onDeleteTaskHandler}
+        confirmText="Yes" 
+        cancelText="Cancel">
+        <p>Are you sure that you want to delete that task?</p>
+      </ModalWindow>
+
       <Notification
         show={notification.show}
         setShow={notification.setShow}
@@ -378,7 +784,7 @@ const Tasks=()=>{
               <a className="nav-link" id="done-tab" data-toggle="pill" href="#done" role="tab" aria-controls="done" aria-selected="false">Done</a>
             </li>
             {
-              currentEmployee &&
+              currentEmployee && currentDepEmployees.length > 0 &&
               <li className="nav-item">
                 <a className="nav-link" id="manage-tasks-tab" data-toggle="pill" href="#manage-tasks" role="tab" aria-controls="manage-tasks" aria-selected="false">Manage tasks</a>
               </li>
@@ -399,7 +805,7 @@ const Tasks=()=>{
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("obligatory", index)}>
                           <div className="task-container task-obligatory">
                               <div className="task-cover">
-                                  <img src={task.cover} alt="cover" className="img-fluid" />
+                                  <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                               </div>
                               <div className="task-content">
                                   <h5 className="task-title">{task.header}</h5>
@@ -425,7 +831,7 @@ const Tasks=()=>{
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("overdue", index)}>
                           <div className="task-container task-overdue" style={{position: "relative"}}>
                               <div className="task-cover">
-                                  <img src={task.cover} alt="cover" className="img-fluid" />
+                                  <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                               </div>
                               <div className="task-content">
                                   <h5 className="task-title">{task.header}</h5>
@@ -454,7 +860,7 @@ const Tasks=()=>{
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("optional", index)}>
                           <div className="task-container task-optional">
                               <div className="task-cover">
-                                <img src={task.cover} alt="cover" className="img-fluid" />
+                                <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                               </div>
                               <div className="task-content">
                                 <h5 className="task-title">{task.header}</h5>
@@ -477,7 +883,7 @@ const Tasks=()=>{
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("done", index)}>
                           <div className="task-container task-done">
                               <div className="task-cover">
-                                <img src={task.cover} alt="cover" className="img-fluid" />
+                                <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                               </div>
                               <div className="task-content">
                                 <h5 className="task-title">{task.header}</h5>
@@ -505,7 +911,7 @@ const Tasks=()=>{
                       <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("obligatory", index)}>
                         <div className="task-container task-obligatory">
                             <div className="task-cover">
-                                <img src={task.cover} alt="cover" className="img-fluid" />
+                                <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                             </div>
                             <div className="task-content">
                                 <h5 className="task-title">{task.header}</h5>
@@ -531,7 +937,7 @@ const Tasks=()=>{
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("overdue", index)}>
                           <div className="task-container task-overdue" style={{position: "relative"}}>
                               <div className="task-cover">
-                                  <img src={task.cover} alt="cover" className="img-fluid" />
+                                  <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                               </div>
                               <div className="task-content">
                                   <h5 className="task-title">{task.header}</h5>
@@ -561,7 +967,7 @@ const Tasks=()=>{
                       <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("optional", index)}>
                         <div className="task-container task-optional">
                             <div className="task-cover">
-                              <img src={task.cover} alt="cover" className="img-fluid" />
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                             </div>
                             <div className="task-content">
                               <h5 className="task-title">{task.header}</h5>
@@ -588,7 +994,7 @@ const Tasks=()=>{
                       <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("done", index)}>
                         <div className="task-container task-done">
                             <div className="task-cover">
-                              <img src={task.cover} alt="cover" className="img-fluid" />
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                             </div>
                             <div className="task-content">
                               <h5 className="task-title">{task.header}</h5>
@@ -603,7 +1009,7 @@ const Tasks=()=>{
                 </div>
             </div>
             {
-              currentEmployee && 
+              currentEmployee && currentDepEmployees.length > 0 &&
               <div className="tab-pane fade" id="manage-tasks" role="tabpanel" aria-labelledby="manage-tasks-tab">
               <div class="row" style={{marginTop: "30px"}}>
                 {
@@ -611,10 +1017,16 @@ const Tasks=()=>{
                   <div class="col-md-4">
                     <h4>Choose employee</h4>
                     <br />
-                    <input type="text" class="form-control mb-3" placeholder="Search users by name" />
+                    <input type="text" class="form-control mb-3" placeholder="Search users by name" id="seach-users-in-tasks" value={empsSeachInput} onChange={(event) => setEmpsSeachInput(event.target.value)}/>
                     <div class="user-list list-group" id="tasks-employees-by-department">
                       {
-                        currentDepEmployees.map((emp, index) => (
+                        (empsSeachInput.length > 0 ? currentDepEmployees.filter(e => 
+                          e.lastName.toLowerCase().startsWith(empsSeachInput.toLowerCase()) 
+                          || 
+                          e.firstName.toLowerCase().startsWith(empsSeachInput.toLowerCase()) 
+                          ||
+                          (e.lastName + " " + e.firstName).toLowerCase().startsWith(empsSeachInput.toLowerCase())
+                        ): currentDepEmployees).map((emp, index) => (
                           <div class="list-group-item list-group-item-action" key={index} onClick={(event) => chooseUserHandler(event, index)} style={{cursor: "pointer"}}>{emp.lastName + " " + emp.firstName}</div>
                         ))
                       }
@@ -624,17 +1036,19 @@ const Tasks=()=>{
                 { 
                 !selectedEmp.id ? <h4 style={{margin: "60px 20px"}}>Choose employee to manage his tasks</h4> 
                 :
-                !obligatoryTasksForEmp && !expiredTasksForEmp && !optionalTasks && !doneTasksForEmp ? <h3 style={{margin: "60px 20px"}}>That employee has no tasks, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}}><i>create new one</i></span></h3>
+                obligatoryTasksForEmp.length == 0 && expiredTasksForEmp.length == 0 && optionalTasksForEmp.length == 0 && doneTasksForEmp.length == 0 ? <h3 style={{margin: "60px 20px"}}>That employee has no tasks, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>create new one</i></span></h3>
                 :
                 <div class="col-md-8">
                   <h4 style={{marginBottom: "15px"}}>Obligatory</h4>
                   <div class="row">
                   {
-                    obligatoryTasksForEmp.length == 0? <h4 className="noTasks">No obligatory tasks for {selectedEmp.lastName + " " + selectedEmp.firstName}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}}><i>create new one</i></span></h4> : obligatoryTasksForEmp.map((task, index) => (
-                      <div class="col-md-4" key={index}>
+                    obligatoryTasksForEmp.length == 0? <h4 className="noTasks">No obligatory tasks for {selectedEmp.lastName + " " + selectedEmp.firstName}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>create new one</i></span></h4> 
+                    :
+                    obligatoryTasksForEmp.map((task, index) => (
+                      <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("obligatory", index)}>
                         <div class="task-container task-obligatory">
                           <div class="task-cover">
-                            <img src={`https://localhost:7250/api/Files/download${task.cover}`} alt="cover" class="img-fluid" />
+                            <img src={`${keys.ServerConnection}/Files/download${task.cover}`} alt="cover" class="img-fluid" />
                           </div>
                           <div class="task-content">
                             <h5 class="task-title">{task.header}</h5>
@@ -644,11 +1058,15 @@ const Tasks=()=>{
                       </div>
                     ))
                   }
-                  <div class="col-md-4">
-                    <div class="task-container task-obligatory-add" onClick={() => setShowTaskCreateModal(true)}>
-                      <p>+</p>
+                  {
+                    obligatoryTasksForEmp.length > 0 
+                    &&
+                    <div class="col-md-4">
+                      <div class="task-container task-obligatory-add" onClick={() => setShowTaskCreateModal(true)}>
+                        <p>+</p>
+                      </div>
                     </div>
-                  </div>
+                  }
                   </div>
                   { expiredTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>Overdue</h4> }
                   {
@@ -656,10 +1074,10 @@ const Tasks=()=>{
                     <div class="row">
                     {
                       expiredTasksForEmp.map((task, index) => (
-                        <div class="col-md-4" key={index}>
+                        <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("expired", index)}>
                           <div class="task-container task-overdue">
                             <div class="task-cover">
-                              <img src={task.cover} alt="cover" class="img-fluid" />
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" class="img-fluid" />
                             </div>
                             <div class="task-content">
                               <h5 class="task-title">{task.header}</h5>
@@ -678,10 +1096,10 @@ const Tasks=()=>{
                     <div class="row">
                     {
                       optionalTasksForEmp.map((task, index) => (
-                        <div class="col-md-4" key={index}>
+                        <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("optional", index)}>
                           <div class="task-container task-optional">
                             <div class="task-cover">
-                              <img src={task.cover} alt="cover" class="img-fluid" />
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" class="img-fluid" />
                             </div>
                             <div class="task-content">
                               <h5 class="task-title">{task.header}</h5>
@@ -700,15 +1118,15 @@ const Tasks=()=>{
                     <div class="row">
                     {
                       doneTasksForEmp.map((task, index) => (
-                        <div class="col-md-4" key={index}>
+                        <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("done", index)}>
                           <div class="task-container task-done">
                             <div class="task-cover">
-                              <img src={task.cover} alt="cover" class="img-fluid" />
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" class="img-fluid" />
                             </div>
                             <div class="task-content">
                               <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline">Deadline: {task.deadLineDate}</p>
-                              <p>Done: {task.doneDate}</p>
+                              <p class="task-deadline mt-2">Deadline: {task.deadLineDate}</p>
+                              <p class="task-deadline">Done: {task.doneDate}</p>
                             </div>
                           </div>
                         </div>

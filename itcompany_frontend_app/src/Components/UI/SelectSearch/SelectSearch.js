@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SelectSearch.css';
 const SelectSearch = props => {
-  const [searchTerm, setSearchTerm] = useState(props.value||'');
+  const [searchTerm, setSearchTerm] = useState(props.value);
   const [isOpen, setIsOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState(props.options);
   const [isAlreadyOnChange, setIsAlreadyOnChange] = useState(false);

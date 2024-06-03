@@ -1,5 +1,6 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
+using ITCompanyApp.Models.SpecialModels.Tasks;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -130,13 +131,13 @@ namespace ITCompanyApp.Controllers
             _context.Entry(task).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("GetTasks");
+            return Ok();
         }
 
         [HttpPut("setDone/{id}")]
-        public IActionResult setDoneTask(int id)
+        public IActionResult setDoneTask(int id, TaskDoneClaimSpecialModel model)
         {
-            if (!_context.Tasks.Any(t => t.TaskId == id))
+            if (!_context.Tasks.Any(t => t.TaskId == id) || model.doneFilePath == null)
             {
                 return NotFound();
             }
@@ -144,6 +145,25 @@ namespace ITCompanyApp.Controllers
             Models.Task task = _context.Tasks.First(t => t.TaskId == id);
             task.IsDone = true;
             task.DoneDate = DateTime.Now;
+            task.DoneFile = model.doneFilePath != null ? model.doneFilePath : "";
+
+            _context.Entry(task).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut("claim/{id}/{employeeId}")]
+        public IActionResult ClaimTask(int id, int employeeId)
+        {
+            if (!_context.Tasks.Any(t => t.TaskId == id) || !_context.Employees.Any(e => e.Id == employeeId))
+            {
+                return BadRequest();
+            }
+
+            Models.Task task = _context.Tasks.First(t => t.TaskId == id);
+            task.EmployeeFor = _context.Employees.First(e => e.Id == employeeId);
+            task.EmployeeFor_Id = employeeId;
 
             _context.Entry(task).State = EntityState.Modified;
             _context.SaveChanges();
@@ -163,7 +183,7 @@ namespace ITCompanyApp.Controllers
             _context.Tasks.Remove(task);
             _context.SaveChanges();
 
-            return RedirectToAction("GetTasks");
+            return Ok();
         }
     }
 }
