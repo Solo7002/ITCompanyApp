@@ -180,10 +180,236 @@ namespace ITCompanyApp.Controllers
             int[] monthlyTaskCounts = new int[12];
             foreach (var result in completedTasksByMonth)
             {
-                monthlyTaskCounts[result.Month - 1] = result.Count; 
+                monthlyTaskCounts[result.Month - 1] = result.Count;
             }
             return monthlyTaskCounts;
 
         }
-    }   
+
+        [HttpGet]
+        [Route("getAvarageFeedback/{id}")]
+        public double GetAvarageFeedbackScoreById(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return 0;
+            }
+
+            Employee employee = _context.Employees.First(e => e.Id == id);
+
+            if (employee == null)
+            {
+                return 0;
+            }
+            var feedbacks = _context.FeedBacks.Where(f => f.EmployeeForId == employee.Id).ToList();
+            if (!feedbacks.Any())
+            {
+                return 0;
+            }
+            List<FeedBack> feedBacks = _context.FeedBacks.Where(f => f.EmployeeForId == employee.Id).ToList();
+            double avarageFeedback = Math.Round(feedBacks.Average(f => f.FeedBackMark), 2);
+            return avarageFeedback;
+
+
+        }
+        [HttpGet]
+        [Route("getEmployeeNameAndFeedback/{id}")]
+        public List<object> GetEmployeeNameAndFeedbackById(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return null;
+            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
+            var employeesByDepartment = _context.Employees
+             .Where(e => e.DepartmentId == employee.DepartmentId)
+             .ToList();
+
+            var result = employeesByDepartment.Where(e=>e.FireDate==null)
+         .Select(e => new
+         {
+             Id = e.Id,
+             Name = $"{e.LastName} {e.FirstName}",
+             AverageFeedback = GetAvarageFeedbackScoreById(e.Id)
+         }).OrderByDescending(e=>e.AverageFeedback)
+         .ToList();
+
+            return result.Cast<object>().ToList();
+        }
+        [HttpGet]
+        [Route("getAllEmployeesNameAndFeedBack")]
+        public List<object> GetAllEmployeeNameAndFeedBack()
+        { 
+            if(_context.Employees==null)
+                return null;
+            List<Employee> employees=_context.Employees.Where(e => e.FireDate == null).ToList();
+            var results = employees.Select(e=>new{
+                Id=e.Id,
+                Name = $"{e.LastName} {e.FirstName}",
+                AverageFeedback = GetAvarageFeedbackScoreById(e.Id)
+            }).OrderByDescending(e => e.AverageFeedback)
+         .ToList();
+            return results.Cast<object>().ToList();
+        }
+        [HttpGet]
+        [Route("getBirthdayIsComingEmployees")]
+        public List<object> GetBirthdayIsComingEmployees()
+        {
+            if (_context.Employees == null)
+                return null;
+            List<Employee> employees = _context.Employees.Where(e=>e.FireDate==null)
+                .Where(e =>
+                (e.BirthDate.Month == DateTime.Now.Month && e.BirthDate.Day >= DateTime.Now.Day) ||
+                (e.BirthDate.Month > DateTime.Now.Month))
+                .OrderBy(e=>e.BirthDate.Month).ThenBy(e=>e.BirthDate.Day).Take(4).ToList();
+            var results = employees.Select(e => new
+            {
+                Id = e.Id,
+                Name = $"{e.LastName} {e.FirstName}",
+                Birthdate = $"{e.BirthDate.ToString("dd.MM")}"
+            });
+            return results.Cast<object>().ToList();
+        }
+        [HttpGet]
+        [Route("getInfoTasks/{id}")]
+        public object GetInfoTasksByIdEmployee(int id)
+        {
+            if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
+            {
+                return null;
+            }
+            Employee employee = _context.Employees.First(e => e.Id == id);
+            List<Task> tasks=_context.Tasks.Where(t=>t.EmployeeFor_Id== employee.Id).ToList();
+            var result = new
+            {
+                DoneTask = tasks.Where(t => t.IsDone).Count(),
+                AllTask = tasks.Count,
+                UnDoneTask=tasks.Where(t=>!t.IsDone).Count(),
+            };
+            return result;
+             
+        }
+        [HttpGet]
+        [Route("getCountEmployees")]
+        public object GetCountAllEmployees()
+        {
+            if (_context.Employees == null)
+            {
+                return null;
+            }
+            List<Employee> employees = _context.Employees.ToList();
+            var result = new
+            {
+                AllEmployee=employees.Count,
+                FireEmployee=employees.Where(e=>e.FireDate!=null).Count(),
+                NotFireEmployee=employees.Where(e=>e.FireDate==null).Count(),
+            };
+            return result;
+        }
+        [HttpGet]
+        [Route("getNewEmployees")]
+        public IEnumerable<int> GetNewEmployeesInYear()
+        {
+            if (_context.Employees == null)
+            {
+                return null;
+            }
+            List<Employee> employees = _context.Employees.Where(e => e.HireDate.Year == DateTime.Now.Year)
+            .OrderBy(e => e.HireDate)
+            .ToList();
+            var results = employees.GroupBy(e => e.HireDate.Month).Select(e => new
+            {
+                Month = e.Key,
+                Count = e.Count()
+            });
+            int[] monthlyNewEmployeeCounts = new int[12];
+            foreach (var result in results)
+            {
+                monthlyNewEmployeeCounts[result.Month - 1] = result.Count;
+            }
+            return monthlyNewEmployeeCounts;
+        }
+        [HttpGet]
+        [Route("getFireEmployeesInYear")]
+        public IEnumerable<int> GetFireEmployeesInYear()
+        {
+            if (_context.Employees == null)
+            {
+                return null;
+            }
+            List<Employee> employees = _context.Employees.Where(e => e.FireDate.HasValue&& e.FireDate.Value.Year == DateTime.Now.Year)
+            .OrderBy(e => e.FireDate)
+            .ToList();
+            var results = employees.GroupBy(e => e.FireDate.Value.Month).Select(e => new
+            {
+                Month = e.Key,
+                Count = e.Count()
+            });
+            int[] monthlyEmployeeCounts = new int[12];
+            foreach (var result in results)
+            {
+                monthlyEmployeeCounts[result.Month - 1] = result.Count;
+            }
+            return monthlyEmployeeCounts;
+        }
+        [HttpGet]
+        [Route("getMonthlyExpensesInYear")]
+        public IEnumerable<double> GetFireEmployeesSalaryInYear()
+        {
+            if (_context.Employees == null)
+            {
+                return null;
+            }
+
+            List<Employee> employees = _context.Employees.ToList();
+            List<double> salaryInYear = new List<double>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                double totalSalary = 0;
+                if (i > DateTime.Now.Month)
+                {
+                    salaryInYear.Add(totalSalary);
+                }
+                else
+                {
+                    foreach (var employee in employees)
+                    {
+                        if (employee.HireDate < DateTime.Now)
+                        {
+                            if (employee.FireDate.HasValue && employee.FireDate.Value.Month < i)
+                            {
+                                totalSalary += employee.Salary;
+                            }
+                            else if (!employee.FireDate.HasValue&&employee.HireDate.Month<=i)
+                            {
+                                totalSalary += employee.Salary;
+                            }
+                        }
+                    }
+
+                    salaryInYear.Add(totalSalary);
+                }
+            }
+
+            return salaryInYear;
+        }
+
+        [HttpGet]
+        [Route("getAvarageSalary")]
+        public double GetAvarageSalary()
+        {
+            if (_context.Employees == null)
+            {
+                return 0;
+            }
+            double salary=Math.Round(_context.Employees.Where(e=>e.FireDate==null).Average(e=>e.Salary),2);
+            return salary;
+        }
+
+
+
+
+
+    }
 }

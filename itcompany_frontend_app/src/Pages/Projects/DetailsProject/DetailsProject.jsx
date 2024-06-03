@@ -173,7 +173,7 @@ const DetailsProject = () => {
             <div>
                 <Link to={`/projects/update/${project.projectId}`}><button className='btn btn-success '>{t("projects.details.updateButton")}</button></Link>
                 <button className='btn btn-danger ' onClick={deleteHandler}>{t("projects.details.deleteButton")}</button>
-                <button className='btn btn-dark ' onClick={() => { navigate(-1); }}>{t("projects.details.backButton")}</button>
+                <button className='btn btn-dark ' onClick={() => { navigate('/projects'); }}>{t("projects.details.backButton")}</button>
             </div>
         </div>
     );

@@ -297,7 +297,20 @@
         "October": "Octubre",
         "November": "Noviembre",
         "December": "Diciembre"
+    },
+    "Home":{
+        "Home": "Inicio",
+        "AverageText": "Calificación promedio",
+        "BirthdayIsComing": "El cumpleaños se acerca",
+        "Department": "Departamento",
+        "All": "Todos",
+        "EmployeesByRating": "Empleados por calificación",
+        "TaskOverview": "Resumen de tareas",
+        "TotalTasks": "Total de tareas",
+        "CompletedTasks": "Tareas completadas",
+        "CurrentTasks": "Tareas actuales"
     }
+        
     
 }
 

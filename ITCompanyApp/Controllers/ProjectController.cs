@@ -145,5 +145,26 @@ namespace ITCompanyApp.Controllers
             Project project = _context.Projects.First(p => p.ProjectId == id);
             return project.Tasks;
         }
+        [HttpGet]
+        [Route("getProjectInYear")]
+        public IEnumerable<int> GetComplitedProjectInYear()
+        {
+            if (_context.Projects == null)
+            {
+                return null;
+            }
+            List<Project> projects = _context.Projects.Where(p => p.IsDone).Where(p => p.DeadLineProjectDate.Year == DateTime.Now.Year).OrderBy(p=>p.DeadLineProjectDate).ToList();
+            var results = projects.GroupBy(e => e.DeadLineProjectDate.Month).Select(e => new
+            {
+                Month = e.Key,
+                Count = e.Count()
+            });
+            int[] monthlyProjectCounts = new int[12];
+            foreach (var result in results)
+            {
+                monthlyProjectCounts[result.Month - 1] = result.Count;
+            }
+            return monthlyProjectCounts;
+        }
     }
 }

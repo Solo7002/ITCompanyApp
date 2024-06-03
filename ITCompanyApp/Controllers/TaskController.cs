@@ -165,5 +165,28 @@ namespace ITCompanyApp.Controllers
 
             return RedirectToAction("GetTasks");
         }
+        [HttpGet]
+        [Route("getCompliteTaskInYear")]
+        public IEnumerable<int> GetCompliteTaskInYear()
+        {
+            if (_context.Tasks == null )
+            {
+                return null;
+            }
+            List<Models.Task> tasks = _context.Tasks.Where(t=>t.IsDone).Where(t=>t.DoneDate.HasValue&&t.DoneDate.Value.Year==DateTime.Now.Year).OrderBy(t=>t.DoneDate).ToList();
+            var results = tasks.GroupBy(t => t.DoneDate.Value.Month).Select(t => new
+            {
+                Month = t.Key,
+                Count = t.Count(),
+            });
+            int[] monthlyTaskCounts = new int[12];
+            foreach (var result in results)
+            {
+                monthlyTaskCounts[result.Month - 1] = result.Count;
+            }
+            return monthlyTaskCounts;
+        }
     }
+   
+
 }

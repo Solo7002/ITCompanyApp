@@ -298,5 +298,17 @@
         "October": "十月",
         "November": "十一月",
         "December": "十二月"
+    },
+    "Home":{
+        "Home": "ホーム",
+    "AverageText": "平均評価",
+    "BirthdayIsComing": "誕生日が近づいています",
+    "Department": "部門",
+    "All": "すべて",
+    "EmployeesByRating": "評価別従業員",
+    "TaskOverview": "タスク概要",
+    "TotalTasks": "総タスク数",
+    "CompletedTasks": "完了したタスク",
+    "CurrentTasks": "現在のタスク"
     }
 }

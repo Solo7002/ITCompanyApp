@@ -144,8 +144,8 @@
             "descriptionPlaceholder": "Введіть опис",
             "createButton": "Створити",
             "backButton": "Назад"
-          },
-          "details": {
+        },
+        "details": {
             "projectInformation": "Інформація про проєкт",
             "startDate": "Дата початку",
             "deadline": "Крайній термін",
@@ -158,8 +158,8 @@
             "updateButton": "Оновити",
             "deleteButton": "Видалити",
             "backButton": "Назад"
-          },
-          "update": {
+        },
+        "update": {
             "header": "Оновлення проєкту",
             "projectName": "Назва проєкту",
             "projectNamePlaceholder": "Введіть назву проєкту",
@@ -175,75 +175,75 @@
             "descriptionPlaceholder": "Введіть опис",
             "updateButton": "Оновити",
             "backButton": "Назад"
-          }
+        }
     },
-    "DepsJobs":{
-        "errors":{
-            "ThisRequired":"Це поле є обов'язковим",
-            "MinLenght":"Мінімальна довжина - 2 символи",
-            "DepartmentExists":"Відділ з такою назвою вже існує!",
-            "NoEmployees":"Немає співробітників з таким ім'ям",
-            "EmployeeAlready":"Цей співробітник вже є керівником іншого відділу",
-            "JobNameCant":"Нова назва посади не може бути такою ж, як стара",
-            "JobSuch":"Посада з такою назвою вже існує!"
+    "DepsJobs": {
+        "errors": {
+            "ThisRequired": "Це поле є обов'язковим",
+            "MinLenght": "Мінімальна довжина - 2 символи",
+            "DepartmentExists": "Відділ з такою назвою вже існує!",
+            "NoEmployees": "Немає співробітників з таким ім'ям",
+            "EmployeeAlready": "Цей співробітник вже є керівником іншого відділу",
+            "JobNameCant": "Нова назва посади не може бути такою ж, як стара",
+            "JobSuch": "Посада з такою назвою вже існує!"
         },
-        "department":{
-            "NoDepartments":"Ще немає відділів",
-            "SeachDepartmentByName":"Шукати відділ за назвою",
-            "AmountEmployees":"Кількість співробітників",
-            "EmployeesInThisDepartment":"Співробітники у цьому відділі",
-            "Name":"Ім'я",
-            "Salary":"Зарплата",
-            "AddDepartmentBtn":"Додати відділ",
-            "EditDepartmentBtn":"Редагувати відділ",
-            "YouCantDelete":"Ви не можете видалити відділ з працівниками!",
-            "DeleteDepartmentBtn":"Видалити відділ",
-            "SearchDepartments":"Шукати відділи",
-            "ChooseDepartment":"Виберіть відділ",
-            "Departments":"Відділи",
-            "Department":"Відділ",
-            "DepartmentAdded":"додано",
-            "DepartmentUpdated":"оновлено",
-            "DepartmentDeleted":"Відділ видалено",
-            "AddNewDepartament":"Додати новий відділ",
-            "DepartmentName":"Назва відділу",
-            "Cancel":"Скасувати",
-            "DepartmentHead":"Керівник відділу",
-            "AddingDepartment":"Додавання відділу",
-            "EditingDepartment":"Редагування відділу",
-            "UpdateDepartment":"Оновити відділ",
-            "ConfirmDeletion":"Підтвердити видалення відділу",
-            "Delete":"Видалити",
-            "AreSure":"Ви впевнені, що хочете видалити цей відділ?"
+        "department": {
+            "NoDepartments": "Ще немає відділів",
+            "SeachDepartmentByName": "Шукати відділ за назвою",
+            "AmountEmployees": "Кількість співробітників",
+            "EmployeesInThisDepartment": "Співробітники у цьому відділі",
+            "Name": "Ім'я",
+            "Salary": "Зарплата",
+            "AddDepartmentBtn": "Додати відділ",
+            "EditDepartmentBtn": "Редагувати відділ",
+            "YouCantDelete": "Ви не можете видалити відділ з працівниками!",
+            "DeleteDepartmentBtn": "Видалити відділ",
+            "SearchDepartments": "Шукати відділи",
+            "ChooseDepartment": "Виберіть відділ",
+            "Departments": "Відділи",
+            "Department": "Відділ",
+            "DepartmentAdded": "додано",
+            "DepartmentUpdated": "оновлено",
+            "DepartmentDeleted": "Відділ видалено",
+            "AddNewDepartament": "Додати новий відділ",
+            "DepartmentName": "Назва відділу",
+            "Cancel": "Скасувати",
+            "DepartmentHead": "Керівник відділу",
+            "AddingDepartment": "Додавання відділу",
+            "EditingDepartment": "Редагування відділу",
+            "UpdateDepartment": "Оновити відділ",
+            "ConfirmDeletion": "Підтвердити видалення відділу",
+            "Delete": "Видалити",
+            "AreSure": "Ви впевнені, що хочете видалити цей відділ?"
         },
-        "job":{
-            "Jobs":"Посади",
-            "NoJobs":"Ще немає посад",
-            "SearchJob":"Шукати посаду за назвою",
-            "Cancel":"Скасувати",
-            "Job":"Посада",
-            "JobAdded":"додано",
-            "JobUpdated":"оновлено",
-            "JobDeleted":"Посаду видалено",
-            "AddingJob":"Додавання посади",
-            "AddNewJob":"Додати нову посаду",
-            "JobName":"Назва посади",
-            "EditingJob":"Редагування посади",
-            "UpdateJob":"Оновити посаду",
-            "ConfirmJobDeletion":"Підтвердити видалення посади",
-            "Delete":"Видалити",
-            "AreYouSure":"Ви впевнені, що хочете видалити цю посаду?",
-            "JobTitle":"Назва посади",
-            "StaffCount":"Кількість працівників",
-            "YouCantDelete":"Ви не можете видалити посаду з працівниками!",
-            "DeleteJob":"Видалити посаду"
+        "job": {
+            "Jobs": "Посади",
+            "NoJobs": "Ще немає посад",
+            "SearchJob": "Шукати посаду за назвою",
+            "Cancel": "Скасувати",
+            "Job": "Посада",
+            "JobAdded": "додано",
+            "JobUpdated": "оновлено",
+            "JobDeleted": "Посаду видалено",
+            "AddingJob": "Додавання посади",
+            "AddNewJob": "Додати нову посаду",
+            "JobName": "Назва посади",
+            "EditingJob": "Редагування посади",
+            "UpdateJob": "Оновити посаду",
+            "ConfirmJobDeletion": "Підтвердити видалення посади",
+            "Delete": "Видалити",
+            "AreYouSure": "Ви впевнені, що хочете видалити цю посаду?",
+            "JobTitle": "Назва посади",
+            "StaffCount": "Кількість працівників",
+            "YouCantDelete": "Ви не можете видалити посаду з працівниками!",
+            "DeleteJob": "Видалити посаду"
         },
-        "employees":{
-            "EmployeesJob":"Співробітники на цій посаді",
-            "Name":"Ім'я",
-            "Salary":"Зарплата",
-            "AddJob":"Додати посаду",
-            "EditJob":"Редагувати посаду"
+        "employees": {
+            "EmployeesJob": "Співробітники на цій посаді",
+            "Name": "Ім'я",
+            "Salary": "Зарплата",
+            "AddJob": "Додати посаду",
+            "EditJob": "Редагувати посаду"
         }
     },
     "feedbacks": {
@@ -269,7 +269,7 @@
         "enterEmployeeName": "Введіть ім'я співробітника",
         "noUsersWithName": "Немає користувачів з таким ім'ям",
         "employeeHasNoFeedbacks": "У цього співробітника немає відгуків",
-        "search":"Пошук"
+        "search": "Пошук"
     },
     "settings": {
         "Settings": "Налаштування",
@@ -297,7 +297,17 @@
         "October": "Жовтень",
         "November": "Листопад",
         "December": "Грудень"
+    },
+    "Home": {
+        "Home": "Головна",
+        "AverageText": "Середній рейтинг",
+        "BirthdayIsComing": "Скоро день народження",
+        "Department": "Відділ",
+        "All": "Всі",
+        "EmployeesByRating": "Працівники за рейтингом",
+        "TaskOverview": "Огляд завдань",
+        "TotalTasks": "Загальна кількість завдань",
+        "CompletedTasks": "Виконані завдання",
+        "CurrentTasks": "Поточні завдання"
     }
-    
-    
 }

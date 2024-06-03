@@ -1,3 +1,168 @@
-.homeContainer{
+ .homeContainer{
     height: 100vh;
+}
+
+
+ .review-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+ .review-container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+ .rating-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+ .rating-block i {
+    font-size: 2rem;
+    color: #ffcd3c;
+    margin-right: 10px;
+}
+
+ .rating-block span {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.main-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.employee-list {
+    height: 320px;
+   max-height: 600px;
+   width: 250px;
+    overflow-y: auto;
+}
+
+.employee-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+.meEmployee 
+{
+    background-color: rgb(228, 224, 224);
+}
+.employee-item:last-child {
+    border-bottom: none;
+}
+
+.employee-name {
+    font-weight: bold;
+}
+
+.employee-rating {
+    display: flex;
+    align-items: center;
+}
+
+.employee-rating i {
+    color: #ffcd3c;
+    margin-right: 5px;
+}
+.birthday-container {
+    text-wrap: wrap;
+    padding: 20px;
+    max-width: 600px;
+    max-height: 500px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.birthday-container h2 {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    text-align: center;
+   
+}
+
+.birthday-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.birthday-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.birthday-item:last-child {
+    border-bottom: none;
+}
+
+.birthday-item span {
+    font-weight: bold;
+}
+
+.birthday-date {
+    color: #6c757d;
+}
+.tasks-container {
+    padding: 20px;
+    text-wrap: wrap;
+    max-width: 400px;
+    max-height: 600px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tasks-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tasks-header h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.tasks-info {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.task-item {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.task-item h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.task-item p {
+    font-size: 1rem;
+    color: #6c757d;
 }
