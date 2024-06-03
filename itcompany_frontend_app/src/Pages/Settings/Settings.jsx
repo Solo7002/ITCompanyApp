@@ -27,6 +27,7 @@ const Settings = () => {
                         <option value="ua">Українська</option>
                         <option value="es">Español</option>
                         <option value="ja">日本語</option>
+                        <option value="de">Deutschland</option>
                     </select>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import ModalWindow from "../../Components/Other/ModalWindow/ModalWindow.js";
 import Notification from "../../Components/Other/Notification/Notification.js";
 
 import "./Tasks.css";
+import { useTranslation } from "react-i18next";
 
 const Tasks=()=>{
   const {token, signOut} = useAuth();
@@ -50,6 +51,7 @@ const Tasks=()=>{
   const [taskFilePath, setTaskFilePath] = useState("");
   const [doneTaskFilePath, setDoneTaskFilePath] = useState("");
 
+  const {t}=useTranslation();
   const [notification, setNotification] = useState({
     show: false,
     text: "",
@@ -157,23 +159,23 @@ const Tasks=()=>{
       case "obligatory": 
         temp_data = obligatoryTasks[task_index];
         temp_data.headerBackColor = "#d1ecf1";
-        temp_data.btnText = "Upload done task"
+        temp_data.btnText = t("Tasks.UploadDoneTask");
         break;
       case "overdue": 
         temp_data = expiredTasks[task_index];
         temp_data.headerBackColor = "#d4555f";
-        temp_data.btnText = "Upload done task"
+        temp_data.btnText = t("Tasks.UploadDoneTask");
         break;
       case "optional": 
         temp_data = optionalTasks[task_index];
         temp_data.headerBackColor = "#fedf77";
-        temp_data.btnText = "Claim"
+        temp_data.btnText =  t("Tasks.Claim");
         temp_data.confirmBtnColor = "warning"
         break;
       case "done": 
         temp_data = doneTasks[task_index];
         temp_data.headerBackColor = "#85f19e";
-        temp_data.btnText = "Ok"
+        temp_data.btnText = t("Tasks.Ok");
         break;
     }
     temp_data.task_type = task_type;
@@ -226,43 +228,43 @@ const Tasks=()=>{
 
   const isTaskValid = (taskHeaderInput, taskDescriptionInput, taskCoverInput, taskProjectInput, taskEmployeeInput, taskFileInput, taskDeadLineInput, isEdit) => {
     if (taskHeaderInput.value.trim() === ''){
-      taskHeaderInput.setCustomValidity("Header is required");
+      taskHeaderInput.setCustomValidity(t("Tasks.HeaderIsRequired"));
       taskHeaderInput.reportValidity();
     }
     else if (taskDescriptionInput.value.trim() === ''){
-      taskDescriptionInput.setCustomValidity("Description is required");
+      taskDescriptionInput.setCustomValidity(t("Tasks.DescriptionIsRequired"));
       taskDescriptionInput.reportValidity();
     }
     else if (!isEdit && taskCoverInput.value.trim() === ''){
-      taskCoverInput.setCustomValidity("Cover is required");
+      taskCoverInput.setCustomValidity(t("Tasks.CoverIsRequired"));
       taskCoverInput.reportValidity();
     }
     else if (isEdit && taskCoverInput.value.trim() === '' && !coverFilePath){
-      taskCoverInput.setCustomValidity("Cover is required");
+      taskCoverInput.setCustomValidity(t("Tasks.CoverIsRequired"));
       taskCoverInput.reportValidity();
     }
     else if (taskProjectInput.value.trim() === ''){
-      taskProjectInput.setCustomValidity("Project is required");
+      taskProjectInput.setCustomValidity(t("Tasks.ProjectIsRequired"));
       taskProjectInput.reportValidity();
     }
     else if (projects.filter(p => p.projectName.toLowerCase() == taskProjectInput.value.toLowerCase()).length == 0){
-      taskProjectInput.setCustomValidity("No projects with such name");
+      taskProjectInput.setCustomValidity(t("Tasks.NoProjectsWithSuchName"));
       taskProjectInput.reportValidity();
     }
     else if (taskEmployeeInput.value.trim() != '' && currentDepEmployees.filter(e => e.lastName.toLowerCase() + " " + e.firstName.toLowerCase() == taskEmployeeInput.value.toLowerCase()).length == 0){
-      taskProjectInput.setCustomValidity("No employees with such name");
+      taskProjectInput.setCustomValidity(t("Tasks.NoEmployeesWithSuchName"));
       taskProjectInput.reportValidity();
     }
     else if (!isEdit && taskFileInput.value.trim() === ''){
-      taskFileInput.setCustomValidity("File is required");
+      taskFileInput.setCustomValidity(t("Tasks.FileIsRequired"));
       taskFileInput.reportValidity();
     }
     else if (isEdit && taskFileInput.value.trim() === '' && !taskFilePath){
-      taskFileInput.setCustomValidity("File is required");
+      taskFileInput.setCustomValidity(t("Tasks.FileIsRequired"));
       taskFileInput.reportValidity();
     }
     else if (taskDeadLineInput.value.trim() === ''){
-      taskDeadLineInput.setCustomValidity("Deadline is required");
+      taskDeadLineInput.setCustomValidity(t("Tasks.DeadlineIsRequired"));
       taskDeadLineInput.reportValidity();
     }
     else {
@@ -305,7 +307,7 @@ const Tasks=()=>{
         setNotification({
           ...notification,
           show: true,
-          text: `Task added to ${document.getElementById("create-task-employeeFor").value}`,
+          text: `${t("Tasks.Task added to")} ${document.getElementById("create-task-employeeFor").value}`,
           color: "success",
           icon: "fa-regular fa-circle-check"
         });
@@ -342,7 +344,7 @@ const Tasks=()=>{
       setNotification({
         ...notification,
         show: true,
-        text: `Task claimed successfully`,
+        text: `${t("Tasks.Task claimed successfully")}`,
         color: "success",
         icon: "fa-regular fa-circle-check"
       });
@@ -359,7 +361,7 @@ const Tasks=()=>{
   const uploadDoneTaskHandler = () => {
     let uploadDoneFileInput = document.getElementById("upload-done-task-file");
     if (uploadDoneFileInput.value.trim() === ''){
-      uploadDoneFileInput.setCustomValidity("Header is required");
+      uploadDoneFileInput.setCustomValidity(t("Tasks.Header is required"));
       uploadDoneFileInput.reportValidity();
     }
     else
@@ -376,7 +378,7 @@ const Tasks=()=>{
         setNotification({
           ...notification,
           show: true,
-          text: `Done task uploaded successfully`,
+          text: `${t("Tasks.Done task uploaded successfully")}`,
           color: "success",
           icon: "fa-regular fa-circle-check"
         });
@@ -459,7 +461,7 @@ const Tasks=()=>{
         setNotification({
           ...notification,
           show: true,
-          text: `Task updated successfully`,
+          text: `${t("Tasks.Task updated successfully")}`,
           color: "success",
           icon: "fa-regular fa-circle-check"
         });
@@ -491,7 +493,7 @@ const Tasks=()=>{
       setNotification({
         ...notification,
         show: true,
-        text: `Task deleted successfully`,
+        text: `${t("Tasks.Task deleted successfully")}`,
         color: "success",
         icon: "fa-regular fa-circle-check"
       });
@@ -504,13 +506,13 @@ const Tasks=()=>{
   return(
     <div className="task-page-container">
       <ModalWindow
-        title="Task details"
+        title={t("Tasks.Task details")}
         show={showTaskDetailsModal} 
         handleClose={() => setShowTaskDetailsModal(false)} 
         handleConfirm={confirmFromDetailsHandler}
         confirmText={selectedTask.btnText}
         confirmBtnColor={selectedTask.confirmBtnColor}
-        cancelText="Cancel"
+        cancelText={t("Tasks.Cancel")}
         headerBackgroundColor={selectedTask.headerBackColor}>
       <div id="modal-task-details">
         <div class="col-md-12">
@@ -523,19 +525,19 @@ const Tasks=()=>{
         <div class="col-md-9" style={{marginBottom: "10px"}}>
           <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <h5>Task file:</h5>
-            <a href={`${keys.ServerConnection}/Files/download${selectedTask.file}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+            <a href={`${keys.ServerConnection}/Files/download${selectedTask.file}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
           </div>
           {
             selectedTask.task_type == "done" && 
             <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-              <h5>Done task file:</h5>
-              <a href={`${keys.ServerConnection}/Files/download${selectedTask.doneFile}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+              <h5>{t("Tasks.Done task file")}:</h5>
+              <a href={`${keys.ServerConnection}/Files/download${selectedTask.doneFile}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
             </div>
           }
         </div>
         <div class="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
-          <h6>Uploaded: <b style={{color: "black"}}>{selectedTask.uploadDate}</b></h6>
-          <h6>Deadline: <b style={{color: "red"}}>{selectedTask.deadLineDate}</b></h6>
+          <h6>{t("Tasks.Uploaded")}: <b style={{color: "black"}}>{selectedTask.uploadDate}</b></h6>
+          <h6>{t("Tasks.Deadline")}: <b style={{color: "red"}}>{selectedTask.deadLineDate}</b></h6>
         </div>
       </div>
       </ModalWindow>
@@ -552,7 +554,7 @@ const Tasks=()=>{
         <form>
           <div className="row">
             <div className="col-md-3" style={{display: "flex", alignItems: "center", marginBottom: "0"}}>
-              <label>Header</label>
+              <label>{t("Tasks.Header")}</label>
             </div>
             <div className="col-md-9">
               <input type="text" className="form-control" required={true} id="create-task-header" maxLength={50}/>
@@ -561,7 +563,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-3 mt-1">
-              <label>Cover</label>
+              <label>{t("Tasks.Cover")}</label>
             </div>
             <div className="col-md-9  ">
               <FileUpload folder="tasks/task_covers" id="create-task-cover" setFile={setCoverFilePath} accept="image/png, image/gif, image/jpeg"/>
@@ -570,7 +572,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-12 mb-2" style={{display: "flex", alignItems: "center", marginBottom: "0"}}>
-              <label>Description</label>
+              <label>{t("Tasks.Description")}</label>
             </div>
             <div className="col-md-12">
               <textarea type="text" rows={3} className="form-control" required={true}  id="create-task-text" maxLength={250}/>
@@ -579,10 +581,10 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-6 mb-2">
-              <label>Project</label>
+              <label>{t("Tasks.Project")}</label>
             </div>
             <div className="col-md-6 mb-2">
-              <label style={{marginLeft: "18px"}}>Employee for</label>
+              <label style={{marginLeft: "18px"}}>{t("Tasks.Employee for")}</label>
             </div>
           </div>
           <div className="row">
@@ -596,7 +598,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-3 mt-1">
-              <label>Task file</label>
+              <label>{t("Tasks.Task file")}</label>
             </div>
             <div className="col-md-9  ">
               <FileUpload folder="tasks/task_files" id="create-task-file" setFile={setTaskFilePath}/>
@@ -605,7 +607,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-3 d-flex align-items-center mt-2">
-              <label>Deadline</label>
+              <label>{t("Tasks.Deadline")}</label>
             </div>
             <div className="col-md-9">
               <input type="date" className="form-control" min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]} max={new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]} id="create-task-deadline"/>
@@ -616,16 +618,16 @@ const Tasks=()=>{
       </ModalWindow>
 
       <ModalWindow
-        title="Done task upload"
+        title={t("Tasks.Done task upload")}
         show={showTaskUploadDoneModal} 
         handleClose={() => setShowTaskUploadDoneModal(false)} 
         handleConfirm={uploadDoneTaskHandler}
-        confirmText="Upload"
-        cancelText="Cancel">
+        confirmText={t("Tasks.Upload")}
+        cancelText={t("Tasks.Cancel")}>
       <div id="modal-task-details">
           <div className="row">
             <div className="col-md-4 mt-1">
-              <label>Done task file</label>
+              <label>{t("Tasks.Done task file")}</label>
             </div>
             <div className="col-md-8">
               <FileUpload folder="tasks/task_files" id="upload-done-task-file" setFile={setDoneTaskFilePath}/>
@@ -635,12 +637,12 @@ const Tasks=()=>{
       </ModalWindow>
 
       <ModalWindow
-        title="Task details"
+        title={t("Tasks.Task details")}
         show={showTaskDetailsInMangeModal} 
         handleClose={() => setShowTaskDetailsInMangeModal(false)} 
         handleConfirm={() => selectedTaskForEmp.isDone? setShowTaskDetailsInMangeModal(false) : updateClickInManageHandler()}
-        confirmText={selectedTaskForEmp.isDone? "Ok" : "Update"}
-        cancelText="Cancel"
+        confirmText={selectedTaskForEmp.isDone? t("Tasks.Ok") : t("Tasks.Update")}
+        cancelText={t("Tasks.Cancel")}
         headerBackgroundColor={selectedTaskForEmp.isDone? "primary" : selectedTaskForEmp.headerBackColor}
         >
       <div id="modal-task-details-2">
@@ -653,40 +655,40 @@ const Tasks=()=>{
         </div>
         <div class="col-md-9 mb-2">
           <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-            <h5>Task file:</h5>
-            <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.file}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+            <h5>{t("Tasks.Task file")}:</h5>
+            <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.file}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
           </div>
           {
             selectedTaskForEmp.task_type == "done" && 
             <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-              <h5>Done task file:</h5>
-              <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.doneFile}`} class="btn btn-success" download>Download File <i class="fa-solid fa-file-arrow-down"></i></a>
+              <h5>{t("Tasks.Done task file")}:</h5>
+              <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.doneFile}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
             </div>
           }
         </div>
         <div class="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
-          <h6>Uploaded: <b style={{color: "black"}}>{selectedTaskForEmp.uploadDate}</b></h6>
-          <h6>Deadline: <b style={{color: "red"}}>{selectedTaskForEmp.deadLineDate}</b></h6>
+          <h6>{t("Tasks.Uploaded")}: <b style={{color: "black"}}>{selectedTaskForEmp.uploadDate}</b></h6>
+          <h6>{t("Tasks.Deadline")}: <b style={{color: "red"}}>{selectedTaskForEmp.deadLineDate}</b></h6>
         </div>
         <div class="col-md-12">
-          <button className="btn btn-danger" style={{width: "100%"}} onClick={confirmDeletionHandler}>Delete</button>
+          <button className="btn btn-danger" style={{width: "100%"}} onClick={confirmDeletionHandler}>{t("Tasks.Delete")}</button>
         </div>
       </div>
       </ModalWindow>
 
       <ModalWindow
-        title="Task editing"
+        title={t("Tasks.Task editing")}
         show={showTaskUpdateModal} 
         handleClose={() => setShowTaskUpdateModal(false)} 
         handleConfirm={updateTaskHandler}
-        confirmText="Update"
-        cancelText="Cancel"
+        confirmText={t("Tasks.Update")}
+        cancelText={t("Tasks.Cancel")}
         headerBackgroundColor={selectedTaskForEmp.headerBackColor}>
       <div id="modal-update-task-details">
         <form>
           <div className="row">
             <div className="col-md-3" style={{display: "flex", alignItems: "center", marginBottom: "0"}}>
-              <label>Header</label>
+              <label>{t("Tasks.Header")}</label>
             </div>
             <div className="col-md-9">
               <input type="text" className="form-control" required={true} id="update-task-header" maxLength={50}/>
@@ -695,7 +697,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-3 mt-1">
-              <label>Cover</label>
+              <label>{t("Tasks.Cover")}</label>
             </div>
             <div className="col-md-9  ">
               <FileUpload folder="tasks/task_covers" id="update-task-cover" setFile={setCoverFilePath} accept="image/png, image/gif, image/jpeg"/>
@@ -704,7 +706,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-12 mb-2" style={{display: "flex", alignItems: "center", marginBottom: "0"}}>
-              <label>Description</label>
+              <label>{t("Tasks.Description")}</label>
             </div>
             <div className="col-md-12">
               <textarea type="text" rows={3} className="form-control" required={true}  id="update-task-text" maxLength={250}/>
@@ -713,10 +715,10 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-6 mb-2">
-              <label>Project</label>
+              <label>{t("Tasks.Project")}</label>
             </div>
             <div className="col-md-6 mb-2">
-              <label style={{marginLeft: "18px"}}>Employee for</label>
+              <label style={{marginLeft: "18px"}}>{t("Tasks.Employee for")}</label>
             </div>
           </div>
           <div className="row">
@@ -730,7 +732,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-3 mt-1">
-              <label>Task file</label>
+              <label>{t("Tasks.Task file")}</label>
             </div>
             <div className="col-md-9  ">
               <FileUpload folder="tasks/task_files" id="update-task-file" setFile={setTaskFilePath}/>
@@ -739,7 +741,7 @@ const Tasks=()=>{
           <br />
           <div className="row">
             <div className="col-md-3 d-flex align-items-center mt-2">
-              <label>Deadline</label>
+              <label>{t("Tasks.Deadline")}</label>
             </div>
             <div className="col-md-9">
               <input type="date" className="form-control" min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]} max={new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]} id="update-task-deadline"/>
@@ -750,13 +752,13 @@ const Tasks=()=>{
       </ModalWindow>
 
       <ModalWindow
-        title="Confirm deletion"
+        title={t("Tasks.Confirm deletion")}
         show={showTaskDeleteModal} 
         handleClose={() => setShowTaskDeleteModal(false)} 
         handleConfirm={onDeleteTaskHandler}
-        confirmText="Yes" 
-        cancelText="Cancel">
-        <p>Are you sure that you want to delete that task?</p>
+        confirmText={t("Tasks.Yes")} 
+        cancelText={t("Tasks.Cancel")} >
+        <p>{t("Tasks.Are you sure that you want to delete that task?")}</p>
       </ModalWindow>
 
       <Notification
@@ -769,24 +771,24 @@ const Tasks=()=>{
       ></Notification>
 
       <div className="container mt-5">
-        <h1 className="text-center mb-4">Tasks</h1>
+        <h1 className="text-center mb-4">{t("Tasks.Tasks")}</h1>
         <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li className="nav-item">
-              <a className="nav-link active" id="all-tasks-tab" data-toggle="pill" href="#all-tasks" role="tab" aria-controls="all-tasks" aria-selected="true">All tasks</a>
+              <a className="nav-link active" id="all-tasks-tab" data-toggle="pill" href="#all-tasks" role="tab" aria-controls="all-tasks" aria-selected="true">{t("Tasks.All tasks")}</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" id="obligatory-tab" data-toggle="pill" href="#obligatory" role="tab" aria-controls="obligatory" aria-selected="false">Obligatory</a>
+              <a className="nav-link" id="obligatory-tab" data-toggle="pill" href="#obligatory" role="tab" aria-controls="obligatory" aria-selected="false">{t("Tasks.Obligatory")}</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" id="optional-tab" data-toggle="pill" href="#optional" role="tab" aria-controls="optional" aria-selected="false">Optional</a>
+              <a className="nav-link" id="optional-tab" data-toggle="pill" href="#optional" role="tab" aria-controls="optional" aria-selected="false">{t("Tasks.Optional")}</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" id="done-tab" data-toggle="pill" href="#done" role="tab" aria-controls="done" aria-selected="false">Done</a>
+              <a className="nav-link" id="done-tab" data-toggle="pill" href="#done" role="tab" aria-controls="done" aria-selected="false">{t("Tasks.Done")}</a>
             </li>
             {
               currentEmployee && currentDepEmployees.length > 0 &&
               <li className="nav-item">
-                <a className="nav-link" id="manage-tasks-tab" data-toggle="pill" href="#manage-tasks" role="tab" aria-controls="manage-tasks" aria-selected="false">Manage tasks</a>
+                <a className="nav-link" id="manage-tasks-tab" data-toggle="pill" href="#manage-tasks" role="tab" aria-controls="manage-tasks" aria-selected="false">{t("Tasks.Manage tasks")}</a>
               </li>
             }
         </ul>
@@ -794,12 +796,12 @@ const Tasks=()=>{
             <div className="tab-pane fade show active" id="all-tasks" role="tabpanel" aria-labelledby="all-tasks-tab">
                 <div className="row">
                     <div className="col-12 my-3">
-                      <h3>Obligatory</h3>
+                      <h3>{t("Tasks.Obligatory")}</h3>
                     </div>
                     {
                       isTasksLoading ? <h4 className="noTasks">Loading ....</h4> 
                       :
-                      (obligatoryTasks.length == 0? <h4 className="noTasks">No obligatory tasks yet</h4> 
+                      (obligatoryTasks.length == 0? <h4 className="noTasks">{t("Tasks.No obligatory tasks yet")}</h4> 
                       :
                         obligatoryTasks.map((task, index) => (
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("obligatory", index)}>
@@ -809,7 +811,7 @@ const Tasks=()=>{
                               </div>
                               <div className="task-content">
                                   <h5 className="task-title">{task.header}</h5>
-                                  <p className="task-deadline">Deadline: {task.deadLineDate}</p>
+                                  <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                               </div>
                           </div>
                         </div>
@@ -819,7 +821,7 @@ const Tasks=()=>{
                     {
                       !isTasksLoading && expiredTasks.length != 0 &&
                       <div className="col-12 my-3">
-                        <h3>Overdue</h3>
+                        <h3>{t("Tasks.Overdue")}</h3>
                       </div>
                     }
                     {
@@ -835,10 +837,10 @@ const Tasks=()=>{
                               </div>
                               <div className="task-content">
                                   <h5 className="task-title">{task.header}</h5>
-                                  <p className="task-deadline">Deadline: {task.deadLineDate}</p>
+                                  <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                               </div>
                               <div style={{position: "absolute", bottom: "3px", right: "13px"}}>
-                                <h6>Expired</h6>
+                                <h6>{t("Tasks.Expired")}</h6>
                               </div>
                           </div>
                         </div>
@@ -848,7 +850,7 @@ const Tasks=()=>{
                     {
                       !isTasksLoading && optionalTasks.length != 0 &&
                       <div className="col-12 my-3">
-                        <h3>Optional</h3>
+                        <h3>{t("Tasks.Optional")}</h3>
                       </div>
                     }
                     {
@@ -864,7 +866,7 @@ const Tasks=()=>{
                               </div>
                               <div className="task-content">
                                 <h5 className="task-title">{task.header}</h5>
-                                <p className="task-deadline">Deadline: {task.deadLineDate}</p>
+                                <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                               </div>
                           </div>
                         </div>
@@ -872,12 +874,12 @@ const Tasks=()=>{
                       )
                     }
                     <div className="col-12 my-3">
-                        <h3>Done</h3>
+                        <h3>{t("Tasks.Done")}</h3>
                     </div>
                     {
                       isTasksLoading ? <h4 className="noTasks">Loading ....</h4> 
                       :
-                      (doneTasks.length == 0? <h4 className="noTasks">No done tasks yet</h4>
+                      (doneTasks.length == 0? <h4 className="noTasks">{t("Tasks.No done tasks yet")}</h4>
                       :
                       doneTasks.map((task, index) => (
                         <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("done", index)}>
@@ -887,8 +889,8 @@ const Tasks=()=>{
                               </div>
                               <div className="task-content">
                                 <h5 className="task-title">{task.header}</h5>
-                                <p className="task-deadline">Deadline: {task.deadLineDate}</p>
-                                <p className="task-done-date">Done Date: {task.doneDate}</p>
+                                <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                                <p className="task-done-date">{t("Tasks.Done Date")}: {task.doneDate}</p>
                               </div>
                           </div>
                         </div>
@@ -900,12 +902,12 @@ const Tasks=()=>{
             <div className="tab-pane fade" id="obligatory" role="tabpanel" aria-labelledby="obligatory-tab">
                 <div className="row">
                   <div className="col-12 my-3">
-                    <h3>Obligatory</h3>
+                    <h3>{t("Tasks.Obligatory")}</h3>
                   </div>
                   {
                     isTasksLoading ? <h4 className="noTasks">Loading ....</h4> 
                     :
-                    (obligatoryTasks.length == 0? <h4 className="noTasks">No obligatory tasks yet</h4> 
+                    (obligatoryTasks.length == 0? <h4 className="noTasks">{t("Tasks.No obligatory tasks yet")}</h4> 
                     :
                       obligatoryTasks.map((task, index) => (
                       <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("obligatory", index)}>
@@ -915,7 +917,7 @@ const Tasks=()=>{
                             </div>
                             <div className="task-content">
                                 <h5 className="task-title">{task.header}</h5>
-                                <p className="task-deadline">Deadline: {task.deadLineDate}</p>
+                                <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                             </div>
                         </div>
                       </div>
@@ -925,7 +927,7 @@ const Tasks=()=>{
                   {
                       !isTasksLoading && expiredTasks.length != 0 &&
                       <div className="col-12 my-3">
-                        <h3>Overdue</h3>
+                        <h3>{t("Tasks.Overdue")}</h3>
                       </div>
                     }
                     {
@@ -941,10 +943,10 @@ const Tasks=()=>{
                               </div>
                               <div className="task-content">
                                   <h5 className="task-title">{task.header}</h5>
-                                  <p className="task-deadline">Deadline: {task.deadLineDate}</p>
+                                  <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                               </div>
                               <div style={{position: "absolute", bottom: "3px", right: "13px"}}>
-                                <h6>Expired</h6>
+                                <h6>{t("Tasks.Expired")}</h6>
                               </div>
                           </div>
                         </div>
@@ -956,12 +958,12 @@ const Tasks=()=>{
             <div className="tab-pane fade" id="optional" role="tabpanel" aria-labelledby="optional-tab">
                 <div className="row">
                   <div className="col-12 my-3">
-                    <h3>Optional</h3>
+                    <h3>{t("Tasks.Optional")}</h3>
                   </div>
                   {
                     isTasksLoading ? <h4 className="noTasks">Loading ....</h4> 
                     :
-                    (optionalTasks.length == 0? <h4 className="noTasks">No optional tasks yet</h4>
+                    (optionalTasks.length == 0? <h4 className="noTasks">{t("Tasks.No optional tasks yet")}</h4>
                     :
                     optionalTasks.map((task, index) => (
                       <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("optional", index)}>
@@ -971,7 +973,7 @@ const Tasks=()=>{
                             </div>
                             <div className="task-content">
                               <h5 className="task-title">{task.header}</h5>
-                              <p className="task-deadline">Deadline: {task.deadLineDate}</p>
+                              <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                             </div>
                         </div>
                       </div>
@@ -983,12 +985,12 @@ const Tasks=()=>{
             <div className="tab-pane fade" id="done" role="tabpanel" aria-labelledby="done-tab">
                 <div className="row">
                   <div className="col-12 my-3">
-                    <h3>Done</h3>
+                    <h3>{t("Tasks.Done")}</h3>
                   </div>
                   {
                     isTasksLoading ? <h4 className="noTasks">Loading ....</h4> 
                     :
-                    (doneTasks.length == 0? <h4 className="noTasks">No done tasks yet</h4>
+                    (doneTasks.length == 0? <h4 className="noTasks">{t("Tasks.No done tasks yet")}</h4>
                     :
                     doneTasks.map((task, index) => (
                       <div className="col-md-3" key={index} onClick={() => openDetailsModalWindow("done", index)}>
@@ -998,8 +1000,8 @@ const Tasks=()=>{
                             </div>
                             <div className="task-content">
                               <h5 className="task-title">{task.header}</h5>
-                              <p className="task-deadline">Deadline: {task.deadLineDate}</p>
-                              <p className="task-done-date">Done Date: {task.doneDate}</p>
+                              <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                              <p className="task-done-date">{t("Tasks.Done Date")}: {task.doneDate}</p>
                             </div>
                         </div>
                       </div>
@@ -1015,7 +1017,7 @@ const Tasks=()=>{
                 {
                   currentDepEmployees.length > 0 && 
                   <div class="col-md-4">
-                    <h4>Choose employee</h4>
+                    <h4>{t("Tasks.Choose employee")}</h4>
                     <br />
                     <input type="text" class="form-control mb-3" placeholder="Search users by name" id="seach-users-in-tasks" value={empsSeachInput} onChange={(event) => setEmpsSeachInput(event.target.value)}/>
                     <div class="user-list list-group" id="tasks-employees-by-department">
@@ -1034,15 +1036,15 @@ const Tasks=()=>{
                   </div>
                 }
                 { 
-                !selectedEmp.id ? <h4 style={{margin: "60px 20px"}}>Choose employee to manage his tasks</h4> 
+                !selectedEmp.id ? <h4 style={{margin: "60px 20px"}}>{t("Tasks.Choose employee to manage his tasks")}</h4> 
                 :
-                obligatoryTasksForEmp.length == 0 && expiredTasksForEmp.length == 0 && optionalTasksForEmp.length == 0 && doneTasksForEmp.length == 0 ? <h3 style={{margin: "60px 20px"}}>That employee has no tasks, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>create new one</i></span></h3>
+                obligatoryTasksForEmp.length == 0 && expiredTasksForEmp.length == 0 && optionalTasksForEmp.length == 0 && doneTasksForEmp.length == 0 ? <h3 style={{margin: "60px 20px"}}>{t("Tasks.That employee has no tasks")}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>{t("Tasks.create new one")}</i></span></h3>
                 :
                 <div class="col-md-8">
-                  <h4 style={{marginBottom: "15px"}}>Obligatory</h4>
+                  <h4 style={{marginBottom: "15px"}}>{t("Tasks.Obligatory")}</h4>
                   <div class="row">
                   {
-                    obligatoryTasksForEmp.length == 0? <h4 className="noTasks">No obligatory tasks for {selectedEmp.lastName + " " + selectedEmp.firstName}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>create new one</i></span></h4> 
+                    obligatoryTasksForEmp.length == 0? <h4 className="noTasks">{t("Tasks.No obligatory tasks for")} {selectedEmp.lastName + " " + selectedEmp.firstName}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>{t("Tasks.create new one")}</i></span></h4> 
                     :
                     obligatoryTasksForEmp.map((task, index) => (
                       <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("obligatory", index)}>
@@ -1052,7 +1054,7 @@ const Tasks=()=>{
                           </div>
                           <div class="task-content">
                             <h5 class="task-title">{task.header}</h5>
-                            <p class="task-deadline">Deadline: {task.deadLineDate}</p>
+                            <p class="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                           </div>
                         </div>
                       </div>
@@ -1068,7 +1070,7 @@ const Tasks=()=>{
                     </div>
                   }
                   </div>
-                  { expiredTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>Overdue</h4> }
+                  { expiredTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>{t("Tasks.Overdue")}</h4> }
                   {
                     expiredTasksForEmp.length > 0 && 
                     <div class="row">
@@ -1081,7 +1083,7 @@ const Tasks=()=>{
                             </div>
                             <div class="task-content">
                               <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline">Deadline: {task.deadLineDate}</p>
+                              <p class="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                             </div>
                           </div>
                         </div>
@@ -1090,7 +1092,7 @@ const Tasks=()=>{
                     </div>
                   }
 
-                  { optionalTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>Optional</h4> }
+                  { optionalTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>{t("Tasks.Optional")}</h4> }
                   {
                     optionalTasksForEmp.length > 0 && 
                     <div class="row">
@@ -1103,7 +1105,7 @@ const Tasks=()=>{
                             </div>
                             <div class="task-content">
                               <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline">Deadline: {task.deadLineDate}</p>
+                              <p class="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                             </div>
                           </div>
                         </div>
@@ -1112,7 +1114,7 @@ const Tasks=()=>{
                     </div>
                   }
 
-                  { doneTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>Done</h4> }
+                  { doneTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>{t("Tasks.Done")}</h4> }
                   {
                     doneTasksForEmp.length > 0 && 
                     <div class="row">
@@ -1125,8 +1127,8 @@ const Tasks=()=>{
                             </div>
                             <div class="task-content">
                               <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline mt-2">Deadline: {task.deadLineDate}</p>
-                              <p class="task-deadline">Done: {task.doneDate}</p>
+                              <p class="task-deadline mt-2">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                              <p class="task-deadline">{t("Tasks.Done")}: {task.doneDate}</p>
                             </div>
                           </div>
                         </div>

@@ -39,8 +39,8 @@ function App() {
           <Route path='/projects/update/:id' element={<Bootstrap530Helmet><UpdateProject/></Bootstrap530Helmet>}/>
           <Route path='/employees' element={<Bootstrap452Helmet><Employees/></Bootstrap452Helmet>}/>
           <Route path='/depsJobs' element={<Bootstrap452Helmet><DepsJobs/></Bootstrap452Helmet>}/>
-          <Route path='/financies' element={<Finances/>}/>
-          <Route path='/feedbacks' element={<Bootstrap530Helmet><Feedbacks/></Bootstrap530Helmet>}/>
+          <Route path='/financies' element={<Bootstrap530Helmet><Finances/></Bootstrap530Helmet>}/>
+          <Route path='/feedbacks' element={<Bootstrap452Helmet><Feedbacks/></Bootstrap452Helmet>}/>
           <Route path='/settings' element={<Bootstrap452Helmet><Settings/></Bootstrap452Helmet>}/>
           <Route path='/employee/create' element={<Bootstrap530Helmet><CreateEmployee/></Bootstrap530Helmet>}/>
           <Route path='/employee/details/:id' element={<Bootstrap452Helmet><DetailsEmployee/></Bootstrap452Helmet>}/>

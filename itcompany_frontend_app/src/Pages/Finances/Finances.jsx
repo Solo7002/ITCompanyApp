@@ -17,6 +17,8 @@ const Finances = () => {
     const[taskInYear,setTaskInYear]=useState([]);
     const[projectInYear,setProjectInYear]=useState([]);
     const[averageSalary,setAverageSalary]=useState();
+    const[averageSalaryInDepartment,setAverageSalaryInDepartment]=useState();
+    const[averageSalaryInJob,setAverageSalaryInJob]=useState();
     useEffect(()=>{
         axios.get(`${keys.ServerConnection}/Employee/getCountEmployees`, { headers: { Authorization: `Bearer ${token}` } }).then(res=>{
             setCountEmployees(res.data);
@@ -58,6 +60,20 @@ const Finances = () => {
         });
         axios.get(`${keys.ServerConnection}/Employee/getAvarageSalary`, { headers: { Authorization: `Bearer ${token}` } }).then(res=>{
             setAverageSalary(res.data);
+        }).catch(err => {
+            if (err.response.status === 401)
+                signOut();
+        });
+        axios.get(`${keys.ServerConnection}/Department/getAverageSalaryInDepartment`, { headers: { Authorization: `Bearer ${token}` } }).then(res=>{
+            setAverageSalaryInDepartment(res.data);
+        }).catch(err => {
+            if (err.response.status === 401)
+                signOut();
+        });
+
+        axios.get(`${keys.ServerConnection}/Job/getAverageSalaryInJob`, { headers: { Authorization: `Bearer ${token}` } }).then(res=>{
+            setAverageSalaryInJob(res.data);
+            console.log(res.data);
         }).catch(err => {
             if (err.response.status === 401)
                 signOut();
@@ -134,6 +150,16 @@ const Finances = () => {
                         </div>
                     </div>
                 </div>
+                {averageSalaryInDepartment&&
+                <div className="statistic-container">
+                    <MyStatistics data={averageSalaryInDepartment.map(d=>d.averageSalary)} backgroundColor='rgb(190, 7, 152)' label={t("Statistic.Money")} borderColor='rgb(247, 19, 199)' text={t("Statistic.AverageSalaryInDepartment")} labels={averageSalaryInDepartment.map(d=>d.nameDepartment)} />
+                </div>
+                }
+                {averageSalaryInJob&&
+                <div className="statistic-container">
+                    <MyStatistics data={averageSalaryInJob.map(j=>j.averageSalary)} backgroundColor='rgb(11, 94, 227)' label={t("Statistic.Money")} borderColor='rgb(77, 142, 247)' text={t("Statistic.AverageSalaryInJob")} labels={averageSalaryInJob.map(j=>j.nameJob)} />
+                </div>
+                }
             </div>
         </div>
     )

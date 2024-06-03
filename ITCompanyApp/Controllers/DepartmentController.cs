@@ -134,6 +134,27 @@ namespace ITCompanyApp.Controllers
             return Ok();
         }
 
-        
+        [HttpGet]
+        [Route("getAverageSalaryInDepartment")]
+        public  List<object> GetAverageSalaryInDepartment()
+        {
+            if (_context.Departments == null || _context.Employees == null)
+            {
+                return null;
+            }
+
+            List<Department> departments = _context.Departments.ToList();
+            var results = departments.Select(d => new
+            {
+                NameDepartment = d.DepartmentName,
+                AverageSalary = _context.Employees.Where(e => e.DepartmentId == d.DepartmentId)
+                                                  .Where(e => !e.FireDate.HasValue)
+                                                  .Select(e => (decimal?)e.Salary) 
+                                                  .Average() ?? 0m 
+            }).ToList();
+
+            return results.Cast<object>().ToList(); 
+
+        }
     }
 }

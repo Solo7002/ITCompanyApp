@@ -5,7 +5,7 @@ import {initReactI18next} from 'react-i18next'
 
 
 // the translations
-const languages = ['ua','en','es','ja'];
+const languages = ['ua','en','es','ja','de'];
 i18n
   .use(Backend)
   .use(LanguageDetector)

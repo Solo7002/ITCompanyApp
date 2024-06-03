@@ -113,5 +113,27 @@ namespace ITCompanyApp.Controllers
 
             return Ok();
         }
+        [HttpGet]
+        [Route("getAverageSalaryInJob")]
+        public List<object> GetAverageSalaryInJob()
+        {
+            if (_context.Jobs == null || _context.Employees == null)
+            {
+                return null;
+            }
+
+            List<Job> jobs = _context.Jobs.ToList();
+            var results = jobs.Select(j => new
+            {
+                NameJob = j.JobName,
+                AverageSalary = _context.Employees.Where(e => e.JobId == j.JobId)
+                                                  .Where(e => !e.FireDate.HasValue)
+                                                  .Select(e => (decimal?)e.Salary)
+                                                  .Average() ?? 0m
+            }).ToList();
+
+            return results.Cast<object>().ToList();
+
+        }
     }
 }
