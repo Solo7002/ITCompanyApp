@@ -1,17 +1,21 @@
-.main-cont{
+.profile-page-container{
+  height: 100vh;
+}
+
+.profile-page-container .main-cont{
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
-.labels {
+.profile-page-container .labels {
     font-size: 13px;
 }  
 
-#image-container {
+.profile-page-container #image-container {
   position: relative;
   display: inline-block;
 }
 
-#overlay {
+.profile-page-container #overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -26,19 +30,20 @@
   align-items: center;
 }
 
-#plus {
+.profile-page-container #plus {
   color: white;
   font-size: 2em;
 }
 
-#image-container:hover #overlay {
+.profile-page-container #image-container:hover #overlay {
   opacity: 1;
 }
 
-#image-container:active #overlay {
+.profile-page-container #image-container:active #overlay {
   background-color: rgba(0, 0, 0, 0.8);
 }
-#statistick{
-  width:500px;
-  height:200px;
+
+.profile-page-container #statistick{
+  margin: 10px auto;
+  height: 300px;
 }

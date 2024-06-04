@@ -68,7 +68,7 @@ const Home = () => {
 
 
     return (
-        <div classNameName="homeContainer">
+        <div className="homeContainer">
             <h1>{t("Home.Home")}</h1>
 
             <div className="container mt-5">
@@ -101,7 +101,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <div >
+                    <div>
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item">
                                 <a className="nav-link active" id="employees-tab" data-toggle="tab" href="#employees" role="tab" aria-controls="employees" aria-selected="true">{t("Home.Department")}</a>
@@ -166,6 +166,7 @@ const Home = () => {
 
                         
                     </div>
+
                     <div className="tasks-container">
                             <div className="tasks-header">
                                 <h2>{t("Home.TaskOverview")}</h2>
@@ -186,7 +187,7 @@ const Home = () => {
                                 </div>
                             </div>}
 
-                        </div>
+                    </div>
                     
                 </div>
                 

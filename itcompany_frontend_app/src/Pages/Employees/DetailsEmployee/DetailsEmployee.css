@@ -1,3 +1,7 @@
+.employee-info-container {
+  height: 100vh;
+}
+
 .employee-info-container .employee-info-container {
     padding: 50px 0;
   }

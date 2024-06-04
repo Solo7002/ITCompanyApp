@@ -57,7 +57,7 @@ const Projects = () => {
 
     return (
         <div className="projectsContainer">
-            <h1>{t('projects.index.title')}</h1>
+            <h1 className="text-center my-4">{t('projects.index.title')}</h1>
             <hr />
             <div className="container mt-5 myCon">
                 <Link to={`/projects/create`}>
@@ -76,7 +76,7 @@ const Projects = () => {
                 filteredProjects.map((project, index) => (
                     <div className="col-lg-3 col-md-6 mb-4" key={index}>
                         <div className="card">
-                            <img src="https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" className="card-img-top" alt="Project Alpha" />
+                            <img src={`${keys.ServerConnection}/Files/download${project.file}`} className="card-img-top" alt="Project Alpha" />
                             <div className="card-body">
                                 <h5 className="card-title">{project.projectName}</h5>
                                 <p className="project-dates">

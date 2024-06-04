@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import keys from "../../../config/keys";
 import SelectSearch from "../../../Components/UI/SelectSearch/SelectSearch";
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+import FileUpload from "../../../Components/UI/FileUpload/FileUpload";
 
 const CreateProject = () => {
     const { t } = useTranslation(); 
@@ -14,6 +15,7 @@ const CreateProject = () => {
     const [errors, setErrors] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [errorInfo, setErrorInfo] = useState('none');
+    const [coverFile, setCoverFile] = useState("");
 
     const fetchEmployees = async () => {
         const response = await axios.get(`${keys.ServerConnection}/Employee/`, {
@@ -46,7 +48,7 @@ const CreateProject = () => {
             axios.post(`${keys.ServerConnection}/Project`, {
                 projectName: form.projectName.value,
                 description: form.description.value,
-                file: '', //set!!!
+                file: coverFile,
                 isDone: false,
                 deadLineProjectDate: form.deadlineProjectDate.value,
                 employeeId: id
@@ -85,7 +87,7 @@ const CreateProject = () => {
 
                         <div className="form-group">
                             <label>{t("projects.create.photoFile")}</label>
-                            <input type="file" className="form-control" name="file" placeholder={t("projects.create.photoFilePlaceholder")} accept="image/jpeg,image/png,image/gif" />
+                            <FileUpload folder="projects/project_files" setFile={setCoverFile} accept="image/png, image/gif, image/jpeg" className="form-control"/>
                         </div>
 
                         <div className="form-group">

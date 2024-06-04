@@ -1,12 +1,13 @@
-
 import { useEffect, useState } from "react";
 import SelectSearch from "../../../Components/UI/SelectSearch/SelectSearch";
-import "./CreateEmployee.css";
 import { useAuth } from "../../../hooks/useAuth";
 import axios from "axios";
 import keys from "../../../config/keys";
 import {  useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import FileUpload from "../../../Components/UI/FileUpload/FileUpload";
+
+import "./CreateEmployee.css";
 
 const CreateEmployee = () => {
 
@@ -23,6 +24,8 @@ const CreateEmployee = () => {
         jobsDisplay: 'none'
     });
     const [errors,setErrors]=useState();
+    const [photoFile, setPhotoFile] = useState("");
+
     useEffect(()=>{
         try {
            
@@ -71,7 +74,7 @@ const CreateEmployee = () => {
                 BirthDate:form.birthdate.value,
                 PhoneNumber:form.phone.value,
                 Email:form.email.value,
-                PhotoFile:'',
+                PhotoFile:photoFile,
                 Salary:form.salary.value,
                 DepartmentName:form.department.value,
                 JobName:form.job.value,
@@ -159,10 +162,8 @@ const CreateEmployee = () => {
                     </div>
                     <div className="form-group">
                         <label >{t("employees.create.PhotoFile")}</label>
-                        <input type="file"  className="form-control"   name="file" placeholder={t("employees.create.InputPhoto")}  accept="image/jpeg,image/png,image/gif" />
+                        <FileUpload folder="users/images" id="employeePhotoProfile" setFile={setPhotoFile} accept="image/png, image/gif, image/jpeg" className="form-control"/>
                     </div>
-                    
-                    
                         
                         {
                         errors != null && errors.map((error, index) => (

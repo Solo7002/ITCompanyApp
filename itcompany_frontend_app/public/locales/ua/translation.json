@@ -247,6 +247,8 @@
         }
     },
     "feedbacks": {
+        "for": "Для",
+        "from": "Від",
         "confirmDeletion": "Підтвердити видалення",
         "yes": "Так",
         "cancel": "Скасувати",
@@ -301,7 +303,7 @@
     "Home": {
         "Home": "Головна",
         "AverageText": "Середній рейтинг",
-        "BirthdayIsComing": "Скоро день народження",
+        "BirthdayIsComing": "Найближчі дні народження",
         "Department": "Відділ",
         "All": "Всі",
         "EmployeesByRating": "Працівники за рейтингом",

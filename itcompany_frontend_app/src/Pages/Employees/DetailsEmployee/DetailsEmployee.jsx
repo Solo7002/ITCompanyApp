@@ -84,7 +84,7 @@ const DetailsEmployee = () => {
                         <div className="card-body p-5">
                             <div className="row align-items-center mb-4">
                                 <div className="col-md-3 text-center">
-                                    <img id="image" className="img-fluid rounded-circle employee-photo" width="150px" height="150px" src="https://img.freepik.com/premium-vector/user-icon-man-business-suit_454641-453.jpg" alt="user" />
+                                    <img id="image" className="img-fluid rounded-circle employee-photo" width="150px" height="150px" src={`${keys.ServerConnection}/Files/download${employee.photoFile}`} alt="user" />
 
                                 </div>
                                 <div className="col-md-9">

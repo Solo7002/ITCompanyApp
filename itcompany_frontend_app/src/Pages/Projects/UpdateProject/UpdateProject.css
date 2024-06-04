@@ -1,6 +1,8 @@
+.updateProjectContainer{
+    height: 100vh;
+}
+
 .updateProjectContainer .form-container {
-        
-         
     background-color: #ffffff;
     min-width: 300px;
     max-width: 600px;
@@ -8,22 +10,28 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .updateProjectContainer .form-header {
     margin-bottom: 20px;
 }
+
 .updateProjectContainer .form-group label {
     font-weight: bold;
 }
+
 .updateProjectContainer .btn-custom {
     background-color: #007bff;
     color: #ffffff;
 }
+
 .updateProjectContainer .btn-custom:hover {
     background-color: #0056b3;
 }
+
 .updateProjectContainer .btn{
     margin: 5px;
 }
+
 .updateProjectContainer .form-group{
     margin-bottom: 10px;
 }

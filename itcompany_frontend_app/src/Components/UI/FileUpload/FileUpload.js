@@ -25,8 +25,8 @@ const FileUpload = (props) => {
     };
 
     return (
-        <div>
-            <input id={props.id?props.id:""} type="file" onChange={handleUpload} accept={props.accept? props.accept : ""} required={true}/>
+        <div style={{display: props.display?props.display:''}}>
+            <input id={props.id?props.id:""} type="file" onChange={handleUpload} accept={props.accept? props.accept : ""} required={props.required!==undefined?props.required:true} className={props.className||''}/>
         </div>
     );
 }

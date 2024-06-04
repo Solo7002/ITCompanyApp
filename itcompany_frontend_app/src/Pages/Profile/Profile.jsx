@@ -4,8 +4,10 @@ import { useAuth } from "../../hooks/useAuth";
 import axios from "axios";
 import keys from "../../config/keys";
 import { useTranslation } from "react-i18next"; 
-import "./Profile.css";
 import { MyStatistics } from "../../Components/UI/MyStatistics/MyStatistics";
+import FileUpload from "../../Components/UI/FileUpload/FileUpload.js";
+
+import "./Profile.css";
 
 const Profile = () => {
     const { t } = useTranslation(); 
@@ -15,7 +17,9 @@ const Profile = () => {
     const [user, setUser] = useState({});
     const [department, setDepartment] = useState({});
     const [job, setJob] = useState({});
-    const[countTask,setCountTasks]=useState([]);
+    const [countTask,setCountTasks]=useState([]);
+    const [userImagePath, setUserImagePath] = useState("");
+
     useEffect(() => {
         if (token) {
             try {
@@ -69,7 +73,18 @@ const Profile = () => {
                 console.log(error);
             }
         }
-    }, [token])
+    }, [token]);
+
+
+    useEffect(() => {
+        console.log("userImagePath: ", userImagePath);
+        setEmployee({
+            ...employee,
+            photoFile: userImagePath
+        });
+        console.log("path to server: ", `${keys.ServerConnection}/Files/download${userImagePath}`);
+        document.getElementById("imageUserProfilePhoto").setAttribute("src", `${keys.ServerConnection}/Files/download${userImagePath}`);
+    }, [userImagePath])
 
     const Month=[t("Month.January"),t("Month.February"),t("Month.March"),t("Month.April"),t("Month.May"),t("Month.June"),t("Month.July"),t("Month.August"),t("Month.September"),t("Month.October"),t("Month.November"),t("Month.December"),]
     const inputUserChangeHandler = (event) => {
@@ -87,6 +102,10 @@ const Profile = () => {
             [name]: value
         });
     };
+
+    const chooseFileHandler = () => {
+        document.getElementById("employeePhotoProfile").click();
+    }
 
     const btnClickHandler = async () => {
         const decoded = jwtDecode(token);
@@ -117,16 +136,16 @@ const Profile = () => {
     }
 
     return (
-        <div>
+        <div className="profile-page-container">
             <div className="container rounded bg-white mt-5 mb-5 main-cont">
                 <div className="row">
-                    <div className="col-md-3 border-right">
+                    <div className="col-lg-3 border-right">
                         <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                             <div id="image-container" className="mt-5">
-                                <input type="file" name="employeePhoto" id="employeePhoto" style={{ display: "none" }} />
+                                <FileUpload folder="users/images" id="employeePhotoProfile" setFile={setUserImagePath} accept="image/png, image/gif, image/jpeg" display="none"/>
                                 <label>
-                                    <img id="image" className="rounded-circle" width="150px" height="150px" src="https://img.freepik.com/premium-vector/user-icon-man-business-suit_454641-453.jpg" alt="user" />
-                                    <div id="overlay">
+                                    <img id="imageUserProfilePhoto" className="img" width={150} height={150} style={{borderRadius: "50%"}} src={`${keys.ServerConnection}/Files/download${employee.photoFile}`} alt="user"/>
+                                    <div id="overlay" onClick={chooseFileHandler}>
                                         <span id="plus">+</span>
                                     </div>
                                 </label>
@@ -135,7 +154,7 @@ const Profile = () => {
                             <span className="text-black-50">{employee.email}</span>
                         </div>
                     </div>
-                    <div className="col-md-5 border-right">
+                    <div className="col-lg-5 border-right">
                         <div className="p-3 py-5">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <h4 className="text-right">{t("profile.settings")}</h4>
@@ -183,7 +202,7 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-lg-4">
                         <div className="p-3 py-5">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <h4 className="text-right">{t("profile.workInfo")}</h4>

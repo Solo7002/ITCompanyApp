@@ -248,6 +248,8 @@
         }
     },
     "feedbacks": {
+        "for": "について",
+        "from": "より",
         "confirmDeletion": "削除の確認",
         "yes": "はい",
         "cancel": "キャンセル",

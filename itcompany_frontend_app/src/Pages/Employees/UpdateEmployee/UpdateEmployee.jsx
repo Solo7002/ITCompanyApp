@@ -6,6 +6,7 @@ import DateReduction from "../../../Function/DateReduction";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import FileUpload from "../../../Components/UI/FileUpload/FileUpload";
 
 const UpdateEmployee = () => {
     const { t } = useTranslation();
@@ -21,11 +22,15 @@ const UpdateEmployee = () => {
     });
     const [errors, setErrors] = useState();
     const { signOut } = useAuth();
+    const [photoFile, setPhotoFile] = useState("");
 
     const fetchEmployee = async () => {
         try {
             await axios.get(`${keys.ServerConnection}/Employee/${id}`, { headers: { Authorization: `Bearer ${token}` } })
-                .then(res => setEmployee({ ...res.data, birthDate: DateReduction(res.data.birthDate) }))
+                .then(res =>{
+                    setEmployee({ ...res.data, birthDate: DateReduction(res.data.birthDate) });
+                    setPhotoFile(res.data.photoFile);
+                })
                 .catch(err => {
                     if (err.response.status === 401) signOut();
                 });
@@ -62,7 +67,7 @@ const UpdateEmployee = () => {
             axios.put(`${keys.ServerConnection}/Employee/${id}`,
                 {
                     LastName: employee.lastName,
-                    PhotoFile: employee.photoFile,
+                    PhotoFile: photoFile,
                     FirstName: employee.firstName,
                     BirthDate: employee.birthDate,
                     PhoneNumber: employee.phoneNumber,
@@ -129,6 +134,10 @@ const UpdateEmployee = () => {
                         <label>{t("employees.update.Job")}</label>
                         <SelectSearch placeholder={t("employees.update.InputJob")} name='job' id='jobSearch' options={jobs.map(job => job.jobName)} />
                         <h5 style={{ color: "red", marginLeft: "5px", display: errorInfo.jobsDisplay }}>* {t("employees.update.NoJob")}</h5>
+                    </div>
+                    <div className="form-group">
+                        <label >{t("employees.create.PhotoFile")}</label>
+                        <FileUpload folder="users/images" id="employeePhotoProfile" setFile={setPhotoFile} accept="image/png, image/gif, image/jpeg" className="form-control" required={false}/>
                     </div>
                     {
                         errors != null && errors.map((error, index) => (

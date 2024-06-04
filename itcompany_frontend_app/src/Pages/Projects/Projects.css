@@ -1,4 +1,8 @@
-h1 {
+.projectsContainer{
+    height: 100vh;
+}
+
+.projectsContainer h1 {
     color: #343a40;
 }
 

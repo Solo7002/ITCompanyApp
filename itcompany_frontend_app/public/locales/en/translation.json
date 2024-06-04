@@ -250,6 +250,8 @@
         
     },
     "feedbacks": {
+        "for": "For",
+        "from": "From",
         "confirmDeletion": "Confirm deletion",
         "yes": "Yes",
         "cancel": "Cancel",

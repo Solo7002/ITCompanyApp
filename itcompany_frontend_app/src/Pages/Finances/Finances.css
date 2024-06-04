@@ -5,8 +5,7 @@
     gap: 20px;
 }
 
-.financesContainer  .tasks-container,
-.statistic-container {
+.financesContainer .tasks-container, .financesContainer .statistic-container {
     padding: 20px;
     max-width: 400px;
     max-height: 600px;

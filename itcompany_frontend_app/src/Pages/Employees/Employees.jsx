@@ -96,7 +96,7 @@ const Employees = () => {
 
     return (
         <div className="employeesContainer">
-            <h1>{t("employees.index.Title")}</h1>
+            <h1 className="text-center my-4">{t("employees.index.Title")}</h1>
             <hr />
             <div className="container mt-5">
             <input

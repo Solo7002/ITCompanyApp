@@ -6,6 +6,7 @@ import keys from "../../../config/keys";
 import DateReduction from "../../../Function/DateReduction";
 import SelectSearch from "../../../Components/UI/SelectSearch/SelectSearch";
 import { useTranslation } from 'react-i18next';
+import FileUpload from "../../../Components/UI/FileUpload/FileUpload";
 
 import './UpdateProject.css'
 
@@ -17,6 +18,7 @@ const UpdateProject = () => {
     const [errors, setErrors] = useState();
     const [employees, setEmployees] = useState([]);
     const [errorInfo, setErrorInfo] = useState('none');
+    const [coverFile, setCoverFile] = useState("");
 
     const { token, signOut } = useAuth();
 
@@ -56,13 +58,12 @@ const UpdateProject = () => {
         if (fullNameExist) {
             const employee = employees.find(employee => employee.fullName === form.teamLead.value);
             const idEmpployee = employee ? employee.id : null;
-            console.log(form.file.value.length > 1 ? form.file.value : project.file);
             console.log(project.isDone);
             axios.put(`${keys.ServerConnection}/Project/${id}`, {
 
                 projectName: project.projectName,
                 description: project.description,
-                file: form.file.value.length>0?form.file.value:project.file,
+                file: coverFile,
                 isDone: project.isDone,
                 startProjectDate: project.startProjectDate,
                 deadLineProjectDate: project.deadLineProjectDate,
@@ -104,7 +105,7 @@ const UpdateProject = () => {
 
                                 <div className="form-group">
                                     <label >{t("projects.update.photoFile")}</label>
-                                    <input type="file" className="form-control" name="file" placeholder={t("projects.update.photoFilePlaceholder")} accept="image/jpeg,image/png,image/gif" />
+                                    <FileUpload folder="projects/project_files" setFile={setCoverFile} accept="image/png, image/gif, image/jpeg" className="form-control"/>
                                 </div>
                                 <div className="form-group">
                                     <label >{t("projects.update.deadlineProjectDate")}</label>

@@ -247,6 +247,8 @@
         }
     },
     "feedbacks": {
+        "for": "Para",
+        "from": "En",
         "confirmDeletion": "Confirmar eliminación",
         "yes": "Sí",
         "cancel": "Cancelar",

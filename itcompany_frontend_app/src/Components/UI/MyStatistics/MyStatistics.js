@@ -39,7 +39,7 @@ const MyStatistics=props=>{
       };
       return(
         <div>
-            <h2>{props.text}</h2>
+            <h4>{props.text}</h4>
             <Line data={data} options={options}/>
         </div>
       )

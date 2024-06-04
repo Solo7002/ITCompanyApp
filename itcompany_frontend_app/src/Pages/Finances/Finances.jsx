@@ -84,7 +84,7 @@ const Finances = () => {
 
     return (
         <div className="financesContainer">
-            <h1>Finances</h1>
+            <h1 className="text-center my-5">Finances</h1>
             <div className="contents">
                 <div className="tasks-container">
                     <div className="tasks-header">

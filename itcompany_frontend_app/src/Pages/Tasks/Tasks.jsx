@@ -515,27 +515,27 @@ const Tasks=()=>{
         cancelText={t("Tasks.Cancel")}
         headerBackgroundColor={selectedTask.headerBackColor}>
       <div id="modal-task-details">
-        <div class="col-md-12">
+        <div className="col-md-12">
           <h2 className="text-center" style={{marginBottom: "15px"}}>{selectedTask.header}</h2>
           <div className="task-cover" style={{marginBottom: "15px"}}>
             <img src={`${keys.ServerConnection}/Files/download${selectedTask.cover}`} className="task-cover" alt="Task Cover"/>
           </div>
           <p style={{wordWrap: "break-word", whiteSpace: "normal"}}>{selectedTask.text}</p>
         </div>
-        <div class="col-md-9" style={{marginBottom: "10px"}}>
-          <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+        <div className="col-md-9" style={{marginBottom: "10px"}}>
+          <div className="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <h5>Task file:</h5>
-            <a href={`${keys.ServerConnection}/Files/download${selectedTask.file}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
+            <a href={`${keys.ServerConnection}/Files/download${selectedTask.file}`} className="btn btn-success" download>{t("Tasks.Download File")} <i className="fa-solid fa-file-arrow-down"></i></a>
           </div>
           {
             selectedTask.task_type == "done" && 
-            <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <div className="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <h5>{t("Tasks.Done task file")}:</h5>
-              <a href={`${keys.ServerConnection}/Files/download${selectedTask.doneFile}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
+              <a href={`${keys.ServerConnection}/Files/download${selectedTask.doneFile}`} className="btn btn-success" download>{t("Tasks.Download File")} <i className="fa-solid fa-file-arrow-down"></i></a>
             </div>
           }
         </div>
-        <div class="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
+        <div className="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
           <h6>{t("Tasks.Uploaded")}: <b style={{color: "black"}}>{selectedTask.uploadDate}</b></h6>
           <h6>{t("Tasks.Deadline")}: <b style={{color: "red"}}>{selectedTask.deadLineDate}</b></h6>
         </div>
@@ -646,31 +646,31 @@ const Tasks=()=>{
         headerBackgroundColor={selectedTaskForEmp.isDone? "primary" : selectedTaskForEmp.headerBackColor}
         >
       <div id="modal-task-details-2">
-        <div class="col-md-12">
+        <div className="col-md-12">
           <h2 className="text-center mb-3">{selectedTaskForEmp.header}</h2>
           <div className="task-cover mb-3">
             <img src={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.cover}`} className="task-cover" alt="Task Cover"/>
           </div>
           <p style={{wordWrap: "break-word", whiteSpace: "normal"}}>{selectedTaskForEmp.text}</p>
         </div>
-        <div class="col-md-9 mb-2">
-          <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+        <div className="col-md-9 mb-2">
+          <div className="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <h5>{t("Tasks.Task file")}:</h5>
-            <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.file}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
+            <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.file}`} className="btn btn-success" download>{t("Tasks.Download File")} <i className="fa-solid fa-file-arrow-down"></i></a>
           </div>
           {
             selectedTaskForEmp.task_type == "done" && 
-            <div class="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <div className="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <h5>{t("Tasks.Done task file")}:</h5>
-              <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.doneFile}`} class="btn btn-success" download>{t("Tasks.Download File")} <i class="fa-solid fa-file-arrow-down"></i></a>
+              <a href={`${keys.ServerConnection}/Files/download${selectedTaskForEmp.doneFile}`} className="btn btn-success" download>{t("Tasks.Download File")} <i className="fa-solid fa-file-arrow-down"></i></a>
             </div>
           }
         </div>
-        <div class="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
+        <div className="col-md-12" style={{textAlign: "right", marginTop: "40px", color: "#555"}}>
           <h6>{t("Tasks.Uploaded")}: <b style={{color: "black"}}>{selectedTaskForEmp.uploadDate}</b></h6>
           <h6>{t("Tasks.Deadline")}: <b style={{color: "red"}}>{selectedTaskForEmp.deadLineDate}</b></h6>
         </div>
-        <div class="col-md-12">
+        <div className="col-md-12">
           <button className="btn btn-danger" style={{width: "100%"}} onClick={confirmDeletionHandler}>{t("Tasks.Delete")}</button>
         </div>
       </div>
@@ -1013,14 +1013,14 @@ const Tasks=()=>{
             {
               currentEmployee && currentDepEmployees.length > 0 &&
               <div className="tab-pane fade" id="manage-tasks" role="tabpanel" aria-labelledby="manage-tasks-tab">
-              <div class="row" style={{marginTop: "30px"}}>
+              <div className="row" style={{marginTop: "30px"}}>
                 {
                   currentDepEmployees.length > 0 && 
-                  <div class="col-md-4">
+                  <div className="col-md-4">
                     <h4>{t("Tasks.Choose employee")}</h4>
                     <br />
-                    <input type="text" class="form-control mb-3" placeholder="Search users by name" id="seach-users-in-tasks" value={empsSeachInput} onChange={(event) => setEmpsSeachInput(event.target.value)}/>
-                    <div class="user-list list-group" id="tasks-employees-by-department">
+                    <input type="text" className="form-control mb-3" placeholder="Search users by name" id="seach-users-in-tasks" value={empsSeachInput} onChange={(event) => setEmpsSeachInput(event.target.value)}/>
+                    <div className="user-list list-group" id="tasks-employees-by-department">
                       {
                         (empsSeachInput.length > 0 ? currentDepEmployees.filter(e => 
                           e.lastName.toLowerCase().startsWith(empsSeachInput.toLowerCase()) 
@@ -1029,7 +1029,7 @@ const Tasks=()=>{
                           ||
                           (e.lastName + " " + e.firstName).toLowerCase().startsWith(empsSeachInput.toLowerCase())
                         ): currentDepEmployees).map((emp, index) => (
-                          <div class="list-group-item list-group-item-action" key={index} onClick={(event) => chooseUserHandler(event, index)} style={{cursor: "pointer"}}>{emp.lastName + " " + emp.firstName}</div>
+                          <div className="list-group-item list-group-item-action" key={index} onClick={(event) => chooseUserHandler(event, index)} style={{cursor: "pointer"}}>{emp.lastName + " " + emp.firstName}</div>
                         ))
                       }
                     </div>
@@ -1040,21 +1040,21 @@ const Tasks=()=>{
                 :
                 obligatoryTasksForEmp.length == 0 && expiredTasksForEmp.length == 0 && optionalTasksForEmp.length == 0 && doneTasksForEmp.length == 0 ? <h3 style={{margin: "60px 20px"}}>{t("Tasks.That employee has no tasks")}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>{t("Tasks.create new one")}</i></span></h3>
                 :
-                <div class="col-md-8">
+                <div className="col-md-8">
                   <h4 style={{marginBottom: "15px"}}>{t("Tasks.Obligatory")}</h4>
-                  <div class="row">
+                  <div className="row">
                   {
                     obligatoryTasksForEmp.length == 0? <h4 className="noTasks">{t("Tasks.No obligatory tasks for")} {selectedEmp.lastName + " " + selectedEmp.firstName}, <span style={{color: "#007BFF", cursor: "pointer", fontWeight: "450"}} onClick={() => setShowTaskCreateModal(true)}><i>{t("Tasks.create new one")}</i></span></h4> 
                     :
                     obligatoryTasksForEmp.map((task, index) => (
-                      <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("obligatory", index)}>
-                        <div class="task-container task-obligatory">
-                          <div class="task-cover">
-                            <img src={`${keys.ServerConnection}/Files/download${task.cover}`} alt="cover" class="img-fluid" />
+                      <div className="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("obligatory", index)}>
+                        <div className="task-container task-obligatory">
+                          <div className="task-cover">
+                            <img src={`${keys.ServerConnection}/Files/download${task.cover}`} alt="cover" className="img-fluid" />
                           </div>
-                          <div class="task-content">
-                            <h5 class="task-title">{task.header}</h5>
-                            <p class="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                          <div className="task-content">
+                            <h5 className="task-title">{task.header}</h5>
+                            <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                           </div>
                         </div>
                       </div>
@@ -1063,8 +1063,8 @@ const Tasks=()=>{
                   {
                     obligatoryTasksForEmp.length > 0 
                     &&
-                    <div class="col-md-4">
-                      <div class="task-container task-obligatory-add" onClick={() => setShowTaskCreateModal(true)}>
+                    <div className="col-md-4">
+                      <div className="task-container task-obligatory-add" onClick={() => setShowTaskCreateModal(true)}>
                         <p>+</p>
                       </div>
                     </div>
@@ -1073,17 +1073,17 @@ const Tasks=()=>{
                   { expiredTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>{t("Tasks.Overdue")}</h4> }
                   {
                     expiredTasksForEmp.length > 0 && 
-                    <div class="row">
+                    <div className="row">
                     {
                       expiredTasksForEmp.map((task, index) => (
-                        <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("expired", index)}>
-                          <div class="task-container task-overdue">
-                            <div class="task-cover">
-                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" class="img-fluid" />
+                        <div className="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("expired", index)}>
+                          <div className="task-container task-overdue">
+                            <div className="task-cover">
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                             </div>
-                            <div class="task-content">
-                              <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                            <div className="task-content">
+                              <h5 className="task-title">{task.header}</h5>
+                              <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                             </div>
                           </div>
                         </div>
@@ -1095,17 +1095,17 @@ const Tasks=()=>{
                   { optionalTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>{t("Tasks.Optional")}</h4> }
                   {
                     optionalTasksForEmp.length > 0 && 
-                    <div class="row">
+                    <div className="row">
                     {
                       optionalTasksForEmp.map((task, index) => (
-                        <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("optional", index)}>
-                          <div class="task-container task-optional">
-                            <div class="task-cover">
-                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" class="img-fluid" />
+                        <div className="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("optional", index)}>
+                          <div className="task-container task-optional">
+                            <div className="task-cover">
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                             </div>
-                            <div class="task-content">
-                              <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                            <div className="task-content">
+                              <h5 className="task-title">{task.header}</h5>
+                              <p className="task-deadline">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
                             </div>
                           </div>
                         </div>
@@ -1117,18 +1117,18 @@ const Tasks=()=>{
                   { doneTasksForEmp.length > 0 && <h4 style={{marginBottom: "15px"}}>{t("Tasks.Done")}</h4> }
                   {
                     doneTasksForEmp.length > 0 && 
-                    <div class="row">
+                    <div className="row">
                     {
                       doneTasksForEmp.map((task, index) => (
-                        <div class="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("done", index)}>
-                          <div class="task-container task-done">
-                            <div class="task-cover">
-                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" class="img-fluid" />
+                        <div className="col-md-4" key={index} onClick={() => openDetailsInManageModalWindow("done", index)}>
+                          <div className="task-container task-done">
+                            <div className="task-cover">
+                              <img src={`${keys.ServerConnection}/Files/download${task.cover}`}  alt="cover" className="img-fluid" />
                             </div>
-                            <div class="task-content">
-                              <h5 class="task-title">{task.header}</h5>
-                              <p class="task-deadline mt-2">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
-                              <p class="task-deadline">{t("Tasks.Done")}: {task.doneDate}</p>
+                            <div className="task-content">
+                              <h5 className="task-title">{task.header}</h5>
+                              <p className="task-deadline mt-2">{t("Tasks.Deadline")}: {task.deadLineDate}</p>
+                              <p className="task-deadline">{t("Tasks.Done")}: {task.doneDate}</p>
                             </div>
                           </div>
                         </div>
