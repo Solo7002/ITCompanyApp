@@ -1,14 +1,20 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
 using ITCompanyApp.Models.AuthModels;
+using MailKit.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit.Text;
+using MimeKit;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static Org.BouncyCastle.Math.EC.ECCurve;
+using MailKit.Net.Smtp;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITCompanyApp.Controllers.Sign_Auth
 {
@@ -18,11 +24,13 @@ namespace ITCompanyApp.Controllers.Sign_Auth
     {
         private readonly IConfiguration _configuration;
         private readonly DBContext _context;
-        public AuthController(IConfiguration configuration,DBContext context)
+
+        public AuthController(IConfiguration configuration, DBContext context)
         {
             _configuration = configuration;
             _context = context;
         }
+
         [HttpPost("login")]
         [AllowAnonymous]
         public IActionResult Login(UserLoginModel model)
@@ -123,6 +131,95 @@ namespace ITCompanyApp.Controllers.Sign_Auth
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        [HttpPost("sendConfirmationEmail")]
+        [AllowAnonymous]
+        public IActionResult SendConfirmToEmail(EmailConfirmModel model)
+        {
+            if (model.Email == null || !_context.Employees.Any(e => e.Email == model.Email))
+            {
+                return BadRequest();
+            }
+
+            if (!TempCodesStaticClass._temp_codes.Keys.Any(k => k == model.Email)) 
+            {
+                TempCodesStaticClass._temp_codes.Add(model.Email, new Random().Next(100000, 999999));
+            }
+
+            string htmlContent = $@"
+            <!DOCTYPE html>
+            <html lang='ru'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Відновлення пароля</title>
+            </head>
+            <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;'>
+                <div style='max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'>
+                    <div style='background-color: #4CAF50; padding: 20px; text-align: center; color: white;'>
+                        <h1 style='margin: 0;'>Відновлення пароля</h1>
+                    </div>
+                    <div style='padding: 20px; text-align: center; padding-bottom: 0px;'>
+                        <p style='font-size: 16px; line-height: 1.5; color: #333333;'> Ви запросили відновлення пароля. Будь ласка, використовуйте наступний код для скидання вашого пароля: </p>
+                        <div style='font-size: 24px; font-weight: bold; margin: 20px 0; padding: 10px; background-     color: #f0f0f0; display: inline-block; border-radius: 5px; letter-spacing: 10px;'><h2>{TempCodesStaticClass._temp_codes[model.Email] }</h2></div>
+                        <p style='font-size: 16px; line-height: 1.5; color: #333333;'>Якщо ви не запитували відновлення пароля, просто проігноруйте цей лист.</p>
+                    </div>
+                    <div style='padding: 20px; text-align: center; color: #777777; padding-top: 5px;'>
+                        <h4>Дякуємо, що користуєтеся нашим додатком!</h4>
+                        <h4><a href='http://localhost:3000/login' style='color: #4CAF50; text-decoration: none;'>Назад до авторизації</a></h4>
+                    </div>
+                </div>
+            </body>
+            </html> ";
+
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailUsername").Value));
+            email.To.Add(MailboxAddress.Parse(model.Email));
+            email.Subject = "Password recovering";
+            email.Body = new TextPart(TextFormat.Html) { Text = htmlContent };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_configuration.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_configuration.GetSection("EmailUsername").Value, _configuration.GetSection("EmailPassword").Value);
+            smtp.Send(email);
+            smtp.Disconnect(true);
+
+            return Ok();
+        }
+
+        [HttpPost("ConfirmEmailByCode")]
+        [AllowAnonymous]
+        public IActionResult ConfirmEmailByCode(EmailConfirmModel model)
+        {
+            if (model.ConfirmationCode != TempCodesStaticClass._temp_codes[model.Email].ToString())
+            {
+                return BadRequest();
+            }
+
+            TempCodesStaticClass._temp_codes.Remove(model.Email);
+            return Ok();
+        }
+
+        [HttpPost("setPassword")]
+        [AllowAnonymous]
+        public IActionResult setPassword(EmailConfirmModel model)
+        {
+            if (model.Email == null || !_context.Employees.Any(e => e.Email == model.Email) || model.NewPassword == null)
+            {
+                return BadRequest();
+            }
+
+            string hashPassword = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, 10).ToString();
+            
+            Employee employee = _context.Employees.First(e => e.Email == model.Email);
+            User user = _context.Users.First(u => u.Id == employee.Id);
+
+            user.Password = hashPassword;
+            _context.Entry(user).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok();
         }
     }
 }

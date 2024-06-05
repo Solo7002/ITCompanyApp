@@ -10,7 +10,8 @@ import { Finances } from './Pages/Finances/Finances.jsx';
 import { Feedbacks } from './Pages/Feedbacks/Feedbacks.jsx';
 import { Settings } from './Pages/Settings/Settings.jsx';
 import { Route, Routes } from 'react-router-dom';
-import { Login } from './Pages/Auth/Login/Login.jsx'
+import { Login } from './Pages/Auth/Login/Login.jsx';
+import { PasswordRecover } from './Pages/Auth/PasswordRecover/PasswordRecover.jsx'
 import { RequireAuth } from './RequireAuth/RequireAuth.js';
 import { AuthProvider } from './RequireAuth/AuthProvider.js';
 import { Bootstrap452Helmet, Bootstrap530Helmet } from './Components/UI/Helmet/HelmetLinks.js';
@@ -47,6 +48,7 @@ function App() {
           <Route path='/employee/update/:id' element={<Bootstrap530Helmet><UpdateEmployee/></Bootstrap530Helmet>}/>
         </Route>
         <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
+        <Route path='/recoverPassword' element={<Bootstrap452Helmet><PasswordRecover/></Bootstrap452Helmet> }/>
       </Routes>
     </div>
     

@@ -13,6 +13,8 @@ const Login=()=>{
     const [password, setPassword] = useState(Cookies.get('password') || '');
     const [errorDisplay, setErrorDisplay] = useState('none');
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const onClickHandler = async ()=>{
       const rememberMe = document.getElementById("rememberMe").checked;
 
@@ -46,7 +48,12 @@ const Login=()=>{
                                 </div>
                                 <div className="form-group">
                                     <label>{t('login.Password')}:</label>
-                                    <input type="password" className="form-control" id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+                                    <div style={{position: "relative"}}>
+                                        <input type={`${showPassword?"text":"password"}`} className="form-control" id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+                                        <div style={{position: "absolute", top: "8px", right: "10px"}}>
+                                            <i class={`fa-solid ${showPassword?"fa-eye":"fa-eye-slash"}`} style={{color: "#444", cursor: "pointer"}} onClick={() => setShowPassword(!showPassword)}></i>
+                                        </div>
+                                    </div>
                                 </div>
                                 <h5 style={{ display: errorDisplay }} className="login-h5">{t('login.wrong login or password!')}</h5>
                                 <div className="form-group form-check">
@@ -54,7 +61,7 @@ const Login=()=>{
                                     <label className="form-check-label">{t('login.Remember me')}</label>
                                 </div>
                                 <button type="button" className="btn btn-primary" onClick={onClickHandler}>{t('login.Login')}</button>
-                                <a href="#" className="float-right">{t('login.Forgot password?')}</a>
+                                <a href="/recoverPassword" className="float-right">{t('login.Forgot password?')}</a>
                             </div>
                         </div>
                     </div>
