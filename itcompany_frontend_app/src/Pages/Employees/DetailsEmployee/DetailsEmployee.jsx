@@ -115,10 +115,8 @@ const DetailsEmployee = () => {
                                     <ul className="list-unstyled">
                                         {employee.projects && employee.projects.map(project => (
                                             <li key={project.id}>
-                                                <strong>{project.name}</strong> - {project.description}
-                                                <Link to={`/projects/details/${project.id}`}>
-                                                    <button className="btn btn-info btn-sm">{t("employees.details.btnInfo")}</button>
-                                                </Link>
+                                                <strong>{project.projectName}</strong>
+            
                                             </li>
                                         ))}
                                     </ul>

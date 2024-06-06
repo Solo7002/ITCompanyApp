@@ -142,15 +142,34 @@ namespace ITCompanyApp.Controllers
         }
         [HttpGet]
         [Route("lastProjects/{id}")]
-        public IEnumerable<Project> GetLastThreeProjectsByEmployeeId(int id)
+        public ActionResult< IEnumerable<ProjectViewModel>> GetLastThreeProjectsByEmployeeId(int id)
         {
             if (_context.Employees == null || !_context.Employees.Any(e => e.Id == id))
             {
-                return null;
+                return BadRequest();
             }
             Employee employee = _context.Employees.First(e => e.Id == id);
-            List<Project> projects = employee.Projects.Where(p => p.IsDone).OrderBy(p => Math.Abs((p.DeadLineProjectDate - DateTime.Today).TotalDays)).Take(3).ToList();
-            return projects;
+           List<Models.Task> task = _context.Tasks.Where(t => t.EmployeeFor_Id == employee.Id).ToList();
+            List<ProjectViewModel> projects = new List<ProjectViewModel>();
+            foreach (Models.Task item in task)
+            {
+                Project project = _context.Projects.First(e => e.ProjectId == item.ProjectId);
+                projects.Add(new ProjectViewModel
+                {
+                    File = project.File,
+                    DeadLineProjectDate = project.DeadLineProjectDate,
+                    Description = project.Description,
+                    EmployeeId = project.EmployeeId,
+                    IsDone=project.IsDone,
+                    ProjectName = project.ProjectName,
+                    StartProjectDate=project.StartProjectDate,
+
+                }); ;
+            }
+
+            projects = projects.OrderBy(p => p.StartProjectDate).Distinct().Take(3).ToList();
+            return Ok(projects);
+
         }
         [HttpGet]
         [Route("getCountTasks/{id}")]

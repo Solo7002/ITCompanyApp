@@ -5,12 +5,14 @@ import axios from "axios";
 import keys from "../../config/keys";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { jwtDecode } from "jwt-decode";
 const Employees = () => {
 
     const{t}=useTranslation();
    
     const { token } = useAuth();
     const{signOut}=useAuth();
+    const user=jwtDecode(token);
     const [employees, setEmployees] = useState([]);
     const fetchEmployees = async () => {
         try {
@@ -107,7 +109,8 @@ const Employees = () => {
                         onChange={searchHandler}
                        
                     />
-                <table className="table table-striped">
+                    <div className="containerTable">
+                <table className="table table-striped  table-bordered table-hover">
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">{t("employees.index.Name")}</th>
@@ -152,8 +155,13 @@ const Employees = () => {
 
                     </tbody>
                 </table>
+                </div>
+                {
+                    user.actort=='Admin'|| user.actort=='Manager'?
                 <div> <Link to={`/employee/create`}> <button className="btn btn-success ">{t("employees.index.btnCreate")}</button></Link></div>
-            </div>
+                    :null
+            }
+           </div>
             
         </div>
     )

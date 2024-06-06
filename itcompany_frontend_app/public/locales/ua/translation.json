@@ -313,11 +313,12 @@
         "CurrentTasks": "Поточні завдання"
     },
     "Statistic": {
+        "Finances":"Фінанси",
         "EmployeesStatistic": "Статистика Працівників",
         "TotalEmployee": "Загальна кількість працівників",
         "FireEmployee": "Звільнені працівники",
         "NotFireEmployee": "Незвільнені працівники",
-        "NewEmployeesPerYear": "Нові працівники на рік",
+        "NewEmployeesPerYear": "Нові працівники за рік",
         "Employees": "Працівники",
         "FiredEmployeesPerYear": "Звільнені працівники на рік",
         "Money": "Гроші",
@@ -331,6 +332,7 @@
         "AverageSalaryInJob": "Середня зарплата за посадою"
     },
     "Tasks": {
+        "Search users by name":"Пошук користувачів за ім'ям",
         "UploadDoneTask": "Завдання завантажено",
         "Claim": "Заявити",
         "Ok": "Гаразд",
@@ -385,6 +387,30 @@
         "That employee has no tasks": "У цього співробітника немає завдань",
         "create new one": "створити нове",
         "No obligatory tasks for": "Немає обов'язкових завдань для"
+    },
+    "PasswordRecover":{
+        "Email is required": "Електронна пошта обов'язкова",
+        "No employees with such email!": "Немає співробітників з такою електронною поштою!",
+        "Confirmation code must have 6 numbers": "Код підтвердження має містити 6 цифр",
+        "Wrong confirmation code!": "Неправильний код підтвердження!",
+        "Password can't have less than 8 symbols": "Пароль не може містити менше 8 символів",
+        "Password and it's confirmation is not the same!": "Пароль і його підтвердження не збігаються!",
+        "Password is invalid": "Пароль недійсний",
+        "Password recovered": "Пароль відновлено",
+        "Recover password": "Відновити пароль",
+        "Enter your email address": "Введіть свою електронну адресу",
+        "Send code": "Надіслати код",
+        "Back to login page": "Повернутися на сторінку входу",
+        "We have sent confirmation code to your email, please enter that code here": "Ми надіслали код підтвердження на вашу електронну адресу, будь ласка, введіть цей код тут",
+        "Confirmation code": "Код підтвердження",
+        "Enter confirmation code": "Введіть код підтвердження",
+        "Check code": "Перевірити код",
+        "New password": "Новий пароль",
+        "Enter your new password": "Введіть новий пароль",
+        "Confirm": "Підтвердити",
+        "Confirm your new password": "Підтвердьте свій новий пароль",
+        "Your password has been recovered successfully": "Ваш пароль успішно відновлено"
     }
+    
     
 }

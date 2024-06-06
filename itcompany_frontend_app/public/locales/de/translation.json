@@ -313,6 +313,7 @@
         "CurrentTasks": "Aktuelle Aufgaben"
     },
     "Statistic": {
+        "Finances":"Finanzen",
         "EmployeesStatistic": "Mitarbeiterstatistik",
         "TotalEmployee": "Gesamtzahl der Mitarbeiter",
         "FireEmployee": "Gekündigte Mitarbeiter",
@@ -331,6 +332,7 @@
         "AverageSalaryInJob": "Durchschnittsgehalt im Job"
     },
     "Tasks": {
+        "Search users by name":"Suchen Sie Benutzer nach Namen",
         "UploadDoneTask": "Abgeschlossene Aufgabe hochladen",
         "Claim": "Anspruch",
         "Ok": "Ok",
@@ -385,5 +387,29 @@
         "That employee has no tasks": "Dieser Mitarbeiter hat keine Aufgaben",
         "create new one": "neue erstellen",
         "No obligatory tasks for": "Keine verpflichtenden Aufgaben für"
+    },
+    "PasswordRecover": {
+        "Email is required": "E-Mail ist erforderlich",
+        "No employees with such email!": "Keine Mitarbeiter mit dieser E-Mail!",
+        "Confirmation code must have 6 numbers": "Der Bestätigungscode muss 6 Ziffern enthalten",
+        "Wrong confirmation code!": "Falscher Bestätigungscode!",
+        "Password can't have less than 8 symbols": "Das Passwort darf nicht weniger als 8 Zeichen haben",
+        "Password and it's confirmation is not the same!": "Das Passwort und seine Bestätigung stimmen nicht überein!",
+        "Password is invalid": "Das Passwort ist ungültig",
+        "Password recovered": "Passwort wiederhergestellt",
+        "Recover password": "Passwort wiederherstellen",
+        "Enter your email address": "Geben Sie Ihre E-Mail-Adresse ein",
+        "Send code": "Code senden",
+        "Back to login page": "Zurück zur Anmeldeseite",
+        "We have sent confirmation code to your email, please enter that code here": "Wir haben einen Bestätigungscode an Ihre E-Mail gesendet, bitte geben Sie diesen Code hier ein",
+        "Confirmation code": "Bestätigungscode",
+        "Enter confirmation code": "Bestätigungscode eingeben",
+        "Check code": "Code überprüfen",
+        "New password": "Neues Passwort",
+        "Enter your new password": "Geben Sie Ihr neues Passwort ein",
+        "Confirm": "Bestätigen",
+        "Confirm your new password": "Bestätigen Sie Ihr neues Passwort",
+        "Your password has been recovered successfully": "Ihr Passwort wurde erfolgreich wiederhergestellt"
     }
+    
 }

@@ -6,6 +6,8 @@ import axios from 'axios';
 import keys from '../../../config/keys';
 import DateReduction from '../../../Function/DateReduction';
 import { useTranslation } from 'react-i18next';
+import { jwtDecode } from 'jwt-decode';
+import { resolve } from 'chart.js/helpers';
 
 const DetailsProject = () => {
     const { t } = useTranslation(); 
@@ -14,9 +16,11 @@ const DetailsProject = () => {
     const navigate = useNavigate();
     const [project, setProject] = useState();
     const { id } = useParams();
-
+    const [showTasks, setShowTasks] = useState(false);
+    const [showEmployees, setShowEmployees] = useState(false);
+    const user=jwtDecode(token);
     const fetchProjects = async () => {
-        const projectRes = await axios.get(`${keys.ServerConnection}/Project/${id}`, {
+        const projectRes =  await axios.get(`${keys.ServerConnection}/Project/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -26,17 +30,19 @@ const DetailsProject = () => {
             console.log(err)
         });
 
-        const employeesRes = await axios.get(`${keys.ServerConnection}/Project/getEmployeeInProject/${id}`, {
+        const employeesRes = await  axios.get(`${keys.ServerConnection}/Project/getEmployeeInProject/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then(res => res.data).catch(err => {
+        }).then(res =>{ 
+            console.log(res.data);
+           return res.data}).catch(err => {
             if (err.response.status === 401)
                 signOut();
             console.log(err)
         });
 
-        const employeesWithJobs = await Promise.all(employeesRes.map(async (employee) => {
+        const employeesWithJobs =  Promise.all(employeesRes.map(async (employee) => {
             try {
                 if (employee.jobId) {
                     const jobRes = await axios.get(`${keys.ServerConnection}/Job/${employee.jobId}`, {
@@ -61,13 +67,16 @@ const DetailsProject = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then(res => res.data).catch(err => {
+        }).then(res => {
+            console.log(res.data);
+            return res.data
+        }).catch(err => {
             if (err.response.status === 401)
                 signOut();
             console.log(err)
         });
 
-        const tasksStatus = tasksRes.map(task => ({
+         const tasksStatus =  tasksRes.map(task => ({
             ...task, status: task.isDone ? t("projects.details.completed") : t("projects.details.pending")
         }));
 
@@ -80,20 +89,19 @@ const DetailsProject = () => {
                 signOut();
             console.log(err)
         });
-
         projectRes.startProjectDate = DateReduction(projectRes.startProjectDate);
         projectRes.deadLineProjectDate = DateReduction(projectRes.deadLineProjectDate);
         const status = projectRes.isDone ? t("projects.details.completed") : t("projects.details.pending");
 
         setProject({
             ...projectRes,
-            employees: employeesWithJobs,
+            employees: await employeesWithJobs,
             employeeProjectHead: employeeProjectHead,
             status: status,
             tasks: tasksStatus
         });
     }
-
+    
     const deleteHandler = () => {
         axios.delete(`${keys.ServerConnection}/Project/${id}`, {
             headers: {
@@ -137,28 +145,35 @@ const DetailsProject = () => {
 
             <div className="card mb-4">
                 <div className="card-body">
-                    <h5 className="card-title">{t("projects.details.tasks")}</h5>
+                    <h5 className="card-title">
+                        {t("projects.details.tasks")}
+                        <span className='btn' onClick={() => setShowTasks(!showTasks)}>{showTasks ?  <i class="fa-solid fa-chevron-up"></i>
 
-                    <ul className="list-group">
-                        {
-                            project.tasks && project.tasks.map((task, index) => (
-                                <li key={index} className="list-group-item">
-                                    <h6>{task.header}</h6>
-                                    <p>{task.text}</p>
-                                    <p><strong>{t("projects.details.status")}:</strong> <span className={`badge ${task.status === t("projects.details.pending") ? 'badge-pending' : 'badge-done'}`}>{task.status}</span></p>
-                                </li>
-                            ))
-                        }
+ :  <i class="fa-solid fa-chevron-down"></i>}</span>
+                    </h5>
+
+                    <ul className={`list-group ${showTasks ? 'show' : ''}`}>
+                        {project.tasks && project.tasks.map((task, index) => (
+                            <li key={index} className="list-group-item">
+                                <h6>{task.header}</h6>
+                                <p>{task.text}</p>
+                                <p><strong>{t("projects.details.status")}: </strong><span className={`badge ${task.status === t("projects.details.pending") ? 'badge-pending' : 'badge-done'}`}>{task.status}</span></p>
+                            </li>
+                        ))}
                     </ul>
-
                 </div>
             </div>
 
             <div className="card mb-4">
                 <div className="card-body">
-                    <h5 className="card-title">{t("projects.details.employees")}</h5>
-                    <ul className="list-group">
+                    <h5 className="card-title">{t("projects.details.employees")}
+                    <span className='btn' onClick={() => setShowEmployees(!showEmployees)}>{showEmployees ?  <i class="fa-solid fa-chevron-up"></i>
+
+:  <i class="fa-solid fa-chevron-down"></i>}</span>
+                    </h5>
+                    <ul className={`list-group ${showEmployees ? 'show' : ''}`} >
                         {
+                            project.employees&&
                             project.employees.map((employee, index) => (
                                 <li key={index} className="list-group-item">
                                     {employee.lastName} {employee.firstName} ({employee.jobName})
@@ -171,8 +186,13 @@ const DetailsProject = () => {
 
             </div>
             <div>
-                <Link to={`/projects/update/${project.projectId}`}><button className='btn btn-success '>{t("projects.details.updateButton")}</button></Link>
+                {
+                    user.actort=='Admin'||user.actort=='Manager'?
+                   ( <span>
+               <Link to={`/projects/update/${project.projectId}`}><button className='btn btn-success '>{t("projects.details.updateButton")}</button></Link>
                 <button className='btn btn-danger ' onClick={deleteHandler}>{t("projects.details.deleteButton")}</button>
+                </span>):null
+                }
                 <button className='btn btn-dark ' onClick={() => { navigate('/projects'); }}>{t("projects.details.backButton")}</button>
             </div>
         </div>

@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from "../../../hooks/useAuth";
 import { useTranslation } from 'react-i18next';
+import { jwtDecode } from 'jwt-decode';
 
 
 const Sidebar = () => {
     const [isOpened, setIsOpened] = useState(false);
-    const { signOut } = useAuth();
+    const { signOut,token } = useAuth();
     const { t } = useTranslation();
-
+    const user=jwtDecode(token);
     const ChangePropertiesOfSidebar = () => {
         let sideBar = document.querySelector(".sidebar");
         let sideBarMainChildren = Array.from(document.querySelector('.sidebar-main-div').children);
@@ -50,11 +51,29 @@ const Sidebar = () => {
                 <div className="sidebar-main-div">
                     <NavLink to="/"><div><i className="fa-solid fa-house"></i> <span>{t('sidebar.home')}</span></div></NavLink>
                     <NavLink to="/profile"><div><i className="fa-solid fa-address-card"></i> <span>{t('sidebar.profile')}</span></div></NavLink>
-                    <NavLink to="/tasks"><div><i className="fa-solid fa-list-check"></i> <span>{t('sidebar.tasks')}</span></div></NavLink>
-                    <NavLink to="/projects"><div><i className="fa-solid fa-diagram-project"></i> <span>{t('sidebar.projects')}</span></div></NavLink>
-                    <NavLink to="/employees"><div><i className="fa-solid fa-users-gear"></i> <span>{t('sidebar.employees')}</span></div></NavLink>
+                   {
+                    user.actort==='Admin'||user.actort==='Standard'||user.actort==='Manager'?
+                   ( <>
+                   <NavLink to="/tasks"><div><i className="fa-solid fa-list-check"></i> <span>{t('sidebar.tasks')}</span></div></NavLink>
+                   <NavLink to="/projects"><div><i className="fa-solid fa-diagram-project"></i> <span>{t('sidebar.projects')}</span></div></NavLink>
+                   </> ):null
+                }
+                   { user.actort==='Admin'||user.actort==='Human Resource'?
+                    (<><NavLink to="/employees"><div><i className="fa-solid fa-users-gear"></i> <span>{t('sidebar.employees')}</span></div></NavLink>
                     <NavLink to="/depsjobs"><div><i className="fa-solid fa-layer-group"></i> <span>{t('sidebar.depsJobs')}</span></div></NavLink>
-                    <NavLink to="/financies"><div><i className="fa-solid fa-money-bill-transfer"></i> <span>{t('sidebar.finances')}</span></div></NavLink>
+                    </>):null   
+                }
+                {
+                 user.actort==='Financial Resource'  ?
+                    (<>
+                    <NavLink to="/employees"><div><i className="fa-solid fa-users-gear"></i> <span>{t('sidebar.employees')}</span></div></NavLink>
+                  </>):null
+                }
+                {
+                    user.actort==='Financial Resource'||user.actort==='Admin'?(<> <NavLink to="/financies"><div><i className="fa-solid fa-money-bill-transfer"></i> <span>{t('sidebar.finances')}</span></div></NavLink>
+                    </>):null
+                }
+                    
                     <NavLink to="/feedbacks"><div><i className="fa-solid fa-comments"></i> <span>{t('sidebar.feedbacks')}</span></div></NavLink>
                     <NavLink to="/settings"><div><i className="fa-solid fa-gear"></i> <span>{t('sidebar.settings')}</span></div></NavLink>
                 </div>

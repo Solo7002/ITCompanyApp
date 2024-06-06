@@ -17,4 +17,21 @@
     background-color: rgba(0, 0, 0, .05)!important;
   }
 
-  
+  .employeesContainer .table td {
+   
+    cursor: pointer;
+  }
+  .containerTable{
+    height: 400px;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+  }
+ 
+  .employeesContainer thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: rgb(83, 83, 83);
+    color: white;
+  }

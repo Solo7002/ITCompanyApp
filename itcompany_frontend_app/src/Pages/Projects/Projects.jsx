@@ -7,13 +7,14 @@ import axios from "axios";
 import keys from "../../config/keys";
 import { Link } from "react-router-dom";
 import DateReduction from "../../Function/DateReduction";
+import { jwtDecode } from "jwt-decode";
 
 const Projects = () => {
     const { t } = useTranslation();
     const { token } = useAuth();
     const { signOut } = useAuth();
     const [projects, setProjects] = useState([]);
-    
+    const user=jwtDecode(token);
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -60,9 +61,11 @@ const Projects = () => {
             <h1 className="text-center my-4">{t('projects.index.title')}</h1>
             <hr />
             <div className="container mt-5 myCon">
-                <Link to={`/projects/create`}>
+                { user.actort=='Admin'||user.actort=='Manager'?
+                    <Link to={`/projects/create`}>
                     <button className="btn btn-success ">{t('projects.index.createButton')}</button>
-                </Link>
+                </Link>:null
+                }
                 <input
                     type="text"
                     className="form-control mb-2"

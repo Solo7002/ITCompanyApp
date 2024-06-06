@@ -545,7 +545,7 @@ const DepsJobs=()=>{
                             :
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label>{t("")}</label>
+                                        <label>{t("DepsJobs.department.SearchDepartments")}</label>
                                         <input type="text" className="form-control" id="search-department"  placeholder={t("DepsJobs.department.SearchDepartments")} onChange={seachDepartmentChangeHandler}/>
                                     </div>
                                     <div className="depjobs-table-container">

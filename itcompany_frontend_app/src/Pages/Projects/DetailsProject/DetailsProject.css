@@ -43,3 +43,14 @@
 .project-details-container .badge-pending {
     background-color: #dc3545;
 }
+.project-details-container .list-group {
+    max-height: 0;
+    overflow: hidden;
+    transition:  1.5s ease-in;
+    transition:  1s ease-out;
+
+
+}
+.project-details-container .list-group.show {
+    max-height: 1000px; 
+}

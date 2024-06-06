@@ -100,7 +100,7 @@ const Tasks=()=>{
         if(err.response && err.response.status===401)
           signOut();
       });
-
+    
       axios.get(`${keys.ServerConnection}/Department/checkIfHead/${decoded.nameid}`, {headers: {
         Authorization:`Bearer ${token}`
       }})
@@ -524,7 +524,7 @@ const Tasks=()=>{
         </div>
         <div className="col-md-9" style={{marginBottom: "10px"}}>
           <div className="file-download" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-            <h5>Task file:</h5>
+            <h5>{t("Tasks.Task file")}:</h5>
             <a href={`${keys.ServerConnection}/Files/download${selectedTask.file}`} className="btn btn-success" download>{t("Tasks.Download File")} <i className="fa-solid fa-file-arrow-down"></i></a>
           </div>
           {
@@ -1019,7 +1019,7 @@ const Tasks=()=>{
                   <div className="col-md-4">
                     <h4>{t("Tasks.Choose employee")}</h4>
                     <br />
-                    <input type="text" className="form-control mb-3" placeholder="Search users by name" id="seach-users-in-tasks" value={empsSeachInput} onChange={(event) => setEmpsSeachInput(event.target.value)}/>
+                    <input type="text" className="form-control mb-3" placeholder={t("Tasks.Search users by name")} id="seach-users-in-tasks" value={empsSeachInput} onChange={(event) => setEmpsSeachInput(event.target.value)}/>
                     <div className="user-list list-group" id="tasks-employees-by-department">
                       {
                         (empsSeachInput.length > 0 ? currentDepEmployees.filter(e => 

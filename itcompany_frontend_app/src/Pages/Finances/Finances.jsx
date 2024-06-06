@@ -84,7 +84,7 @@ const Finances = () => {
 
     return (
         <div className="financesContainer">
-            <h1 className="text-center my-5">Finances</h1>
+            <h1 className="text-center my-5">{t("Statistic.Finances")}</h1>
             <div className="contents">
                 <div className="tasks-container">
                     <div className="tasks-header">
@@ -145,7 +145,7 @@ const Finances = () => {
 
                            {
                             averageSalary&&
-                            <h3 id="total-tasks">{averageSalary}</h3>}
+                            <h3 id="total-tasks">{averageSalary} $</h3>}
                             <p>{t("Statistic.AverageSalary")}</p>
                         </div>
                     </div>

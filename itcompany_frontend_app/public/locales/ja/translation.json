@@ -314,6 +314,7 @@
     "CurrentTasks": "現在のタスク"
     },
     "Statistic": {
+        "Finances":"財政",
         "EmployeesStatistic": "従業員統計",
         "TotalEmployee": "従業員総数",
         "FireEmployee": "解雇された従業員",
@@ -332,6 +333,7 @@
         "AverageSalaryInJob": "職種ごとの平均給与"
     },
     "Tasks": {
+        "Search users by name":"ユーザーを名前で検索する",
         "UploadDoneTask": "アップロード完了タスク",
         "Claim": "請求",
         "Ok": "オーケー",
@@ -386,6 +388,29 @@
         "That employee has no tasks": "その従業員にはタスクがありません",
         "create new one": "新しいものを作成",
         "No obligatory tasks for": "必須タスクはありません"
+    },
+    "PasswordRecover":{
+        "Email is required": "メールアドレスは必須です",
+        "No employees with such email!": "そのようなメールアドレスの従業員はいません！",
+        "Confirmation code must have 6 numbers": "確認コードは6桁の数字でなければなりません",
+        "Wrong confirmation code!": "確認コードが間違っています！",
+        "Password can't have less than 8 symbols": "パスワードは8文字未満ではいけません",
+        "Password and it's confirmation is not the same!": "パスワードとその確認が一致しません！",
+        "Password is invalid": "パスワードが無効です",
+        "Password recovered": "パスワードが復元されました",
+        "Recover password": "パスワードを復元する",
+        "Enter your email address": "メールアドレスを入力してください",
+        "Send code": "コードを送信",
+        "Back to login page": "ログインページに戻る",
+        "We have sent confirmation code to your email, please enter that code here": "確認コードをメールに送信しました。ここにそのコードを入力してください",
+        "Confirmation code": "確認コード",
+        "Enter confirmation code": "確認コードを入力",
+        "Check code": "コードを確認",
+        "New password": "新しいパスワード",
+        "Enter your new password": "新しいパスワードを入力してください",
+        "Confirm": "確認する",
+        "Confirm your new password": "新しいパスワードを確認してください",
+        "Your password has been recovered successfully": "パスワードが正常に復元されました"
     }
     
 }

@@ -318,6 +318,7 @@
 
     },
     "Statistic": {
+        "Finances":"Finances",
         "EmployeesStatistic": "Employees Statistic",
         "TotalEmployee": "Total Employees",
         "FireEmployee": "Fired Employees",
@@ -336,6 +337,7 @@
         "AverageSalaryInJob":"Average salary in job"
       },
       "Tasks":{
+        "Search users by name":"Search users by name",
         "UploadDoneTask":"Upload done task",
         "Claim":"Claim",
         "Ok":"Ok",
@@ -393,7 +395,30 @@
       
         
 
-      }
+      },
     
-    
+      "PasswordRecover":{
+        "Email is required":"Email is required",
+        "No employees with such email!":"No employees with such email!",
+        "Confirmation code must have 6 numbers":"Confirmation code must have 6 numbers",
+        "Wrong confirmation code!":"Wrong confirmation code!",
+        "Password can't have less than 8 symbols":"Password can't have less than 8 symbols",
+        "Password and it's confirmation is not the same!":"Password and it's confirmation is not the same!",
+        "Password is invalid":"Password is invalid",
+        "Password recovered":"Password recovered",
+        "Recover password":"Recover password",
+        "Enter your email address":"Enter your email address",
+        "Send code":"Send code",
+        "Back to login page":"Back to login page",
+        "We have sent confirmation code to your email, please enter that code here":"We have sent confirmation code to your email, please enter that code here",
+        "Confirmation code":"Confirmation code",
+        "Enter confirmation code":"Enter confirmation code",
+        "Check code":"Check code",
+        "New password":"New password",
+        "Enter your new password":"Enter your new password",
+        "Confirm":"Confirm",
+        "Confirm your new password":"Confirm your new password",
+        "Your password has been recovered successfully":"Your password has been recovered successfully"
+
+    }
 }

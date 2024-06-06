@@ -20,5 +20,26 @@ namespace ITCompanyApp.Models.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime DeadLineProjectDate { get; set; }
         public int? EmployeeId { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var other = (ProjectViewModel)obj;
+            return ProjectName == other.ProjectName &&
+                   Description == other.Description &&
+                   File == other.File &&
+                   IsDone == other.IsDone &&
+                   StartProjectDate == other.StartProjectDate &&
+                   DeadLineProjectDate == other.DeadLineProjectDate &&
+                   EmployeeId == other.EmployeeId;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ProjectName, Description, File, IsDone, StartProjectDate, DeadLineProjectDate, EmployeeId);
+        }
     }
 }

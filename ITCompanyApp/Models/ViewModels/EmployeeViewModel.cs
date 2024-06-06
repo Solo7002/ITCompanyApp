@@ -27,5 +27,30 @@ namespace ITCompanyApp.Models.ViewModels
         public double Salary { get; set; }
         public int? DepartmentId { get; set; }
         public int? JobId { get; set; }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var other = (EmployeeViewModel)obj;
+            return LastName == other.LastName &&
+                   FirstName == other.FirstName &&
+                   BirthDate == other.BirthDate &&
+                   PhoneNumber == other.PhoneNumber &&
+                   Email == other.Email &&
+                   PhotoFile == other.PhotoFile &&
+                   Salary == other.Salary &&
+                   DepartmentId == other.DepartmentId &&
+                   JobId == other.JobId;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.LastName, this.FirstName, this.BirthDate, this.PhoneNumber, this.Email, this.PhotoFile, this.Salary);
+        }
+
+
     }
 }

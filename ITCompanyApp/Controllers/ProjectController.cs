@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.Cryptography.Xml;
 
 namespace ITCompanyApp.Controllers
 {
@@ -125,25 +127,57 @@ namespace ITCompanyApp.Controllers
 
         [HttpGet]
         [Route("getEmployeeInProject/{id}")]
-        public IEnumerable<Employee> GetEmployeeInProjectById(int id)
+        public ActionResult<IEnumerable<EmployeeViewModel>> GetEmployeeInProjectById(int id)
         {
             if (_context.Projects == null || !_context.Projects.Any(p => p.ProjectId == id))
             {
-                return null;
+                return BadRequest();
             }
             Project project = _context.Projects.First(p => p.ProjectId == id);
-            return project.Employees;
+            List<Models.Task> task = _context.Tasks.Where(t=>t.ProjectId==project.ProjectId).ToList();
+            List<EmployeeViewModel> employees =new List<EmployeeViewModel>();
+            foreach (Models.Task item in task)
+            {
+                Employee employee = _context.Employees.First(e => e.Id == item.EmployeeFor_Id);
+                employees.Add(new EmployeeViewModel
+                {
+                    LastName=employee.LastName,
+                    FirstName=employee.FirstName,
+                    BirthDate=employee.BirthDate,
+                    Email=employee.Email,
+                    PhoneNumber=employee.PhoneNumber,
+                    PhotoFile=employee.PhotoFile,
+                    Salary=employee.Salary,
+                    DepartmentId=employee.DepartmentId,
+                    JobId=employee.JobId
+                });
+            }
+            
+            return Ok(employees.Distinct());
         }
-        [HttpGet]
-        [Route("getTasksInProject/{id}")]
-        public IEnumerable<Models.Task> GetTasksInProjectById(int id)
+        [HttpGet("getTasksInProject/{id}")]
+       
+        public ActionResult<IEnumerable<TaskViewModel>> GetTasksInProjectById(int id)
         {
-            if (_context.Projects == null || !_context.Projects.Any(p => p.ProjectId == id))
+            if (_context.Projects == null || !_context.Projects.Any(p => p.ProjectId == id)|| _context.Tasks==null)
             {
-                return null;
+                return BadRequest();
             }
             Project project = _context.Projects.First(p => p.ProjectId == id);
-            return project.Tasks;
+           List<TaskViewModel> tasks =_context.Tasks.Where(t=> t.ProjectId.Value == project.ProjectId).Select(t=>new TaskViewModel{
+               DeadLineDate=t.DeadLineDate,
+               Text=t.Text,
+               Header=t.Header,
+               File=t.File,
+               DoneFile=t.File,
+               Cover=t.Cover,
+               IsDone=t.IsDone,
+               ProjectId=t.ProjectId,
+               EmployeeFor_Id=t.EmployeeFor_Id,
+               EmployeeFrom_Id=t.EmployeeFrom_Id
+
+           }).ToList();
+            return Ok(tasks);
         }
         [HttpGet]
         [Route("getProjectInYear")]

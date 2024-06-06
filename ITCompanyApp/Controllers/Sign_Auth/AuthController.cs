@@ -38,13 +38,25 @@ namespace ITCompanyApp.Controllers.Sign_Auth
             try
             {
                 User user = _context.Users.First(u => u.Login == model.Login);
-                if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+                if (user != null)
                 {
-                    string accessLevel = _context.AccessLevels.First(a => a.AccessLevelId == user.AccessLevelId).AccessLevelName;
-                    var token = GenerateJwtToken(user, accessLevel);
+                    Employee employee = _context.Employees.First(e => e.Id == user.Id);
+                    if (employee != null)
+                    {
 
-                    return Ok(new { token });
+                        if (!employee.FireDate.HasValue)
+                        {
+                            if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+                            {
+                                string accessLevel = _context.AccessLevels.First(a => a.AccessLevelId == user.AccessLevelId).AccessLevelName;
+                                var token = GenerateJwtToken(user, accessLevel);
+
+                                return Ok(new { token });
+                            }
+                        }
+                    }
                 }
+                
             }
             catch (Exception ex)
             {
