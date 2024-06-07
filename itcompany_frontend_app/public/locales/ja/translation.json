@@ -82,6 +82,24 @@
             "NoJob": "仕事なし",
             "Update": "更新",
             "Back": "戻る"
+        },
+        "errors": {
+            "wrongLogin": "ログイン名は4〜30文字でなければなりません",
+            "wrongPassword": "パスワードは8文字以上でなければなりません",
+            "wrongConfirmPassword": "パスワードと確認用パスワードが一致しません！",
+            "wrongLastname": "姓は4〜30文字でなければなりません",
+            "wrongFirstname": "名は4〜30文字でなければなりません",
+            "wrongBirthdate": "従業員は少なくとも14歳でなければなりません",
+            "wrongPhone": "電話番号が正しくありません",
+            "wrongEmail": "メールアドレスが間違っています",
+            "wrongSalary": "最低給与は1ドルです",
+            "wrongNoDepartment": "部門は必須項目です",
+            "wrongNoJob": "職種は必須項目です",
+            "wrongNoAccessLevel": "アクセスレベルは必須項目です",
+            "wrongDepartment": "その名前の部門は存在しません",
+            "wrongJob": "その名前の仕事は存在しません",
+            "wrongAccessLevel": "その名前のアクセスレベルは存在しません",
+            "wrongPhotofile": "写真は添付されていません"
         }
     },
     "profile": {
@@ -102,7 +120,14 @@
         "department": "部門",
         "job": "職業",
         "hireDate": "雇用日",
-        "salary": "給与"
+        "salary": "給与",
+        "accessLevel": "アクセスレベル",
+        "errors": {
+            "wrongEmail": "間違ったメールアドレス",
+            "wrongPhone": "正しくない電話番号",
+            "wrongLogin": "ログインは4から30文字である必要があります",
+            "wrongPassword": "パスワードは少なくとも8文字でなければなりません"
+        }
     },
     "sidebar": {
         "itCompanySoftware": "IT企業ソフトウェア",
@@ -272,7 +297,11 @@
         "enterEmployeeName": "従業員名を入力",
         "noUsersWithName": "その名前のユーザーはいません",
         "employeeHasNoFeedbacks": "その従業員にはフィードバックがありません",
-        "search": "検索"
+        "search": "検索",
+        "errors": {
+            "employeeFor": "この名前の従業員はいない",
+            "feedbackText": "レビューの本文は10文字以上500文字以内でお願いします。"
+        }
     },
     "settings": {
         "Settings": "設定",

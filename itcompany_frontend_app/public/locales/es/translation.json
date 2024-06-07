@@ -82,6 +82,24 @@
             "NoJob": "Sin trabajo",
             "Update": "Actualizar",
             "Back": "Volver"
+        },
+        "errors": {
+            "wrongLogin": "El nombre de usuario debe tener entre 4 y 30 símbolos",
+            "wrongPassword": "La contraseña debe tener al menos 8 símbolos",
+            "wrongConfirmPassword": "¡La contraseña y su confirmación no son iguales!",
+            "wrongLastname": "El apellido debe tener entre 4 y 30 símbolos",
+            "wrongFirstname": "El nombre debe tener entre 4 y 30 símbolos",
+            "wrongBirthdate": "El empleado debe tener al menos 14 años",
+            "wrongPhone": "Número de teléfono incorrecto",
+            "wrongEmail": "Dirección de correo electrónico incorrecta",
+            "wrongSalary": "El salario mínimo es de 1$",
+            "wrongNoDepartment": "El campo de departamento es obligatorio",
+            "wrongNoJob": "El campo de trabajo es obligatorio",
+            "wrongNoAccessLevel": "El campo de nivel de acceso es obligatorio",
+            "wrongDepartment": "No hay departamentos con ese nombre",
+            "wrongJob": "No hay trabajos con ese nombre",
+            "wrongAccessLevel": "No hay niveles de acceso con ese nombre",
+            "wrongPhotofile": "Foto no adjunta"
         }
     },
     "profile": {
@@ -102,7 +120,14 @@
         "department": "Departamento",
         "job": "Trabajo",
         "hireDate": "Fecha de contratación",
-        "salary": "Salario"
+        "salary": "Salario",
+        "accessLevel": "Nivel de acceso",
+        "errors": {
+            "wrongEmail": "Dirección de correo electrónico incorrecta",
+            "wrongPhone": "Número de teléfono incorrecto",
+            "wrongLogin": "El nombre de usuario debe tener entre 4 y 30 símbolos",
+            "wrongPassword": "La contraseña debe tener al menos 8 símbolos"
+        }
     },
     "sidebar": {
         "itCompanySoftware": "Empresa de TI",
@@ -271,7 +296,11 @@
         "enterEmployeeName": "Ingrese el nombre del empleado",
         "noUsersWithName": "No hay usuarios con ese nombre",
         "employeeHasNoFeedbacks": "Ese empleado no tiene retroalimentaciones",
-        "search": "Buscar"
+        "search": "Buscar",
+        "errors": {
+            "employeeFor": "No hay empleados con este nombre",
+            "feedbackText": "El texto de la reseña debe contener entre 10 y 500 caracteres."
+        }
     },
     "settings": {
         "Settings": "Ajustes",
@@ -312,7 +341,6 @@
         "CompletedTasks": "Tareas completadas",
         "CurrentTasks": "Tareas actuales"
     },
-        
     "Statistic": {
         "Finances":"Finanzas",
         "EmployeesStatistic": "Estadísticas de Empleados",
@@ -411,8 +439,6 @@
         "Confirm": "Confirmar",
         "Confirm your new password": "Confirme su nueva contraseña",
         "Your password has been recovered successfully": "Su contraseña ha sido recuperada con éxito"
-    }
-    
-    
+    } 
 }
 

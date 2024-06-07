@@ -82,6 +82,24 @@
             "NoJob": "Keine Position",
             "Update": "Aktualisieren",
             "Back": "Zurück"
+        },
+        "errors": {
+            "wrongLogin": "Der Login muss zwischen 4 und 30 Zeichen lang sein",
+            "wrongPassword": "Das Passwort muss mindestens 8 Zeichen lang sein",
+            "wrongConfirmPassword": "Das Passwort und seine Bestätigung stimmen nicht überein!",
+            "wrongLastname": "Der Nachname muss zwischen 4 und 30 Zeichen lang sein",
+            "wrongFirstname": "Der Vorname muss zwischen 4 und 30 Zeichen lang sein",
+            "wrongBirthdate": "Der Mitarbeiter muss mindestens 14 Jahre alt sein",
+            "wrongPhone": "Falsche Telefonnummer",
+            "wrongEmail": "Falsche E-Mail-Adresse",
+            "wrongSalary": "Das niedrigste Gehalt beträgt 1$",
+            "wrongNoDepartment": "Abteilung ist ein Pflichtfeld",
+            "wrongNoJob": "Beruf ist ein Pflichtfeld",
+            "wrongNoAccessLevel": "Zugriffsebene ist ein Pflichtfeld",
+            "wrongDepartment": "Keine Abteilungen mit diesem Namen",
+            "wrongJob": "Keine Berufe mit diesem Namen",
+            "wrongAccessLevel": "Keine Zugriffsebenen mit diesem Namen",
+            "wrongPhotofile": "Foto nicht beigefügt"
         }
     },
     "profile": {
@@ -102,7 +120,14 @@
         "department": "Abteilung",
         "job": "Job",
         "hireDate": "Einstellungsdatum",
-        "salary": "Gehalt"
+        "salary": "Gehalt",
+        "accessLevel": "Zugriffsebene",
+        "errors": {
+            "wrongEmail": "Falsche E-Mail-Adresse",
+            "wrongPhone": "Falsche Telefonnummer",
+            "wrongLogin": "Der Login muss zwischen 4 und 30 Zeichen haben",
+            "wrongPassword": "Das Passwort muss mindestens 8 Zeichen haben"
+        }
     },
     "sidebar": {
         "itCompanySoftware": "IT Unternehmenssoftware",
@@ -271,7 +296,11 @@
         "enterEmployeeName": "Mitarbeiternamen eingeben",
         "noUsersWithName": "Keine Benutzer mit diesem Namen",
         "employeeHasNoFeedbacks": "Dieser Mitarbeiter hat keine Feedbacks",
-        "search": "Suchen"
+        "search": "Suchen",
+        "errors": {
+            "employeeFor": "Keine Mitarbeiter mit diesem Namen",
+            "feedbackText": "Der Text der Rezension sollte zwischen 10 und 500 Zeichen enthalten."
+        }
     },
     "settings": {
         "Settings": "Einstellungen",

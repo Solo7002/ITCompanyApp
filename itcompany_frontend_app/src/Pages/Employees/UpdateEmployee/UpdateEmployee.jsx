@@ -7,33 +7,41 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import FileUpload from "../../../Components/UI/FileUpload/FileUpload";
+import InputMask from 'react-input-mask';
+
+import "./UpdateEmployee.css";
 
 const UpdateEmployee = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
-    const { token } = useAuth();
+    const { token, signOut } = useAuth();
     const { id } = useParams();
     const [jobs, setJobs] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [employee, setEmployee] = useState();
-    const [errorInfo, setErrorInfo] = useState({
-        departmentDisplay: 'none',
-        jobsDisplay: 'none'
-    });
-    const [errors, setErrors] = useState();
-    const { signOut } = useAuth();
     const [photoFile, setPhotoFile] = useState("");
+    const navigate = useNavigate();
 
     const fetchEmployee = async () => {
         try {
             await axios.get(`${keys.ServerConnection}/Employee/${id}`, { headers: { Authorization: `Bearer ${token}` } })
-                .then(res =>{
-                    setEmployee({ ...res.data, birthDate: DateReduction(res.data.birthDate) });
-                    setPhotoFile(res.data.photoFile);
-                })
-                .catch(err => {
-                    if (err.response.status === 401) signOut();
+            .then(res =>{
+                setEmployee({ ...res.data, birthDate: DateReduction(res.data.birthDate) });
+
+                axios.get(`${keys.ServerConnection}/Department/${res.data.departmentId}`, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res2 => {
+                    document.getElementById("update-employee-form").department.value = res2.data.departmentName;
                 });
+
+                axios.get(`${keys.ServerConnection}/Job/${res.data.jobId}`, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res2 => {
+                    document.getElementById("update-employee-form").job.value = res2.data.jobName;
+                });
+
+                setPhotoFile(res.data.photoFile);
+            })
+            .catch(err => {
+                if (err.response.status === 401) signOut();
+            });
 
             await axios.get(`${keys.ServerConnection}/Department`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res => setDepartments(res.data))
@@ -51,17 +59,59 @@ const UpdateEmployee = () => {
             console.log(error);
         }
     };
+    
+    const setInputAsInvalid = (el) => {
+        (el.nextElementSibling? el.nextElementSibling : el.parentElement.nextElementSibling).style.display = "block";
+        el.style.border = "1px solid red";
+        el.focus();
+    }
 
     const submitHandler = (event) => {
         event.preventDefault();
+        
         const form = event.target;
-        const departmentExists = departments.some(dep => dep.departmentName === form.department.value);
-        const jobExists = jobs.some(job => job.jobName === form.job.value);
-        setErrorInfo({
-            departmentDisplay: !departmentExists ? 'block' : 'none',
-            jobsDisplay: !jobExists ? 'block' : 'none'
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        Array.from(document.getElementById("update-employee-form").children).forEach(el => {
+            if (!el.classList.contains("update-employee-page-buttons-div")){
+                el.lastElementChild.style.display = "none";
+                if (el.children[1].classList.contains("form-control")){
+                    el.children[1].style.border = "";
+                }
+                else {
+                    el.children[1].firstElementChild.style.border = "";
+                }
+            }
         });
-        if (departmentExists && jobExists) {
+
+        if (form.lastname.value.trim() == '' || form.lastname.value.length < 3 || form.lastname.value.length > 30){
+            setInputAsInvalid(form.lastname);
+        }
+        else if (form.firstname.value.trim() == '' || form.firstname.value.length < 3 || form.firstname.value.length > 30){
+            setInputAsInvalid(form.firstname);
+        }
+        else if (form.birthdate.value.trim() == '' || (new Date(form.birthdate.value)) > (new Date((new Date()).getFullYear() - 14, (new Date()).getMonth(), (new Date()).getDate()))){
+            setInputAsInvalid(form.birthdate);
+        }
+        else if (form.phone.value.trim().length < 19){
+            setInputAsInvalid(form.phone);
+        }
+        else if (!re.test(form.email.value)){
+            setInputAsInvalid(form.email);
+        }
+        else if (form.salary.value.trim() == '' || parseFloat(form.salary.value)<1){
+            setInputAsInvalid(form.salary);
+        }
+        else if (departments.filter(d => d.departmentName == form.department.value).length == 0){
+            setInputAsInvalid(form.department);
+        }
+        else if (jobs.filter(j => j.jobName == form.job.value).length == 0){
+            setInputAsInvalid(form.job);
+        }
+        else if (photoFile.trim() == ''){
+            setInputAsInvalid(document.getElementById("employeeCreatePhoto"));
+        }
+        else {
             const departmentId = departments.find(dep => dep.departmentName === form.department.value).departmentId;
             const jobId = jobs.find(jb => jb.jobName === form.job.value).jobId;
             axios.put(`${keys.ServerConnection}/Employee/${id}`,
@@ -76,16 +126,11 @@ const UpdateEmployee = () => {
                     DepartmentId: departmentId,
                     JobId: jobId,
                 }, { headers: { Authorization: `Bearer ${token}` } }
-            ).then(res => {
+            ).then(() => {
                 navigate('/employees');
             }).catch(err => {
-                if (err.response.status === 401) signOut();
-                if (err.response.data.errors != null) {
-                    const errorMessages = Object.values(err.response.data.errors)
-                        .flatMap(errorArray => errorArray.map(errorMessage => errorMessage));
-                    setErrors(errorMessages);
-                } else {
-                    setErrors([err.response.data]);
+                if (err.response && err.response.status === 401){
+                    signOut();
                 }
             });
         }
@@ -97,54 +142,56 @@ const UpdateEmployee = () => {
 
     return (
         employee &&
-        <div className="container mt-5">
+        <div className="container mt-5 update-employee-page-container">
             <div className="form-container mx-auto">
                 <h2 className="form-header text-center">{t("employees.update.Title")}</h2>
-                <form onSubmit={submitHandler}>
+                <form onSubmit={submitHandler} id="update-employee-form">
                     <div className="form-group">
                         <label>{t("employees.update.Lastname")}</label>
                         <input type="text" className="form-control" value={employee.lastName} onChange={(event) => setEmployee({ ...employee, lastName: event.target.value })} name="lastname" placeholder={t("employees.update.InputLastname")} />
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Firstname")}</label>
                         <input type="text" className="form-control" value={employee.firstName} onChange={(event) => setEmployee({ ...employee, firstName: event.target.value })} name="firstname" placeholder={t("employees.update.InputFirstname")} />
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Birthdate")}</label>
-                        <input type="date" className="form-control" value={employee.birthDate} onChange={(event) => setEmployee({ ...employee, birthDate: event.target.value })} name="birthdate" placeholder={t("employees.update.InputBirthdate")} />
+                        <input type="date" className="form-control" name="birthdate" placeholder={t("employees.create.InputBirthdate")} max={new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toISOString().split('T')[0]} value={employee.birthDate} onChange={(event) => setEmployee({ ...employee, birthDate: event.target.value })}/>
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.PhoneNumber")}</label>
-                        <input type="text" className="form-control" value={employee.phoneNumber} onChange={(event) => setEmployee({ ...employee, phoneNumber: event.target.value })} name="phone" placeholder={t("employees.update.InputPhoneNumber")} />
+                        <InputMask mask="+38 (099) 999-99-99" maskChar=" " type="text" className="form-control" name="phone" placeholder={t("employees.create.InputPhoneNumber")} value={employee.phoneNumber} onChange={(event) => setEmployee({ ...employee, phoneNumber: event.target.value })} />
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>Email</label>
                         <input type="email" className="form-control" value={employee.email} onChange={(event) => setEmployee({ ...employee, email: event.target.value })} name="email" placeholder={t("employees.update.InputEmail")} />
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Salary")}</label>
                         <input type="number" min={1} className="form-control" value={employee.salary} onChange={(event) => setEmployee({ ...employee, salary: event.target.value })} name="salary" placeholder={t("employees.update.InputSalary")} />
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Department")}</label>
                         <SelectSearch placeholder={t("employees.update.InputDepartment")} name='department' options={departments.map(department => department.departmentName)} id='departmentSearch' />
-                        <h5 style={{ color: "red", marginLeft: "5px", display: errorInfo.departmentDisplay }}>* {t("employees.update.NoDepartment")}</h5>
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Job")}</label>
                         <SelectSearch placeholder={t("employees.update.InputJob")} name='job' id='jobSearch' options={jobs.map(job => job.jobName)} />
-                        <h5 style={{ color: "red", marginLeft: "5px", display: errorInfo.jobsDisplay }}>* {t("employees.update.NoJob")}</h5>
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
                     <div className="form-group">
                         <label >{t("employees.create.PhotoFile")}</label>
                         <FileUpload folder="users/images" id="employeePhotoProfile" setFile={setPhotoFile} accept="image/png, image/gif, image/jpeg" className="form-control" required={false}/>
+                        <small>{t("employees.errors.wrongLogin")}</small>
                     </div>
-                    {
-                        errors != null && errors.map((error, index) => (
-                            <li key={index}><h6 style={{ color: "red", marginLeft: "5px" }}>{error}</h6></li>
-                        ))
-                    }
-                    <div>
+                    <div className="update-employee-page-buttons-div">
                         <button type="submit" className="btn btn-success">{t("employees.update.Update")}</button>
                         <button type="button" className="btn btn-dark" onClick={() => navigate(-1)}>{t("employees.update.Back")}</button>
                     </div>

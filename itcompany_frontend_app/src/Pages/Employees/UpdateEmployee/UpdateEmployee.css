@@ -1,0 +1,8 @@
+.update-employee-page-container form small{
+    display: none;
+    width: 100%;
+    color: red;
+    text-align: right;
+    padding-top: 5px;
+    padding-right: 5px;
+}

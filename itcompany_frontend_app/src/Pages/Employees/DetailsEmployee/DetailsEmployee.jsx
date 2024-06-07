@@ -112,11 +112,10 @@ const DetailsEmployee = () => {
                             <div className="row">
                                 <div className="col-md-12">
                                     <h4>{t("employees.details.Projects")}</h4>
-                                    <ul className="list-unstyled">
+                                    <ul className="">
                                         {employee.projects && employee.projects.map(project => (
                                             <li key={project.id}>
-                                                <strong>{project.projectName}</strong>
-            
+                                                {project.projectName}
                                             </li>
                                         ))}
                                     </ul>

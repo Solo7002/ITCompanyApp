@@ -82,6 +82,24 @@
             "NoJob": "No job",
             "Update": "Update",
             "Back": "Back"
+        },
+        "errors": {
+            "wrongLogin": "Login must have from 4 till 30 symbols",
+            "wrongPassword": "Password must have at least 8 symbols",
+            "wrongConfirmPassword": "Password and it's confirmation are not the same!",
+            "wrongLastname": "Lastname must have from 4 till 30 symbols",
+            "wrongFirstname": "Firstname must have from 4 till 30 symbols",
+            "wrongBirthdate": "Employee must be at least 14 years old",
+            "wrongPhone": "Not correct phone number",
+            "wrongEmail": "Wrong email address",
+            "wrongSalary": "The lowest salary is 1$",
+            "wrongNoDepartment": "Department is required field",
+            "wrongNoJob": "Job is required field",
+            "wrongNoAccessLevel": "Access level is required field",
+            "wrongDepartment": "No departments with such name",
+            "wrongJob": "No jobs with such name",
+            "wrongAccessLevel": "Mo access leveles with such name",
+            "wrongPhotofile": "Photo not attached"
         }
     },
     "profile": {
@@ -102,7 +120,14 @@
         "department": "Department",
         "job": "Job",
         "hireDate": "Hire Date",
-        "salary": "Salary"
+        "salary": "Salary",
+        "accessLevel": "Access level",
+        "errors": {
+            "wrongEmail": "Wrong email address",
+            "wrongPhone": "Not correct phone number",
+            "wrongLogin": "Login must have from 4 till 30 symbols",
+            "wrongPassword": "Login must have at least 8 symbols"
+        }
     },
     "sidebar": {
         "itCompanySoftware": "IT Company Software",
@@ -274,7 +299,11 @@
         "enterEmployeeName": "Enter employee name",
         "noUsersWithName": "No users with such name",
         "employeeHasNoFeedbacks": "That employee has no feedbacks",
-        "search":"Search"
+        "search":"Search",
+        "errors": {
+            "employeeFor": "No employees with this name",
+            "feedbackText": "The text of the review should contain from 10 to 500 characters"
+        }
     },
     "settings":{
         "Settings":"Settings",

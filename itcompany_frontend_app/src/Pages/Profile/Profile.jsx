@@ -6,6 +6,8 @@ import keys from "../../config/keys";
 import { useTranslation } from "react-i18next"; 
 import { MyStatistics } from "../../Components/UI/MyStatistics/MyStatistics";
 import FileUpload from "../../Components/UI/FileUpload/FileUpload.js";
+import InputMask from 'react-input-mask';
+import Notification from "../../Components/Other/Notification/Notification.js";
 
 import "./Profile.css";
 
@@ -19,6 +21,8 @@ const Profile = () => {
     const [job, setJob] = useState({});
     const [countTask,setCountTasks]=useState([]);
     const [userImagePath, setUserImagePath] = useState("");
+    const [accessLevel, setAccessLevel] = useState("");
+    const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
         if (token) {
@@ -29,6 +33,12 @@ const Profile = () => {
                     .then(res => {
                         res.data.password = '';
                         setUser(res.data);
+
+                        axios.get(`${keys.ServerConnection}/AccessLevel/${res.data.accessLevelId}`, { headers: { Authorization: `Bearer ${token}` }})
+                        .then(res => {
+                            setAccessLevel(res.data.accessLevelName);
+                        });
+
                     }).catch(err => {
                         if (err.response.status === 401)
                             signOut();
@@ -88,6 +98,7 @@ const Profile = () => {
 
     const Month=[t("Month.January"),t("Month.February"),t("Month.March"),t("Month.April"),t("Month.May"),t("Month.June"),t("Month.July"),t("Month.August"),t("Month.September"),t("Month.October"),t("Month.November"),t("Month.December"),]
     const inputUserChangeHandler = (event) => {
+        event.target.setCustomValidity("");
         const { name, value } = event.target;
         setUser({
             ...user,
@@ -96,6 +107,7 @@ const Profile = () => {
     };
 
     const inputEmployeeChangeHandler = (event) => {
+        event.target.setCustomValidity("");
         const { name, value } = event.target;
         setEmployee({
             ...employee,
@@ -109,12 +121,33 @@ const Profile = () => {
 
     const btnClickHandler = async () => {
         const decoded = jwtDecode(token);
+        let emailInput = document.getElementById("email-change-profile");
+        let phoneInput = document.getElementById("phone-change-profile");
+        let loginInput = document.getElementById("login-change-profile");
+        let passwordInput = document.getElementById("password-change-profile");
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        axios.put(
-            `${keys.ServerConnection}/Employee/${decoded.nameid}`, employee,
+        if (!re.test(employee.email)){
+            emailInput.setCustomValidity(t("profile.errors.wrongEmail"));
+            emailInput.reportValidity();
+        }
+        else if (phoneInput.value.trim().length < 19){
+            phoneInput.setCustomValidity(t("profile.errors.wrongPhone"));
+            phoneInput.reportValidity();
+        }
+        else if (user.login.length < 4 || user.login.length > 29){
+            loginInput.setCustomValidity(t("profile.errors.wrongLogin"));
+            loginInput.reportValidity();
+        }
+        else if (user.password.trim().length != 0 && user.password.length < 4){
+            passwordInput.setCustomValidity(t("profile.errors.wrongPassword"));
+            passwordInput.reportValidity();
+        }
+        else {
+            axios.put(`${keys.ServerConnection}/Employee/${decoded.nameid}`, employee,
             { headers: { Authorization: `Bearer ${token}` } })
-            .then((res) => {
-                console.log("resEmployee: ", res.data);
+            .then(() => {
+                setShowNotification(true);
             })
             .catch((err) => {
                 if (err.response.status === 401)
@@ -122,21 +155,28 @@ const Profile = () => {
                 console.log("Error in put: ", err);
             });
 
-        axios.put(
-            `${keys.ServerConnection}/User/${decoded.nameid}`, user,
+            axios.put(`${keys.ServerConnection}/User/${decoded.nameid}`, user,
             { headers: { Authorization: `Bearer ${token}` } })
-            .then((res) => {
-                console.log("resEmployee: ", res.data);
+            .then(() => {
+                setShowNotification(true);
             })
             .catch((err) => {
                 if (err.response.status === 401)
                     signOut();
                 console.log("Error in put: ", err);
             });
+        }
     }
 
     return (
         <div className="profile-page-container">
+            <Notification
+                show={showNotification}
+                setShow={setShowNotification}
+                text="Profile updated successfully"
+                color="success"
+                icon="fa-regular fa-circle-check"
+            ></Notification>
             <div className="container rounded bg-white mt-5 mb-5 main-cont">
                 <div className="row">
                     <div className="col-lg-3 border-right">
@@ -174,13 +214,13 @@ const Profile = () => {
                                     <label className="labels">{t("profile.birthdate")}</label>
                                     <input className="form-control" value={employee.birthDate} readOnly={true} />
                                 </div>
-                                <div className="col-md-12">
+                                <div className="col-md-12 mt-1">
                                     <label className="labels">{t("profile.email")}</label>
-                                    <input type="email" className="form-control" placeholder={t("profile.enterEmail")} name="email" maxLength="24" value={employee.email} onChange={inputEmployeeChangeHandler} />
+                                    <input type="email" className="form-control" name="email" maxLength="24" value={employee.email} onChange={inputEmployeeChangeHandler} id="email-change-profile"/>
                                 </div>
-                                <div className="col-md-12">
+                                <div className="col-md-12 mt-1">
                                     <label className="labels">{t("profile.phone")}</label>
-                                    <input type="tel" className="form-control" placeholder={t("profile.enterPhone")} value={employee.phoneNumber} name="phoneNumber" onChange={inputEmployeeChangeHandler} />
+                                    <InputMask mask="+38 (099) 999-99-99" maskChar=" " type="tel" className="form-control" value={employee.phoneNumber} name="phoneNumber" onChange={inputEmployeeChangeHandler}   id="phone-change-profile"/>
                                 </div>
                             </div>
                             <hr />
@@ -190,14 +230,18 @@ const Profile = () => {
                             <div className="row mt-3">
                                 <div className="col-md-6">
                                     <label className="labels">{t("profile.login")}</label>
-                                    <input type="text" className="form-control" name="login" value={user.login} onChange={inputUserChangeHandler} />
+                                    <input type="text" className="form-control" name="login" value={user.login} onChange={inputUserChangeHandler} id="login-change-profile"/>
                                 </div>
                                 <div className="col-md-6">
                                     <label className="labels">{t("profile.password")}</label>
-                                    <input type="password" className="form-control" placeholder={t("profile.enterPassword")} name="password" value={user.password} onChange={inputUserChangeHandler} />
+                                    <input type="password" className="form-control" placeholder={t("profile.enterPassword")} name="password" value={user.password} onChange={inputUserChangeHandler} id="password-change-profile"/>
+                                </div>
+                                <div className="col-md-12 mt-3">
+                                    <label className="labels">{t("profile.accessLevel")}</label>
+                                    <input type="text" className="form-control" readOnly={true} value={accessLevel}/>
                                 </div>
                             </div>
-                            <div className="mt-5 text-center">
+                            <div className="mt-4 text-center">
                                 <button className="btn btn-success" type="button" onClick={btnClickHandler}>{t("profile.saveChanges")}</button>
                             </div>
                         </div>

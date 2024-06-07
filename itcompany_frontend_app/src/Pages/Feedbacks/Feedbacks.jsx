@@ -22,9 +22,6 @@ const Feedbacks=()=>{
     const [isByMeFeedbacksLoading, setIsByMeFeedbacksLoading] = useState(true);
     const [isEmployeeFeedbacksLoading, setIsEmployeeFeedbacksLoading] = useState(false);
     const [employees, setEmployees] = useState([]);
-    const [displayForError, setDisplayForError] = useState("none");
-    const [displayForErrorCreate, setDisplayForErrorCreate] = useState("none");
-    const [displayForErrorCreate2, setDisplayForErrorCreate2] = useState("none");
     const [showModalWindow, setShowModalWindow] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
     const [tempDelIndex, setTempDelIndex] = useState(0);
@@ -122,7 +119,6 @@ const Feedbacks=()=>{
         .then(res => {
             setEmployeeFeedbacks(res.data);
             setIsEmployeeFeedbacksLoading(false);
-            setDisplayForError("none");
         })
         .catch(err => {
             if(err.response.status===401)
@@ -130,7 +126,6 @@ const Feedbacks=()=>{
         
             if (err.response && err.response.status === 404){
                 setEmployeeFeedbacks([]);
-                setDisplayForError("block");
                 setIsEmployeeFeedbacksLoading(false);
             }
             else
@@ -161,6 +156,8 @@ const Feedbacks=()=>{
     const createFormsSubmitHandler = (event) => {
         event.preventDefault();
 
+        const form = event.target;
+
         setFeedbackForCreate({
             ...feedbackForCreate,
             employeeFromName: nowEmployeeName
@@ -170,43 +167,55 @@ const Feedbacks=()=>{
             employeeForName: document.getElementById("userForInput").value
         });
 
-        if (document.getElementById("userForInput").value == nowEmployeeName){
-            setDisplayForErrorCreate2("block");
-            return;
+        form.employeeFor.style.border = "";
+        form.feedbackText.style.border = "";
+        document.getElementById("EmployeeSmallError").style.display = "none";
+        document.getElementById("TextSmallError").style.display = "none";
+
+        if (employees.filter(e => e.lastName + " " + e.firstName == form.employeeFor.value).length == 0){
+            form.employeeFor.style.border = "1px solid red";
+            form.employeeFor.focus();
+            document.getElementById("EmployeeSmallError").style.display = "block";
         }
+        else if (form.feedbackText.value.length < 10 || form.feedbackText.value.length > 500){
+            form.feedbackText.style.border = "1px solid red";
+            form.feedbackText.focus();
+            document.getElementById("TextSmallError").style.display = "block";
+        }
+        else{
+            axios.post(`${keys.ServerConnection}/Feedback`, { 
+                employeeFromName: nowEmployeeName, 
+                employeeForName: document.getElementById("userForInput").value,
+                feedBackMark: feedbackForCreate.feedBackMark,
+                feedBackText: feedbackForCreate.feedBackText
+             }, {headers: {
+                Authorization:`Bearer ${token}`
+            }})
+            .then(() => {
+                forceReload();
+                
+                setFeedbackForCreate({
+                    ...feedbackForCreate,
+                    feedBackText: "",
+                    feedBackMark: 1
+                });
 
-        axios.post(`${keys.ServerConnection}/Feedback`, { 
-            employeeFromName: nowEmployeeName, 
-            employeeForName: document.getElementById("userForInput").value,
-            feedBackMark: feedbackForCreate.feedBackMark,
-            feedBackText: feedbackForCreate.feedBackText
-         }, {headers: {
-            Authorization:`Bearer ${token}`
-        }})
-        .then(res => {
-            forceReload();
-            setDisplayForErrorCreate("none");
-            setDisplayForErrorCreate2("none");
-            
-            setFeedbackForCreate({
-                ...feedbackForCreate,
-                feedBackText: "",
-                feedBackMark: 1
+                form.employeeFor.value = "";
+                form.feedbackText.value = "";
+    
+                setShowNotification(true);
+            })
+            .catch(err => {
+                if(err.response && err.response.status===401){
+                    signOut();
+                }
+                else if (err.response && err.response.status === 404){
+                }
+                else{
+                    console.log("Create error: ", err);
+                }
             });
-
-            setShowNotification(true);
-        })
-        .catch(err => {
-            if(err.response.status===401)
-                signOut();
-            if (err.response && err.response.status === 404){
-                setDisplayForErrorCreate("block");
-            }
-            else
-            {
-                console.log("Create error: ", err);
-            }
-        });
+        }
     }
 
     const onDeleteBeforeConfirm = (index) => {
@@ -248,7 +257,7 @@ const Feedbacks=()=>{
                 text={t("feedbacks.newFeedbackAdded")}
                 color="success"
                 icon="fa-regular fa-circle-check"
-            />
+            ></Notification>
 
             <h1 className="text-center mb-4">{t("feedbacks.feedbacks")}</h1>
             <ul className="nav nav-tabs" id="reviewsTab" role="tablist">
@@ -346,7 +355,6 @@ const Feedbacks=()=>{
                                     
                                 </div>
                             </div>
-                            <h5 style={{color: "red", marginLeft: "5px", display: displayForError}}>{t("feedbacks.noUsersWithName")}</h5>
                             {
                                 isEmployeeFeedbacksLoading ?
                                 <h3>Loading ...</h3> 
@@ -393,9 +401,9 @@ const Feedbacks=()=>{
                                             </div>
                                             <div className="create-feedback-input-employee mb-3">
                                                 <label htmlFor="fromUser" className="form-label">{t("feedbacks.create.forWhom")}</label>
-                                                <SelectSearch options={employees.map(employee => employee.lastName + " " + employee.firstName)} id="userForInput" required/> 
+                                                <SelectSearch options={employees.map(employee => employee.lastName + " " + employee.firstName)} id="userForInput" name="employeeFor" required/>
                                             </div>
-                                            <h5 style={{width: "320px", color: "red", textAlign: "right", display: displayForErrorCreate}}>{t("feedbacks.noUsersWithName")}</h5>
+                                            <small id="EmployeeSmallError">{t("feedbacks.errors.employeeFor")}</small>
                                             <div className="create-feedback-input-employee mb-5">
                                                 <label className="form-label">{t("feedbacks.create.mark")}</label>
                                                 <div className="star-rating" onMouseLeave={onMouseLeaveStarHandler}>
@@ -407,7 +415,8 @@ const Feedbacks=()=>{
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="reviewText" className="form-label mb-3">{t("feedbacks.create.feedbackText")}</label>
-                                            <textarea className="form-control" id="reviewText" rows="5" style={{width: "400px"}} required minLength={10} maxLength={500} value={feedbackForCreate.feedBackText} onChange={event => setFeedbackForCreate({...feedbackForCreate, feedBackText: event.target.value})}></textarea>
+                                            <textarea className="form-control" id="reviewText" rows="5" style={{width: "400px"}} required minLength={10} maxLength={500} value={feedbackForCreate.feedBackText} onChange={event => setFeedbackForCreate({...feedbackForCreate, feedBackText: event.target.value})}  name="feedbackText"></textarea>
+                                            <small id="TextSmallError">{t("feedbacks.errors.feedbackText")}</small>
                                         </div>
                                     </div>
                                     <button type="submit" className="btn btn-primary">{t("feedbacks.create.sendFeedback")}</button>
