@@ -65,7 +65,6 @@ const Employees = () => {
         employee.jobName.toLowerCase().includes(searchEmployee.toLowerCase())
     )
     const fireClick=(id)=>{
-        console.log(id);
         if(id!=null){
             axios.post(`${keys.ServerConnection}/Employee/fire/${id}`,{},{
                 headers: {
@@ -81,7 +80,6 @@ const Employees = () => {
         }
     }
     const appointClick=(id)=>{
-        console.log(id);
         if(id!=null){
             axios.post(`${keys.ServerConnection}/Employee/appoint/${id}`,{},{
                 headers: {

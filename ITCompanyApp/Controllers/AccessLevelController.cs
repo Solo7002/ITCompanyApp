@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using ITCompanyApp.Helpers.DBClasses;
+using ITCompanyApp.Models;
+using ITCompanyApp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ITCompanyApp.Helpers.DBClasses;
-using ITCompanyApp.Models;
-using Microsoft.AspNetCore.Authorization;
-using ITCompanyApp.Models.ViewModels;
 
 namespace ITCompanyApp.Controllers
 {

@@ -1,4 +1,4 @@
-.homeContainer{
+/* .homeContainer{
     height: 100vh;
 }
 .homeContainer .review-container {
@@ -8,7 +8,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.homeContainer  .review-container h1 {
+.homeContainer .review-container h1 {
     font-size: 2rem;
     margin-bottom: 20px;
 }
@@ -163,4 +163,159 @@
 .homeContainer .task-item p {
     font-size: 1rem;
     color: #6c757d;
+} */
+
+
+.homeContainer {
+    height: 100vh;
+    padding: 20px;
+    background: #ffffff;
+}
+
+.homeContainer h1 {
+    font-size: 2.5rem;
+    color: #343a40;
+}
+
+.homeContainer .review-container, .homeContainer .birthday-container, .homeContainer .tasks-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin-bottom: 20px;
+}
+
+.homeContainer .review-container h2, .homeContainer .birthday-container h3, .homeContainer .tasks-container h3 {
+    font-size: 1.75rem;
+    color: #007bff;
+}
+
+.homeContainer .rating-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.homeContainer .rating-block i {
+    font-size: 2rem;
+    color: #ffcd3c;
+    margin-right: 10px;
+}
+
+.homeContainer .rating-block span {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.homeContainer .birthday-list {
+    list-style-type: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.homeContainer .birthday-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.homeContainer .birthday-date {
+    color: #6c757d;
+}
+
+.homeContainer .employee-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.homeContainer .employee-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.1s;
+}
+
+.homeContainer .employee-item:hover {
+    background-color: #f8f9fa;
+}
+
+.homeContainer .meEmployee {
+    background-color: #e8f0fe;
+}
+
+.homeContainer .employee-rating i {
+    color: #ffcd3c;
+    margin-right: 5px;
+}
+
+.homeContainer .nav-tabs .nav-link {
+    border-radius: 0;
+}
+
+.homeContainer .nav-tabs .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.homeContainer .tasks-info {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.homeContainer .task-item h4 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.homeContainer .card-title {
+    font-size: 1.5rem;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.homeContainer .task-item p {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.homeContainer .nav-container {
+    background-color: #f3f3f3;
+    border-radius: 8px;
+    overflow: hidden;
+    border-radius: 8px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.homeContainer .nav-tabs {
+    border-bottom: none;
+}
+
+.homeContainer .nav-tabs .nav-link {
+    border: none;
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+}
+
+.homeContainer .nav-tabs .nav-link.active {
+    background-color: #007bff;
+}
+
+.homeContainer .card {
+    margin-top: 0;
+    border-radius: 0 0 8px 8px;
+    border: none;
+}
+
+.homeContainer .card-body {
+    padding: 20px;
+}
+
+.homeContainer .tab-content {
+    border-top: none;
 }

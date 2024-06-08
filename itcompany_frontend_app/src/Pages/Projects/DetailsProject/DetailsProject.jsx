@@ -34,8 +34,7 @@ const DetailsProject = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then(res =>{ 
-            console.log(res.data);
+        }).then(res =>{
            return res.data}).catch(err => {
             if (err.response.status === 401)
                 signOut();
@@ -68,7 +67,6 @@ const DetailsProject = () => {
                 Authorization: `Bearer ${token}`
             }
         }).then(res => {
-            console.log(res.data);
             return res.data
         }).catch(err => {
             if (err.response.status === 401)
@@ -108,7 +106,6 @@ const DetailsProject = () => {
                 Authorization: `Bearer ${token}`
             }
         }).then(res => {
-            console.log(res);
             navigate('/projects');
         }).catch(err => {
             if (err.response.status === 401)

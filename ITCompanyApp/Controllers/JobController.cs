@@ -1,6 +1,5 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
-using ITCompanyApp.Models.SpecialModels.Department;
 using ITCompanyApp.Models.SpecialModels.Jobs;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;

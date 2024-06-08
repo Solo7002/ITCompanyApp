@@ -2,11 +2,8 @@
 using ITCompanyApp.Models;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Security.Cryptography.Xml;
 
 namespace ITCompanyApp.Controllers
 {

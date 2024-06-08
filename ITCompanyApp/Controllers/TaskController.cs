@@ -1,9 +1,7 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
-using ITCompanyApp.Models;
 using ITCompanyApp.Models.SpecialModels.Tasks;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

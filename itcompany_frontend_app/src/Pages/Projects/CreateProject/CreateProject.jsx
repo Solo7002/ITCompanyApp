@@ -37,7 +37,6 @@ const CreateProject = () => {
     }, [token]);
 
     function validateForm(form) {
-        console.log(form);
         const newErrors = [];
         if (!form.projectName || !form.projectName.value) {
             newErrors.push(t("projects.create.projectNameRequired"));
@@ -72,12 +71,10 @@ const CreateProject = () => {
         const form = event.target;
         const newErrors = validateForm(form);
         setErrors(newErrors);
-        console.log(newErrors);
         if (newErrors.length==0) {
         const fullNameExist = employees.some(item => item.fullName === form.teamLead.value);
         setErrorInfo(!fullNameExist ? 'block' : 'none');
         if (fullNameExist) {
-            console.log('ff');
             const employee = employees.find(employee => employee.fullName === form.teamLead.value);
             const id = employee ? employee.id : null;
 
@@ -93,7 +90,6 @@ const CreateProject = () => {
                     Authorization: `Bearer ${token}`
                 }
             }).then(res => {
-                console.log(res);
                 navigate('/projects');
             }).catch(err => {
                 if (err.response.status === 401)

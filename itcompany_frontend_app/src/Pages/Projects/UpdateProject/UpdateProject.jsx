@@ -88,7 +88,6 @@ const UpdateProject = () => {
         if (fullNameExist) {
             const employee = employees.find(employee => employee.fullName === form.teamLead.value);
             const idEmpployee = employee ? employee.id : null;
-            console.log(project.isDone);
             axios.put(`${keys.ServerConnection}/Project/${id}`, {
 
                 projectName: project.projectName,

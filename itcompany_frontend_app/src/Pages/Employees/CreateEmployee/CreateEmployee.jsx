@@ -125,7 +125,6 @@ const CreateEmployee = () => {
                 RoleName:form.accessLevel.value
             })
             .then(res=>{
-                console.log(res);
                 navigate('/employees');
 
             }).catch(err=>{

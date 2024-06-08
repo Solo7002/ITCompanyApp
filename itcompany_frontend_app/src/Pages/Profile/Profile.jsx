@@ -87,12 +87,10 @@ const Profile = () => {
 
 
     useEffect(() => {
-        console.log("userImagePath: ", userImagePath);
         setEmployee({
             ...employee,
             photoFile: userImagePath
         });
-        console.log("path to server: ", `${keys.ServerConnection}/Files/download${userImagePath}`);
         document.getElementById("imageUserProfilePhoto").setAttribute("src", `${keys.ServerConnection}/Files/download${userImagePath}`);
     }, [userImagePath])
 

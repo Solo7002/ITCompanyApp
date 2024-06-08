@@ -245,13 +245,14 @@ namespace ITCompanyApp.Controllers
              .ToList();
 
             var result = employeesByDepartment.Where(e=>e.FireDate==null)
-         .Select(e => new
-         {
-             Id = e.Id,
-             Name = $"{e.LastName} {e.FirstName}",
-             AverageFeedback = GetAvarageFeedbackScoreById(e.Id)
-         }).OrderByDescending(e=>e.AverageFeedback)
-         .ToList();
+            .Select(e => new
+            {
+                Id = e.Id,
+                Name = $"{e.LastName} {e.FirstName}",
+                AverageFeedback = GetAvarageFeedbackScoreById(e.Id),
+                JobId = e.JobId
+            }).OrderByDescending(e=>e.AverageFeedback)
+            .ToList();
 
             return result.Cast<object>().ToList();
         }
@@ -265,7 +266,8 @@ namespace ITCompanyApp.Controllers
             var results = employees.Select(e=>new{
                 Id=e.Id,
                 Name = $"{e.LastName} {e.FirstName}",
-                AverageFeedback = GetAvarageFeedbackScoreById(e.Id)
+                AverageFeedback = GetAvarageFeedbackScoreById(e.Id),
+                JobId = e.JobId
             }).OrderByDescending(e => e.AverageFeedback)
          .ToList();
             return results.Cast<object>().ToList();

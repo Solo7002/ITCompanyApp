@@ -67,7 +67,6 @@ const Tasks=()=>{
 
   useEffect(()=> {
     if(token){
-      console.log(token);
       const decoded = jwtDecode(token);
             
       axios.get(`${keys.ServerConnection}/Task/employeeFor/${decoded.nameid}`, {headers: {
@@ -143,13 +142,11 @@ const Tasks=()=>{
       }})
       .then(res => {
         setProjects(res.data);
-        console.log("projects: ", res.data);
       });
     }
   }, [token, reload]);
 
   const forceReload = () => {
-    console.log("force reload!");
     setReload(!reload);
   }
 
@@ -203,7 +200,6 @@ const Tasks=()=>{
     .then((res) => {
       setTempChoosenIndex(index);
 
-      console.log("res: ", res.data);
       res.data.forEach(el => {
         el.deadLineDate = DateReduction(el.deadLineDate);
         el.uploadDate = DateReduction(el.uploadDate);
@@ -334,7 +330,6 @@ const Tasks=()=>{
 
   const claimInDetailsHandler = () => {
     const decoded = jwtDecode(token);
-    console.log(`${keys.ServerConnection}/Task/claim/${selectedTask.taskId}/${decoded.nameid}`);
 
     axios.put(`${keys.ServerConnection}/Task/claim/${selectedTask.taskId}/${decoded.nameid}`, {}, {headers: {
       Authorization:`Bearer ${token}`
@@ -368,8 +363,6 @@ const Tasks=()=>{
     {
       uploadDoneFileInput.setCustomValidity("");
       uploadDoneFileInput.reportValidity();
-
-      console.log(doneTaskFilePath);
 
       axios.put(`${keys.ServerConnection}/Task/setDone/${selectedTask.taskId}`,{
         doneFilePath: doneTaskFilePath

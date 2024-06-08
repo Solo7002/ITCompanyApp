@@ -73,7 +73,6 @@ const Finances = () => {
 
         axios.get(`${keys.ServerConnection}/Job/getAverageSalaryInJob`, { headers: { Authorization: `Bearer ${token}` } }).then(res=>{
             setAverageSalaryInJob(res.data);
-            console.log(res.data);
         }).catch(err => {
             if (err.response.status === 401)
                 signOut();

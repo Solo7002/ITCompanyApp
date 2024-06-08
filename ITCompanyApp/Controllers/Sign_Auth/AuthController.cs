@@ -1,20 +1,17 @@
 ﻿using ITCompanyApp.Helpers.DBClasses;
 using ITCompanyApp.Models;
 using ITCompanyApp.Models.AuthModels;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MimeKit.Text;
 using MimeKit;
+using MimeKit.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-using MailKit.Net.Smtp;
-using Microsoft.EntityFrameworkCore;
 
 namespace ITCompanyApp.Controllers.Sign_Auth
 {

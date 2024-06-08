@@ -52,7 +52,6 @@ const DepsJobs=()=>{
     });
 
     useEffect(()=> {
-        console.log("UseEffect!");
         if(token){
             const decoded = jwtDecode(token);
             
@@ -99,7 +98,6 @@ const DepsJobs=()=>{
     }, [token, reload]);
 
     const forceReload = () => {
-        console.log("Force reload!");
         setReload(!reload);
     };
 

@@ -3,10 +3,8 @@ using ITCompanyApp.Models;
 using ITCompanyApp.Models.SpecialModels.FeedBack;
 using ITCompanyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace ITCompanyApp.Controllers
 {
