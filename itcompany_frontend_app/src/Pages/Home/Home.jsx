@@ -54,149 +54,13 @@ const Home = () => {
 
         axios.get(`${keys.ServerConnection}/Job`, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
-            console.log("jobs: ", res.data);
             setJobs(res.data);
         }).catch(err => {
             if (err.response && err.response.status === 401){
                 signOut();
             }
         });
-    }, [token])
-    console.log(token);
-    const handlerInfo = () => {
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                console.log(decoded);
-
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-
-
-
-    // return (
-    //     <div className="homeContainer">
-    //         <h1>{t("Home.Home")}</h1>
-    //         <div className="container mt-5">
-    //             <div className="row">
-    //                 <div className="col-md-4">
-    //                     <div className="review-container text-center">
-    //                         <h1>{t("Home.AverageText")}</h1>
-    //                         <div className="rating-block">
-    //                             <i className="fas fa-star"></i>
-    //                             <span id="average-score">{avarageScore}</span>
-    //                         </div>
-    //                     </div>
-    //                     <br />
-    //                     <div className="birthday-container ">
-    //                         <h2>{t('Home.BirthdayIsComing')}</h2>
-    //                         <ul className="birthday-list">
-    //                             {
-    //                                 birthdayEmployes &&
-    //                                 birthdayEmployes.map((employee, index) => {
-    //                                     return (
-    //                                         <li className="birthday-item" key={index}>
-    //                                             <span>{employee.name}</span>
-    //                                             <span className="birthday-date">{employee.birthdate}</span>
-    //                                         </li>)
-    //                                 })
-    //                             }
-    //                         </ul>
-    //                     </div>
-    //                 </div>
-    //                 <div>
-    //                     <ul className="nav nav-tabs" id="myTab" role="tablist">
-    //                         <li className="nav-item">
-    //                             <a className="nav-link active" id="employees-tab" data-toggle="tab" href="#employees" role="tab" aria-controls="employees" aria-selected="true">{t("Home.Department")}</a>
-    //                         </li>
-    //                         <li className="nav-item">
-    //                             <a className="nav-link" id="employeeAll-tab" data-toggle="tab" href="#employeeAll" role="tab" aria-controls="employeeAll" aria-selected="false">{t("Home.All")}</a>
-    //                         </li>
-    //                     </ul>
-    //                     <div className="tab-content" id="myTabContent">
-    //                         <div className="tab-pane fade show active" id="employees" role="tabpanel" aria-labelledby="employees-tab">
-    //                             <div className="card">
-    //                                 <div className="card-body">
-    //                                     <h5 className="card-title">{t('Home.EmployeesByRating')}</h5>
-    //                                     <div className="employee-list">
-    //                                         {
-    //                                             employeesDepartment &&
-    //                                             employeesDepartment.map((employee, index) => {
-    //                                                 return (
-    //                                                     <div className={`employee-item ${employee.id == MyId ? 'meEmployee' : ''}`}>
-    //                                                         <span>{index + 1}</span>
-    //                                                         <div className="employee-name">{employee.name}</div>
-    //                                                         <div className="employee-rating">
-    //                                                             <i className="fas fa-star"></i>
-    //                                                             <span>{employee.averageFeedback}</span>
-    //                                                         </div>
-    //                                                     </div>)
-    //                                             })
-
-    //                                         }
-    //                                     </div>
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-    //                         <div className="tab-pane fade" id="employeeAll" role="tabpanel" aria-labelledby="feedbacks-tab">
-    //                             <div className="card">
-    //                                 <div className="card-body">
-    //                                     <h5 className="card-title">{t('Home.EmployeesByRating')}</h5>
-    //                                     <div className="employee-list">
-
-    //                                         {
-    //                                             employeesAll &&
-    //                                             employeesAll.map((employee, index) => {
-    //                                                 return (
-    //                                                     <div className={`employee-item ${employee.id == MyId ? 'meEmployee' : ''}`}>
-    //                                                         <span>{index + 1}</span>
-    //                                                         <div className="employee-name">{employee.name}</div>
-    //                                                         <div className="employee-rating">
-    //                                                             <i className="fas fa-star"></i>
-    //                                                             <span>{employee.averageFeedback}</span>
-    //                                                         </div>
-    //                                                     </div>)
-    //                                             })
-
-    //                                         }
-
-    //                                     </div>
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-                            
-    //                     </div>
-
-                        
-    //                 </div>
-    //                 <div className="tasks-container">
-    //                         <div className="tasks-header">
-    //                             <h2>{t("Home.TaskOverview")}</h2>
-    //                         </div>
-    //                         {amountTasks&&
-    //                         <div className="tasks-info">
-    //                             <div className="task-item">
-    //                                 <h3 id="total-tasks">{amountTasks.allTask}</h3>
-    //                                 <p>{t("Home.TotalTasks")}</p>
-    //                             </div>
-    //                             <div className="task-item">
-    //                                 <h3 id="completed-tasks">{amountTasks.doneTask}</h3>
-    //                                 <p>{t("Home.CompletedTasks")}</p>
-    //                             </div>
-    //                             <div className="task-item">
-    //                                 <h3 id="pending-tasks">{amountTasks.unDoneTask}</h3>
-    //                                 <p>{t("Home.CurrentTasks")}</p>
-    //                             </div>
-    //                         </div>}
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </div>
-    // )
+    }, [token]);
 
     return (
         <div className="homeContainer">
@@ -263,7 +127,7 @@ const Home = () => {
                                                         <span>{index + 1}</span>
                                                         <div className="d-flex justify-content-between col-md-8">
                                                             <div className="employee-name" style={{fontWeight: "500"}}>{employee.name}</div>
-                                                            <i className="col-md-5" style={{fontSize: "0.9em"}}>{jobs.filter(j => j.jobId == employee.jobId)[0].jobName}</i>
+                                                            <i className="col-md-5" style={{fontSize: "0.9em"}}>{jobs.filter(j => j.jobId == employee.jobId)[0]?jobs.filter(j => j.jobId == employee.jobId)[0].jobName:""}</i>
                                                         </div>
                                                         <div className="employee-rating">
                                                             <i className="fas fa-star"></i>
@@ -285,7 +149,7 @@ const Home = () => {
                                                         <span>{index + 1}</span>
                                                         <div className="d-flex justify-content-between col-md-8">
                                                             <div className="employee-name" style={{fontWeight: "500"}}>{employee.name}</div>
-                                                            <i className="col-md-5" style={{fontSize: "0.9em"}}>{jobs.filter(j => j.jobId == employee.jobId)[0].jobName}</i>
+                                                            <i className="col-md-5" style={{fontSize: "0.9em"}}>{jobs.filter(j => j.jobId == employee.jobId)[0]?jobs.filter(j => j.jobId == employee.jobId)[0].jobName:""}</i>
                                                         </div>
                                                         <div className="employee-rating">
                                                             <i className="fas fa-star"></i>
