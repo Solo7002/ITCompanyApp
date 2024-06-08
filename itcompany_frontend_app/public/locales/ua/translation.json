@@ -168,7 +168,13 @@
             "description": "Опис",
             "descriptionPlaceholder": "Введіть опис",
             "createButton": "Створити",
-            "backButton": "Назад"
+            "backButton": "Назад",
+            "projectNameRequired": "Назва проекту є обов'язковою",
+            "projectNameLength": "Назва проекту повинна містити від 2 до 50 символів",
+            "descriptionLength": "Опис не повинен перевищувати 500 символів",
+            "deadLineProjectDateRequired": "Необхідно вказати дату завершення",
+            "deadlineProjectDateYearLimit": "Рік дати завершення не може бути більшим за 9999",
+            "deadlineProjectDatePast": "Дата завершення не може бути в минулому"
         },
         "details": {
             "projectInformation": "Інформація про проєкт",
@@ -199,7 +205,13 @@
             "description": "Опис",
             "descriptionPlaceholder": "Введіть опис",
             "updateButton": "Оновити",
-            "backButton": "Назад"
+            "backButton": "Назад",
+            "projectNameRequired": "Назва проекту є обов'язковою",
+            "projectNameLength": "Назва проекту повинна містити від 2 до 50 символів",
+            "deadLineProjectDateRequired": "Необхідно вказати дату завершення",
+            "deadlineProjectDatePast": "Дата завершення не може бути в минулому",
+            "deadlineProjectDateYearLimit": "Рік дати завершення не може бути більшим за 9999"
+
         }
     },
     "DepsJobs": {

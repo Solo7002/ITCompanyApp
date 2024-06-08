@@ -168,7 +168,13 @@
             "description": "説明",
             "descriptionPlaceholder": "説明を入力",
             "createButton": "作成",
-            "backButton": "戻る"
+            "backButton": "戻る",
+            "projectNameRequired": "プロジェクト名は必須です。",
+            "projectNameLength": "プロジェクト名は2〜50文字である必要があります。",
+            "descriptionLength": "説明は500文字以内でなければなりません。",
+            "deadLineProjectDateRequired": "締め切り日が必要です。",
+            "deadlineProjectDateYearLimit": "締め切り年は9999年を超えることはできません。",
+            "deadlineProjectDatePast": "締め切り日が過去の日付ではいけません。"
         },
         "details": {
             "projectInformation": "プロジェクト情報",
@@ -199,7 +205,13 @@
             "description": "説明",
             "descriptionPlaceholder": "説明を入力",
             "updateButton": "更新",
-            "backButton": "戻る"
+            "backButton": "戻る",
+            "projectNameRequired": "プロジェクト名は必須です。",
+            "projectNameLength": "プロジェクト名は2〜50文字である必要があります。",
+            "deadLineProjectDateRequired": "締め切り日が必要です。",
+            "deadlineProjectDatePast": "締め切り日が過去の日付ではいけません。",
+            "deadlineProjectDateYearLimit": "締め切り年は9999年を超えることはできません。"
+ 
         }
     },
     "DepsJobs": {

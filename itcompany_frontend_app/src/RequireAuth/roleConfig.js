@@ -1,6 +1,5 @@
 export const roleConfig = {
-    '/tasks': ['Standard', 'Manager','Admin'],
-    '/projects': ['Standard', 'Manager','Admin'],
+     '/projects': ['Standard', 'Manager','Admin'],
     '/projects/create': ['Manager','Admin'],
     '/projects/details/:id': ['Standard', 'Manager','Admin'],
     '/projects/update/:id': ['Manager','Admin'],

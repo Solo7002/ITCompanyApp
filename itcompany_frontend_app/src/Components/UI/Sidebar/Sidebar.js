@@ -51,11 +51,12 @@ const Sidebar = () => {
                 <div className="sidebar-main-div">
                     <NavLink to="/"><div><i className="fa-solid fa-house"></i> <span>{t('sidebar.home')}</span></div></NavLink>
                     <NavLink to="/profile"><div><i className="fa-solid fa-address-card"></i> <span>{t('sidebar.profile')}</span></div></NavLink>
+                    <NavLink to="/tasks"><div><i className="fa-solid fa-list-check"></i> <span>{t('sidebar.tasks')}</span></div></NavLink>
+                
                    {
                     user.actort==='Admin'||user.actort==='Standard'||user.actort==='Manager'?
                    ( <>
-                   <NavLink to="/tasks"><div><i className="fa-solid fa-list-check"></i> <span>{t('sidebar.tasks')}</span></div></NavLink>
-                   <NavLink to="/projects"><div><i className="fa-solid fa-diagram-project"></i> <span>{t('sidebar.projects')}</span></div></NavLink>
+                     <NavLink to="/projects"><div><i className="fa-solid fa-diagram-project"></i> <span>{t('sidebar.projects')}</span></div></NavLink>
                    </> ):null
                 }
                    { user.actort==='Admin'||user.actort==='Human Resource'?

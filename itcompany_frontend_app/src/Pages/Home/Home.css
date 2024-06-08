@@ -5,7 +5,6 @@
     padding: 20px;
     max-width: 600px;
     margin: 0 auto;
-    background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -38,7 +37,7 @@
 }
 
 .homeContainer  .card {
-    margin-bottom: 20px;
+  margin: 5px;
 }
 
 .homeContainer  .nav-tabs .nav-link.active {
@@ -47,8 +46,8 @@
 }
 
 .homeContainer  .employee-list {
-    height: 320px;
-   max-height: 600px;
+   padding:5px;
+   max-height: 350px;
    width: 250px;
     overflow-y: auto;
 }
@@ -83,11 +82,13 @@
 }
 .homeContainer .birthday-container {
     text-wrap: wrap;
-    padding: 20px;
+    padding: 10px;
+    
     max-width: 600px;
-    max-height: 500px;
+    
+     max-height: 350px;
+  
     margin: 0 auto;
-    background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -126,9 +127,8 @@
     padding: 20px;
     text-wrap: wrap;
     max-width: 400px;
-    max-height: 600px;
+    max-height: 500px;
     margin: 0 auto;
-    background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

@@ -168,7 +168,15 @@
             "description": "Beschreibung",
             "descriptionPlaceholder": "Beschreibung eingeben",
             "createButton": "Erstellen",
-            "backButton": "Zurück"
+            "backButton": "Zurück",
+            "projectNameRequired": "Projektname ist erforderlich",
+            "projectNameLength": "Der Projektname muss zwischen 2 und 50 Zeichen lang sein",
+            "descriptionLength": "Die Beschreibung darf nicht länger als 500 Zeichen sein",
+            "deadLineProjectDateRequired": "Ein Fälligkeitsdatum ist erforderlich",
+            "deadlineProjectDateYearLimit": "Das Jahr des Fälligkeitsdatums darf nicht größer als 9999 sein",
+            "deadlineProjectDatePast": "Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen"
+
+
         },
         "details": {
             "projectInformation": "Projektinformationen",
@@ -199,7 +207,13 @@
             "description": "Beschreibung",
             "descriptionPlaceholder": "Beschreibung eingeben",
             "updateButton": "Aktualisieren",
-            "backButton": "Zurück"
+            "backButton": "Zurück",
+            "projectNameRequired": "Projektname ist erforderlich",
+            "projectNameLength": "Der Projektname muss zwischen 2 und 50 Zeichen lang sein",
+            "deadLineProjectDateRequired": "Ein Fälligkeitsdatum ist erforderlich",
+            "deadlineProjectDatePast": "Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen",
+            "deadlineProjectDateYearLimit": "Das Jahr des Fälligkeitsdatums darf nicht größer als 9999 sein"
+
         }
     },
     "DepsJobs": {

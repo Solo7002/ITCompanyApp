@@ -168,7 +168,13 @@
             "description": "Description",
             "descriptionPlaceholder": "Input Description",
             "createButton": "Create",
-            "backButton": "Back"
+            "backButton": "Back",
+            "projectNameRequired": "Project name is required",
+            "projectNameLength": "Project name must be between 2 and 50 characters long",
+            "descriptionLength": "Description must not exceed 500 characters",
+            "deadLineProjectDateRequired": "Deadline date is required",
+            "deadlineProjectDateYearLimit": "Deadline year cannot be greater than 9999",
+            "deadlineProjectDatePast": "Deadline date cannot be in the past"
           },
           "details": {
             "projectInformation": "Project information",
@@ -199,7 +205,12 @@
             "description": "Description",
             "descriptionPlaceholder": "Input Description",
             "updateButton": "Update",
-            "backButton": "Back"
+            "backButton": "Back",
+            "projectNameRequired": "Project name is required",
+            "projectNameLength": "Project name must be between 2 and 50 characters long",
+            "deadLineProjectDateRequired": "Deadline date is required",
+            "deadlineProjectDatePast": "Deadline date cannot be in the past",
+            "deadlineProjectDateYearLimit": "Deadline year cannot be greater than 9999"
           }
     },
     "DepsJobs":{

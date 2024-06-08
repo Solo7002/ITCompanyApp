@@ -166,7 +166,7 @@ const Home = () => {
 
                         
                     </div>
-
+                  
                     <div className="tasks-container">
                             <div className="tasks-header">
                                 <h2>{t("Home.TaskOverview")}</h2>
@@ -187,7 +187,8 @@ const Home = () => {
                                 </div>
                             </div>}
 
-                    </div>
+                    
+                    </div> 
                     
                 </div>
                 

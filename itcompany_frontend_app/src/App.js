@@ -37,7 +37,7 @@ function App() {
         <Route path='/' element={<RequireAuth allowedRoles={['Admin', 'Standard', 'Manager', 'Human Resource', 'Financial Resource']}><MainLayout/></RequireAuth>}>
           <Route index element={ <Bootstrap452Helmet><Home/></Bootstrap452Helmet>}/>
           <Route path='/profile' element={<Bootstrap452Helmet><Profile/></Bootstrap452Helmet>}/>
-          <Route path='/tasks' element={<RequireAuth allowedRoles={roleConfig['/tasks']}><Bootstrap452Helmet><Tasks/></Bootstrap452Helmet></RequireAuth>}/>
+          <Route path='/tasks' element={<Bootstrap452Helmet><Tasks/></Bootstrap452Helmet>}/>
           <Route path='/projects' element={<RequireAuth allowedRoles={roleConfig['/projects']}><Bootstrap530Helmet><Projects/></Bootstrap530Helmet></RequireAuth>}/>
           <Route path='/projects/create' element={<RequireAuth allowedRoles={roleConfig['/projects/create']}><Bootstrap530Helmet><CreateProject/> </Bootstrap530Helmet></RequireAuth>}/>
           <Route path='/projects/details/:id' element={<RequireAuth allowedRoles={roleConfig['/projects/details/:id']}><Bootstrap530Helmet><DetailsProject/></Bootstrap530Helmet></RequireAuth>}/>

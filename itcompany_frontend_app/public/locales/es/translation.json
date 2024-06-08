@@ -168,7 +168,13 @@
             "description": "Descripción",
             "descriptionPlaceholder": "Ingrese descripción",
             "createButton": "Crear",
-            "backButton": "Volver"
+            "backButton": "Volver",
+            "projectNameRequired": "Se requiere el nombre del proyecto",
+            "projectNameLength": "El nombre del proyecto debe tener entre 2 y 50 caracteres",
+            "descriptionLength": "La descripción no debe exceder los 500 caracteres",
+            "deadLineProjectDateRequired": "Se requiere una fecha límite",
+            "deadlineProjectDateYearLimit": "El año de la fecha límite no puede ser mayor a 9999",
+            "deadlineProjectDatePast": "La fecha límite no puede estar en el pasado"
         },
         "details": {
             "projectInformation": "Información del proyecto",
@@ -183,6 +189,8 @@
             "updateButton": "Actualizar",
             "deleteButton": "Eliminar",
             "backButton": "Volver"
+           
+
         },
         "update": {
             "header": "Actualizar proyecto",
@@ -199,7 +207,13 @@
             "description": "Descripción",
             "descriptionPlaceholder": "Ingrese descripción",
             "update": "Actualizar",
-            "backButton": "Volver"
+            "backButton": "Volver",
+            "projectNameRequired": "Se requiere el nombre del proyecto",
+            "projectNameLength": "El nombre del proyecto debe tener entre 2 y 50 caracteres",
+            "deadLineProjectDateRequired": "Se requiere una fecha límite",
+            "deadlineProjectDatePast": "La fecha límite no puede estar en el pasado",
+            "deadlineProjectDateYearLimit": "El año de la fecha límite no puede ser mayor a 9999"
+
         }
     },
     "DepsJobs": {

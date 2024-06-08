@@ -11,7 +11,7 @@ import FileUpload from "../../../Components/UI/FileUpload/FileUpload";
 import './UpdateProject.css'
 
 const UpdateProject = () => {
-    const { t } = useTranslation(); // Используем хук i18n для доступа к переводам
+    const { t } = useTranslation(); 
     const { id } = useParams();
 
     const [project, setProject] = useState();
@@ -49,10 +49,40 @@ const UpdateProject = () => {
     useEffect(() => {
         fetchProject();
     }, [token])
-
+    const validateForm = (form) => {
+        const errors = [];
+    
+        if (!form.projectName || form.projectName.value.trim() === "") {
+            errors.push(t("projects.update.projectNameRequired"));
+        } else if (form.projectName.value.length < 2 || form.projectName.value.length > 50) {
+            errors.push(t("projects.update.projectNameLength"));
+        }
+    
+        if (!form.deadLineProjectDate || form.deadLineProjectDate.value.trim() === "") {
+            errors.push(t("projects.update.deadLineProjectDateRequired"));
+        } 
+            const deadlineDate = new Date(form.deadLineProjectDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+    
+            if (deadlineDate < today) {
+                errors.push(t("projects.update.deadlineProjectDatePast"));
+            }
+    
+            if (deadlineDate.getFullYear() > 9999) {
+                errors.push(t("projects.update.deadlineProjectDateYearLimit"));
+            }
+        
+    
+        return errors;
+    };
+    
     const submitHandler = (event) => {
         event.preventDefault();
         const form = event.target;
+        const newErrors = validateForm(form);
+    setErrors(newErrors);
+    if(newErrors.length==0){        
         const fullNameExist = employees.some(item => item.fullName === form.teamLead.value);
         setErrorInfo(!fullNameExist ? 'block' : 'none');
         if (fullNameExist) {
@@ -87,6 +117,7 @@ const UpdateProject = () => {
                 }
             })
         }
+    }
     }
 
     return (

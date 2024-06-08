@@ -36,12 +36,48 @@ const CreateProject = () => {
         fetchEmployees();
     }, [token]);
 
+    function validateForm(form) {
+        console.log(form);
+        const newErrors = [];
+        if (!form.projectName || !form.projectName.value) {
+            newErrors.push(t("projects.create.projectNameRequired"));
+        } else if (form.projectName.value.length < 2 || form.projectName.value.length > 50) {
+            newErrors.push(t("projects.create.projectNameLength"));
+        }
+        if (form.description && form.description.value && form.description.value.length > 500) {
+            newErrors.push(t("projects.create.descriptionLength"));
+        }
+        if (!form.deadlineProjectDate || !form.deadlineProjectDate.value) {
+            newErrors.push(t("projects.create.deadLineProjectDateRequired"));
+        }
+        const year = form.deadlineProjectDate.value.split("-")[0];
+        if (parseInt(year, 10) > 9999) {
+            newErrors.push(t("projects.create.deadlineProjectDateYearLimit"));
+        }
+        const deadlineDate = new Date(form.deadlineProjectDate.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (deadlineDate < today) {
+            newErrors.push(t("projects.create.deadlineProjectDatePast"));
+        }
+        return newErrors;
+    }
+    
+    
+
+
+
     const submitHandler = (event) => {
         event.preventDefault();
         const form = event.target;
+        const newErrors = validateForm(form);
+        setErrors(newErrors);
+        console.log(newErrors);
+        if (newErrors.length==0) {
         const fullNameExist = employees.some(item => item.fullName === form.teamLead.value);
         setErrorInfo(!fullNameExist ? 'block' : 'none');
         if (fullNameExist) {
+            console.log('ff');
             const employee = employees.find(employee => employee.fullName === form.teamLead.value);
             const id = employee ? employee.id : null;
 
@@ -72,6 +108,7 @@ const CreateProject = () => {
                 }
             });
         }
+    }
     }
 
     return (
@@ -107,7 +144,7 @@ const CreateProject = () => {
                         </div>
 
                         <hr />
-                        {errors != null && errors.map((error, index) => (
+                        {errors && errors.map((error, index) => (
                             <li key={index}><h6 style={{ color: "red", marginLeft: "5px" }}>{error}</h6></li>
                         ))}
                         <div>
