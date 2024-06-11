@@ -34,7 +34,6 @@ const Feedbacks=()=>{
     });
     const [tempMark, setTempMark] = useState(1);
 
-
     useEffect(()=>{
         if(token){
             try {
@@ -401,7 +400,7 @@ const Feedbacks=()=>{
                                             </div>
                                             <div className="create-feedback-input-employee mb-3">
                                                 <label htmlFor="fromUser" className="form-label">{t("feedbacks.create.forWhom")}</label>
-                                                <SelectSearch options={employees.map(employee => employee.lastName + " " + employee.firstName)} id="userForInput" name="employeeFor" required/>
+                                                <SelectSearch options={employees.filter(e => e.lastName + " " + e.firstName != nowEmployeeName).map(employee => employee.lastName + " " + employee.firstName)} id="userForInput" name="employeeFor" required/>
                                             </div>
                                             <small id="EmployeeSmallError">{t("feedbacks.errors.employeeFor")}</small>
                                             <div className="create-feedback-input-employee mb-5">

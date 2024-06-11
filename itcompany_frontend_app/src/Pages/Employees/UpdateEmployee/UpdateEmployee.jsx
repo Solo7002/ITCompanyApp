@@ -149,47 +149,47 @@ const UpdateEmployee = () => {
                     <div className="form-group">
                         <label>{t("employees.update.Lastname")}</label>
                         <input type="text" className="form-control" value={employee.lastName} onChange={(event) => setEmployee({ ...employee, lastName: event.target.value })} name="lastname" placeholder={t("employees.update.InputLastname")} />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongLastname")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Firstname")}</label>
                         <input type="text" className="form-control" value={employee.firstName} onChange={(event) => setEmployee({ ...employee, firstName: event.target.value })} name="firstname" placeholder={t("employees.update.InputFirstname")} />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongFirstname")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Birthdate")}</label>
                         <input type="date" className="form-control" name="birthdate" placeholder={t("employees.create.InputBirthdate")} max={new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toISOString().split('T')[0]} value={employee.birthDate} onChange={(event) => setEmployee({ ...employee, birthDate: event.target.value })}/>
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongBirthdate")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.PhoneNumber")}</label>
                         <InputMask mask="+38 (099) 999-99-99" maskChar=" " type="text" className="form-control" name="phone" placeholder={t("employees.create.InputPhoneNumber")} value={employee.phoneNumber} onChange={(event) => setEmployee({ ...employee, phoneNumber: event.target.value })} />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongPhone")}</small>
                     </div>
                     <div className="form-group">
                         <label>Email</label>
                         <input type="email" className="form-control" value={employee.email} onChange={(event) => setEmployee({ ...employee, email: event.target.value })} name="email" placeholder={t("employees.update.InputEmail")} />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongEmail")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Salary")}</label>
                         <input type="number" min={1} className="form-control" value={employee.salary} onChange={(event) => setEmployee({ ...employee, salary: event.target.value })} name="salary" placeholder={t("employees.update.InputSalary")} />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongSalary")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Department")}</label>
                         <SelectSearch placeholder={t("employees.update.InputDepartment")} name='department' options={departments.map(department => department.departmentName)} id='departmentSearch' />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongDepartment")}</small>
                     </div>
                     <div className="form-group">
                         <label>{t("employees.update.Job")}</label>
                         <SelectSearch placeholder={t("employees.update.InputJob")} name='job' id='jobSearch' options={jobs.map(job => job.jobName)} />
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongJob")}</small>
                     </div>
                     <div className="form-group">
                         <label >{t("employees.create.PhotoFile")}</label>
                         <FileUpload folder="users/images" id="employeePhotoProfile" setFile={setPhotoFile} accept="image/png, image/gif, image/jpeg" className="form-control" required={false}/>
-                        <small>{t("employees.errors.wrongLogin")}</small>
+                        <small>{t("employees.errors.wrongPhotofile")}</small>
                     </div>
                     <div className="update-employee-page-buttons-div">
                         <button type="submit" className="btn btn-success">{t("employees.update.Update")}</button>

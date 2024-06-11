@@ -12,6 +12,8 @@ const DetailsEmployee = () => {
     const { id } = useParams();
     const navigate=useNavigate();
     const{signOut}=useAuth();
+    const [username, setUsername] = useState(""); 
+    const [accessLevel, setAccessLevel] = useState("");
     const{t}=useTranslation();
     const fetchEmployee = async () => {
         const employeeRes = await axios.get(`${keys.ServerConnection}/Employee/${id}`, {
@@ -68,6 +70,24 @@ const DetailsEmployee = () => {
             projects: projects
         });
 
+        axios.get(`${keys.ServerConnection}/User/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            setUsername(res.data.login);
+            axios.get(`${keys.ServerConnection}/AccessLevel/${res.data.accessLevelId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res2 => {
+                setAccessLevel(res2.data.accessLevelName);
+            })
+        }).catch(err=>{
+            if(err.response && err.response.status===401)
+                signOut();
+        })
+
     }
     useEffect(() => {
 
@@ -88,8 +108,8 @@ const DetailsEmployee = () => {
 
                                 </div>
                                 <div className="col-md-9">
-                                    <h2>{employee.firstName} {employee.lastName}</h2>
-                                    <p className="text-muted">{employee.jobName} | {employee.departmentName}</p>
+                                    <h2>{employee.firstName} {employee.lastName} <small>({username})</small></h2>
+                                    <p className="text-muted">{employee.jobName} | {employee.departmentName} | {accessLevel}</p>
                                 </div>
                             </div>
                             <hr />
