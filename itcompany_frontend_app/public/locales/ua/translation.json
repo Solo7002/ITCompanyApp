@@ -451,6 +451,10 @@
         "Confirm": "Підтвердити",
         "Confirm your new password": "Підтвердьте свій новий пароль",
         "Your password has been recovered successfully": "Ваш пароль успішно відновлено"
+    }, "Errors404": {
+        "Page Not Found": "Сторінку не знайдено",
+        "Oops! The page you are looking for does not exist. It might have been moved or deleted.": "Ой! Сторінка, яку ви шукаєте, не існує. Можливо, вона була переміщена або видалена.",
+        "Go back to Home": "Повернутися на головну"
     }
     
     

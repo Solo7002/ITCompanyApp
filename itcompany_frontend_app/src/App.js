@@ -23,6 +23,7 @@ import { UpdateEmployee } from './Pages/Employees/UpdateEmployee/UpdateEmployee.
 import { UpdateProject } from './Pages/Projects/UpdateProject/UpdateProject.jsx';
 import { Suspense } from 'react';
 import { roleConfig } from './RequireAuth/roleConfig.js';
+import { Error404 } from './Pages/Errors/Error404/Error404.jsx';
 
 
 function App() {
@@ -51,6 +52,8 @@ function App() {
           <Route path='/employee/details/:id' element={<RequireAuth allowedRoles={roleConfig['/employee/details/:id']}><Bootstrap452Helmet><DetailsEmployee/></Bootstrap452Helmet></RequireAuth>}/>
           <Route path='/employee/update/:id' element={<RequireAuth allowedRoles={roleConfig['/employee/update/:id']}><Bootstrap530Helmet><UpdateEmployee/></Bootstrap530Helmet></RequireAuth>}/>
         </Route>
+        <Route path='*' element={<Bootstrap452Helmet><Error404/></Bootstrap452Helmet>}/>
+      
         <Route path='/login' element={<Bootstrap452Helmet><Login/></Bootstrap452Helmet> }/>
         <Route path='/recoverPassword' element={<Bootstrap452Helmet><PasswordRecover/></Bootstrap452Helmet> }/>
       </Routes>

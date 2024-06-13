@@ -460,5 +460,11 @@
         "Confirm your new password":"Confirm your new password",
         "Your password has been recovered successfully":"Your password has been recovered successfully"
 
+    },
+    "Errors404":{
+        "Page Not Found":"Page Not Found",
+        "Oops! The page you are looking for does not exist. It might have been moved or deleted.":"Oops! The page you are looking for does not exist. It might have been moved or deleted.",
+        "Go back to Home":"Go back to Home"
     }
+
 }

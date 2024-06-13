@@ -1,0 +1,28 @@
+.error {
+    font-size: 10em;
+    font-weight: bold;
+    color: #ff6f61;
+    text-shadow: 2px 2px #ff6f61;
+    animation: shake 0.5s;
+}
+
+.message {
+    margin-top: 20px;
+}
+
+.message p {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.message a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background: #ff6f61;
+    text-decoration: none;
+    border-radius: 5px;
+    transition:  0.3s;
+}

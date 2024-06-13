@@ -453,6 +453,12 @@
         "Confirm": "Bestätigen",
         "Confirm your new password": "Bestätigen Sie Ihr neues Passwort",
         "Your password has been recovered successfully": "Ihr Passwort wurde erfolgreich wiederhergestellt"
+    },
+    "Errors404": {
+        "Page Not Found": "Seite nicht gefunden",
+        "Oops! The page you are looking for does not exist. It might have been moved or deleted.": "Ups! Die von Ihnen gesuchte Seite existiert nicht. Sie wurde möglicherweise verschoben oder gelöscht.",
+        "Go back to Home": "Zurück zur Startseite"
     }
+
     
 }

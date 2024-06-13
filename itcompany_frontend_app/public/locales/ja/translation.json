@@ -452,6 +452,11 @@
         "Confirm": "確認する",
         "Confirm your new password": "新しいパスワードを確認してください",
         "Your password has been recovered successfully": "パスワードが正常に復元されました"
+    },
+    "Errors404": {
+        "Page Not Found": "ページが見つかりません",
+        "Oops! The page you are looking for does not exist. It might have been moved or deleted.": "おっと！ お探しのページは存在しません。移動または削除された可能性があります。",
+        "Go back to Home": "ホームに戻る"
     }
     
 }

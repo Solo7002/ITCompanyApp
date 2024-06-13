@@ -453,6 +453,11 @@
         "Confirm": "Confirmar",
         "Confirm your new password": "Confirme su nueva contraseña",
         "Your password has been recovered successfully": "Su contraseña ha sido recuperada con éxito"
-    } 
+    } ,
+    "Errors404": {
+        "Page Not Found": "Página no encontrada",
+        "Oops! The page you are looking for does not exist. It might have been moved or deleted.": "¡Ups! La página que estás buscando no existe. Puede que haya sido movida o eliminada.",
+        "Go back to Home": "Volver a la página principal"
+    }
 }
 
