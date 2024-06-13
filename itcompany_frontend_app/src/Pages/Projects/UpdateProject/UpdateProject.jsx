@@ -57,15 +57,18 @@ const UpdateProject = () => {
         } else if (form.projectName.value.length < 2 || form.projectName.value.length > 50) {
             errors.push(t("projects.update.projectNameLength"));
         }
-    
-        if (!form.deadLineProjectDate || form.deadLineProjectDate.value.trim() === "") {
+        
+        if (!form.deadlineProjectDate || form.deadlineProjectDate.value.trim() === "") {
+            console.log('fff');
+               
             errors.push(t("projects.update.deadLineProjectDateRequired"));
         } 
-            const deadlineDate = new Date(form.deadLineProjectDate);
+            const deadlineDate = new Date(form.deadlineProjectDate);
             const today = new Date();
             today.setHours(0, 0, 0, 0);
     
             if (deadlineDate < today) {
+                
                 errors.push(t("projects.update.deadlineProjectDatePast"));
             }
     

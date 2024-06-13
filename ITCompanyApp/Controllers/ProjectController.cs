@@ -135,19 +135,22 @@ namespace ITCompanyApp.Controllers
             List<EmployeeViewModel> employees =new List<EmployeeViewModel>();
             foreach (Models.Task item in task)
             {
-                Employee employee = _context.Employees.First(e => e.Id == item.EmployeeFor_Id);
-                employees.Add(new EmployeeViewModel
+                if (item.EmployeeFor_Id != null)
                 {
-                    LastName=employee.LastName,
-                    FirstName=employee.FirstName,
-                    BirthDate=employee.BirthDate,
-                    Email=employee.Email,
-                    PhoneNumber=employee.PhoneNumber,
-                    PhotoFile=employee.PhotoFile,
-                    Salary=employee.Salary,
-                    DepartmentId=employee.DepartmentId,
-                    JobId=employee.JobId
-                });
+                    Employee employee = _context.Employees.First(e => e.Id == item.EmployeeFor_Id);
+                    employees.Add(new EmployeeViewModel
+                    {
+                        LastName = employee.LastName,
+                        FirstName = employee.FirstName,
+                        BirthDate = employee.BirthDate,
+                        Email = employee.Email,
+                        PhoneNumber = employee.PhoneNumber,
+                        PhotoFile = employee.PhotoFile,
+                        Salary = employee.Salary,
+                        DepartmentId = employee.DepartmentId,
+                        JobId = employee.JobId
+                    });
+                }
             }
             
             return Ok(employees.Distinct());
